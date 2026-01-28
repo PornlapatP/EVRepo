@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -56,7 +55,7 @@ func ProfileHandler(authService *service.AuthService) gin.HandlerFunc {
 			c.AbortWithStatus(401)
 			return
 		}
-		log.Printf("User: %+v\n", user)
+		// log.Printf("User: %+v\n", user)
 
 		c.JSON(200, gin.H{
 			"id":                  user.Sub,

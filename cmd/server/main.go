@@ -29,7 +29,8 @@ func main() {
 			"http://127.0.0.1:5008",
 		},
 		AllowMethods: []string{
-			"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS",
+			"GET", "POST", "PUT", "DELETE", "OPTIONS",
+			// "GET", "POST", "PUT", "PATCH", "DELETE",
 		},
 		AllowHeaders: []string{
 			"Origin",

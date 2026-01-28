@@ -84,23 +84,23 @@ func (s *AuthService) GetUserInfo(accessToken string) (*KeycloakUser, error) {
 	req, err := http.NewRequest(
 		http.MethodGet,
 		s.cfg.KeycloakUserInfoURL,
-		nil,
+		nil, // no body
 	)
 	if err != nil {
 		return nil, err
 	}
 	log.Printf("REQ: %+v\n", req)
-	req.Header.Set("Authorization", "Bearer "+accessToken)
+	req.Header.Set("Authorization", "Bearer "+accessToken) // key cloak ต้องการ Bearer
 
-	client := &http.Client{Timeout: 5 * time.Second}
+	client := &http.Client{Timeout: 5 * time.Second} // รอ 5 วิ
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer resp.Body.Close() //ปิด body กัน memory / fd leak
 
 	if resp.StatusCode == http.StatusUnauthorized {
-		return nil, errors.New("access token expired or invalid")
+		return nil, errors.New("access token expired or invalid") // check token
 	}
 
 	if resp.StatusCode != http.StatusOK {
@@ -113,7 +113,7 @@ func (s *AuthService) GetUserInfo(accessToken string) (*KeycloakUser, error) {
 	}
 
 	var user KeycloakUser
-	if err := json.NewDecoder(resp.Body).Decode(&user); err != nil {
+	if err := json.NewDecoder(resp.Body).Decode(&user); err != nil { //change json to stuck
 		return nil, err
 	}
 
