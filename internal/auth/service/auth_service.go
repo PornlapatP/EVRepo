@@ -198,3 +198,20 @@ func (s *AuthService) Logout(refreshToken string) error {
 
 	return nil
 }
+
+// func (s *AuthService) RegisterUser(
+// 	email string,
+// 	username string,
+// 	firstName string,
+// 	lastName string,
+// ) error {
+// 	user := models.User{
+// 		Email:     email,
+// 		Username:  username,
+// 		FirstName: firstName,
+// 		LastName:  lastName,
+// 	}
+// 	log.Printf("User: %+v\n", user)
+
+// 	return database.DB.Create(&user).Error
+// }

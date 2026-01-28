@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,6 +29,7 @@ func AuthMiddleware(authService *service.AuthService) gin.HandlerFunc {
 		}
 
 		newToken, err := authService.Refresh(refreshToken)
+		log.Printf("Config: %+v\n", newToken)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"message": "refresh token expired",

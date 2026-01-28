@@ -10,16 +10,23 @@ import (
 	"github.com/pornlapatP/EV/internal/auth/config"
 	"github.com/pornlapatP/EV/internal/auth/handler"
 	"github.com/pornlapatP/EV/internal/auth/service"
+	"github.com/pornlapatP/EV/internal/database"
 	"github.com/pornlapatP/EV/internal/middleware"
+	"github.com/pornlapatP/EV/internal/models"
+	// "github.com/pornlapatP/EV/internal/user/handler"
 	// "golang.org/x/telemetry/config"
 )
 
 func main() {
 	_ = godotenv.Load()
 	cfg := config.Load()
+	database.Connect()
+
+	database.DB.AutoMigrate(&models.User{})
 	// log.Printf("CFG: %+v\n", cfg) //  log ตรงนี้
 	authService := service.NewAuthService(cfg)
 	authHandler := handler.NewAuthHandler(authService)
+
 	//server
 	r := gin.Default()
 	// CORS configuration
@@ -47,6 +54,7 @@ func main() {
 		auth.GET("login", authHandler.Login)
 		auth.GET("dashboard", authHandler.Callback)
 		auth.GET("logout", authHandler.Logout)
+		auth.POST("register", authHandler.Register)
 		// auth.GET("logout", authHandler.Logout)
 	}
 
