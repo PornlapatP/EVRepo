@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -89,7 +88,7 @@ func (s *AuthService) GetUserInfo(accessToken string) (*KeycloakUser, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("REQ: %+v\n", req)
+	// log.Printf("REQ: %+v\n", req)
 	req.Header.Set("Authorization", "Bearer "+accessToken) // key cloak ต้องการ Bearer
 
 	client := &http.Client{Timeout: 5 * time.Second} // รอ 5 วิ
@@ -145,7 +144,9 @@ func (s *AuthService) Refresh(refreshToken string) (*TokenResponse, error) {
 	return &token, nil
 }
 func SetAuthCookies(c *gin.Context, token *TokenResponse) {
+
 	// log.Printf("Config: %+v\n", token)
+
 	c.SetCookie(
 		"access_token",
 		token.AccessToken,
@@ -198,6 +199,28 @@ func (s *AuthService) Logout(refreshToken string) error {
 
 	return nil
 }
+
+// type AuthService struct{}
+
+// func NewAuthService() *AuthService {
+// 	return &AuthService{}
+// }
+
+// func (s *AuthService) RegisterUser(
+// 	email string,
+// 	username string,
+// 	firstName string,
+// 	lastName string,
+// ) error {
+// 	user := models.User{
+// 		Email:     email,
+// 		Username:  username,
+// 		FirstName: firstName,
+// 		LastName:  lastName,
+// 	}
+
+// 	return database.DB.Create(&user).Error
+// }
 
 // func (s *AuthService) RegisterUser(
 // 	email string,

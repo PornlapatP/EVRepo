@@ -40,8 +40,8 @@ func (h *AuthHandler) Callback(c *gin.Context) {
 	service.SetAuthCookies(c, token)
 
 	// 🔑 redirect กลับ frontend
-	c.JSON(200, gin.H{"message": "login success"})
-	// c.Redirect(http.StatusFound, "http://localhost:3000/")
+	// c.JSON(200, gin.H{"message": "login success"})
+	c.Redirect(http.StatusFound, "http://localhost:3000/api/profile")
 }
 
 func ProfileHandler(authService *service.AuthService) gin.HandlerFunc {

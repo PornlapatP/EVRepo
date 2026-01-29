@@ -23,6 +23,15 @@ func main() {
 	database.Connect()
 
 	database.DB.AutoMigrate(&models.User{})
+	rawKey := os.Getenv("KEYCLOAK_PUBLIC_KEY")
+	if rawKey == "" {
+		log.Fatal("KEYCLOAK_PUBLIC_KEY missing")
+	}
+
+	publicKey, err := middleware.ParseRSAPublicKey(rawKey)
+	if err != nil {
+		log.Fatal("invalid KEYCLOAK_PUBLIC_KEY:", err)
+	}
 	// log.Printf("CFG: %+v\n", cfg) //  log ตรงนี้
 	authService := service.NewAuthService(cfg)
 	authHandler := handler.NewAuthHandler(authService)
@@ -59,7 +68,7 @@ func main() {
 	}
 
 	api := r.Group("/api")
-	api.Use(middleware.AuthMiddleware(authService))
+	api.Use(middleware.AuthMiddleware(authService, publicKey))
 	{
 		api.GET("/profile", handler.ProfileHandler(authService))
 	}
