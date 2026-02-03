@@ -13,6 +13,8 @@ import (
 	"github.com/pornlapatP/EV/internal/database"
 	"github.com/pornlapatP/EV/internal/middleware"
 	"github.com/pornlapatP/EV/internal/models"
+	"github.com/pornlapatP/EV/internal/sftp"
+	"github.com/pornlapatP/EV/internal/upload"
 	// "github.com/pornlapatP/EV/internal/user/handler"
 	// "golang.org/x/telemetry/config"
 )
@@ -35,7 +37,7 @@ func main() {
 	// log.Printf("CFG: %+v\n", cfg) //  log ตรงนี้
 	authService := service.NewAuthService(cfg)
 	authHandler := handler.NewAuthHandler(authService)
-
+	sftpSvc := sftp.New()
 	//server
 	r := gin.Default()
 	// CORS configuration
@@ -71,6 +73,7 @@ func main() {
 	api.Use(middleware.AuthMiddleware(authService, publicKey))
 	{
 		api.GET("/profile", handler.ProfileHandler(authService))
+		api.POST("/upload", upload.UploadHandler(sftpSvc))
 	}
 
 	port := os.Getenv("PORT")
