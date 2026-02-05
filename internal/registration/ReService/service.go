@@ -73,7 +73,7 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 			}
 		}
 
-		return nil // commit
+		return nil
 	})
 }
 
