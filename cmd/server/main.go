@@ -13,6 +13,8 @@ import (
 	"github.com/pornlapatP/EV/internal/database"
 	"github.com/pornlapatP/EV/internal/middleware"
 	"github.com/pornlapatP/EV/internal/models"
+	"github.com/pornlapatP/EV/internal/registration/controller"
+	regisservice "github.com/pornlapatP/EV/internal/registration/reservice"
 	"github.com/pornlapatP/EV/internal/sftp"
 	"github.com/pornlapatP/EV/internal/upload"
 	// "github.com/pornlapatP/EV/internal/user/handler"
@@ -24,7 +26,7 @@ func main() {
 	cfg := config.Load()
 	database.Connect()
 
-	database.DB.AutoMigrate(&models.User{})
+	database.DB.AutoMigrate(&models.GeneralInfo{}, &models.Charger{}, &models.VendorCharge{}, &models.Ev{}, &models.VendorEv{})
 	rawKey := os.Getenv("KEYCLOAK_PUBLIC_KEY")
 	if rawKey == "" {
 		log.Fatal("KEYCLOAK_PUBLIC_KEY missing")
@@ -37,6 +39,7 @@ func main() {
 	// log.Printf("CFG: %+v\n", cfg) //  log ตรงนี้
 	authService := service.NewAuthService(cfg)
 	authHandler := handler.NewAuthHandler(authService)
+
 	sftpSvc := sftp.New()
 	//server
 	r := gin.Default()
@@ -59,13 +62,22 @@ func main() {
 	}
 
 	r.Use(cors.New(corsConfig))
+	RegisService := regisservice.NewGeneralService(database.DB)
+	controller := controller.NewControllerHandler(RegisService)
+	group := r.Group("/general-info")
+	{
+		group.POST("", controller.CreateWithRelations)
+		group.GET("", controller.GetAll)
+		group.GET("/:id", controller.GetByID)
+		// group.GET("", controller.GetAllGeneralInfo)
+	}
 
 	auth := r.Group("/")
 	{
 		auth.GET("login", authHandler.Login)
 		auth.GET("dashboard", authHandler.Callback)
 		auth.GET("logout", authHandler.Logout)
-		auth.POST("register", authHandler.Register)
+		// auth.POST("register", authHandler.Register)
 		// auth.GET("logout", authHandler.Logout)
 	}
 
