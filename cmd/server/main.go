@@ -68,7 +68,7 @@ func main() {
 	{
 		group.POST("", controller.CreateWithRelations)
 		group.GET("", controller.GetAll)
-		group.GET("/:id", controller.GetByID)
+		// group.GET("/:id", controller.GetByID)
 		// group.GET("", controller.GetAllGeneralInfo)
 	}
 

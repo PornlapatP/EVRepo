@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"strconv"
-
 	"github.com/gin-gonic/gin"
 	// "github.com/pornlapatP/EV/internal/auth/service"
 	// "github.com/pornlapatP/EV/internal/database"
@@ -61,20 +59,20 @@ func (c *RegistrationController) GetAll(ctx *gin.Context) {
 }
 
 // GET /general-info/:id
-func (c *RegistrationController) GetByID(ctx *gin.Context) {
-	idParam := ctx.Param("id")
+// func (c *RegistrationController) GetByID(ctx *gin.Context) {
+// 	idParam := ctx.Param("id")
 
-	id, err := strconv.ParseUint(idParam, 10, 64)
-	if err != nil {
-		ctx.JSON(400, gin.H{"error": "invalid id"})
-		return
-	}
+// 	id, err := strconv.ParseUint(idParam, 10, 64)
+// 	if err != nil {
+// 		ctx.JSON(400, gin.H{"error": "invalid id"})
+// 		return
+// 	}
 
-	result, err := c.regisService.GetGeneralInfoByID(uint(id))
-	if err != nil {
-		ctx.JSON(404, gin.H{"error": "data not found"})
-		return
-	}
+// 	result, err := c.regisService.GetGeneralInfoByID(uint(id))
+// 	if err != nil {
+// 		ctx.JSON(404, gin.H{"error": "data not found"})
+// 		return
+// 	}
 
-	ctx.JSON(200, gin.H{"data": result})
-}
+// 	ctx.JSON(200, gin.H{"data": result})
+// }

@@ -23,7 +23,6 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 
 	return s.db.Transaction(func(tx *gorm.DB) error {
 
-		// 1️⃣ Create GeneralInfo
 		general := models.GeneralInfo{
 			FirstName: req.FirstName,
 			LastName:  req.LastName,
@@ -35,7 +34,6 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 			return err
 		}
 
-		// 2️⃣ Create Chargers
 		for _, c := range req.Chargers {
 
 			vendorID, err := s.getOrCreateVendorCharge(tx, c)
@@ -54,7 +52,6 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 			}
 		}
 
-		// 3️⃣ Create EVs
 		for _, e := range req.Evs {
 
 			vendorID, err := s.getOrCreateVendorEv(tx, e)
@@ -91,17 +88,17 @@ func (s *GeneralService) GetAllGeneralInfo() ([]models.GeneralInfo, error) {
 	return result, err
 }
 
-func (s *GeneralService) GetGeneralInfoByID(id uint) (*models.GeneralInfo, error) {
-	var result models.GeneralInfo
+// func (s *GeneralService) GetGeneralInfoByID(id uint) (*models.GeneralInfo, error) {
+// 	var result models.GeneralInfo
 
-	err := s.db.
-		Preload("Chargers.Vendor").
-		Preload("Evs.Vendor").
-		First(&result, id).Error
+// 	err := s.db.
+// 		Preload("Chargers.Vendor").
+// 		Preload("Evs.Vendor").
+// 		First(&result, id).Error
 
-	if err != nil {
-		return nil, err
-	}
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	return &result, nil
-}
+// 	return &result, nil
+// }
