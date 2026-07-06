@@ -45,8 +45,6 @@ func AuthMiddleware(
 
 		service.SetAuthCookies(c, newToken)
 
-		c.Redirect(http.StatusFound, c.Request.RequestURI)
-
 		c.Next()
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -98,12 +99,18 @@ func (s *AuthService) GetUserInfo(accessToken string) (*KeycloakUser, error) {
 	}
 	defer resp.Body.Close() //ปิด body กัน memory / fd leak
 
+	// body, err := io.ReadAll(resp.Body)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
 	if resp.StatusCode == http.StatusUnauthorized {
 		return nil, errors.New("access token expired or invalid") // check token
 	}
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
+		log.Printf("Body: %+v\n", body)
 		return nil, fmt.Errorf(
 			"userinfo failed: status=%d body=%s",
 			resp.StatusCode,
@@ -111,6 +118,7 @@ func (s *AuthService) GetUserInfo(accessToken string) (*KeycloakUser, error) {
 		)
 	}
 
+	// log.Printf("UserInfo Response: %s\n", string(body))
 	var user KeycloakUser
 	if err := json.NewDecoder(resp.Body).Decode(&user); err != nil { //change json to stuck
 		return nil, err
