@@ -8,64 +8,39 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *GeneralService) getOrCreateVendorCharge(
+const (
+	vendorTypeCharger = "charger"
+	vendorTypeEv      = "ev"
+)
+
+// getOrCreateVendor resolves a vendor either by ID or by an inline
+// {vendorName, country} payload, deduping inline vendors by (name, type)
+// instead of always inserting a new row.
+func (s *GeneralService) getOrCreateVendor(
 	tx *gorm.DB,
-	req model.CreateChargerRequest,
+	vendorID *uint,
+	inline *model.CreateVendorRequest,
+	vendorType string,
 ) (uint, error) {
 
-	// case: use existing vendor
-	if req.VendorID != nil {
-		var vendor models.VendorCharge
-		if err := tx.First(&vendor, *req.VendorID).Error; err != nil {
-			return 0, fmt.Errorf("vendor charge not found: %d", *req.VendorID)
+	if vendorID != nil {
+		var vendor models.Vendor
+		if err := tx.First(&vendor, *vendorID).Error; err != nil {
+			return 0, fmt.Errorf("vendor not found: %d", *vendorID)
 		}
 		return vendor.ID, nil
 	}
 
-	// case: create new vendor
-	if req.Vendor != nil {
-		vendor := models.VendorCharge{
-			VendorName: req.Vendor.VendorName,
-			Country:    req.Vendor.Country,
-		}
-
-		if err := tx.Create(&vendor).Error; err != nil {
+	if inline != nil {
+		var vendor models.Vendor
+		err := tx.Where(models.Vendor{VendorName: inline.VendorName, Type: vendorType}).
+			Attrs(models.Vendor{Country: inline.Country}).
+			FirstOrCreate(&vendor).Error
+		if err != nil {
 			return 0, err
 		}
-
 		return vendor.ID, nil
 	}
 
-	return 0, fmt.Errorf("vendorId or vendor is required for charger")
-}
-
-func (s *GeneralService) getOrCreateVendorEv(
-	tx *gorm.DB,
-	req model.CreateEvRequest,
-) (uint, error) {
-
-	// case: use existing vendor
-	if req.VendorID != nil {
-		var vendor models.VendorEv
-		if err := tx.First(&vendor, *req.VendorID).Error; err != nil {
-			return 0, fmt.Errorf("vendor ev not found: %d", *req.VendorID)
-		}
-		return vendor.ID, nil
-	}
-
-	// case: create new vendor
-	if req.Vendor != nil {
-		vendor := models.VendorEv{
-			VendorName: req.Vendor.VendorName,
-			Country:    req.Vendor.Country,
-		}
-
-		if err := tx.Create(&vendor).Error; err != nil {
-			return 0, err
-		}
-
-		return vendor.ID, nil
-	}
-
-	return 0, fmt.Errorf("vendorId or vendor is required for ev")
+	return 0, fmt.Errorf("vendorId or vendor is required")
 }
