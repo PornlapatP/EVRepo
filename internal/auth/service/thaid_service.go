@@ -24,36 +24,67 @@ func NewThaIDService(cfg *config.Config) *ThaIDService {
 	return &ThaIDService{cfg: cfg}
 }
 
-// ThaIDTokenResponse represents the token response from ThaID.
+// ThaIDTokenResponse represents the token response from ThaID. Per the DOPA
+// sandbox manual §6.2.2, there is no separate userinfo endpoint — when the
+// authorization request's scope omits "openid", every requested claim comes
+// back as a flat field on this same token response (e.g. {"pid": "...",
+// "name": "..."}), not from a follow-up call.
 type ThaIDTokenResponse struct {
 	AccessToken  string `json:"access_token"`
 	TokenType    string `json:"token_type"`
-	ExpiresIn    int    `json:"expires_in"`
+	ExpiresIn    int    `json:"expire_in"` // DOPA's field name — not the usual OAuth "expires_in"
 	RefreshToken string `json:"refresh_token"`
-	IDToken      string `json:"id_token"`
+	Scope        string `json:"scope"`
+
+	PID            string       `json:"pid"`              // เลขบัตรประชาชน 13 หลัก
+	GivenName      string       `json:"given_name"`       // ชื่อ (ไทย)
+	MiddleName     string       `json:"middle_name"`      // ชื่อกลาง (ไทย)
+	FamilyName     string       `json:"family_name"`      // นามสกุล (ไทย)
+	Name           string       `json:"name"`             // ชื่อเต็ม (ไทย)
+	GivenNameEN    string       `json:"given_name_en"`    // ชื่อ (อังกฤษ)
+	MiddleNameEN   string       `json:"middle_name_en"`   // ชื่อกลาง (อังกฤษ)
+	FamilyNameEN   string       `json:"family_name_en"`   // นามสกุล (อังกฤษ)
+	NameEN         string       `json:"name_en"`          // ชื่อเต็ม (อังกฤษ)
+	Title          string       `json:"title"`            // คำนำหน้า (ไทย)
+	TitleEN        string       `json:"title_en"`         // คำนำหน้า (อังกฤษ)
+	Birthdate      string       `json:"birthdate"`        // วันเกิด
+	Gender         string       `json:"gender"`           // เพศ
+	Address        addressClaim `json:"address"`          // ที่อยู่ — DOPA sends either a plain string or {formatted, raw}
+	IAL            string       `json:"ial"`              // Identity Assurance Level
+	SmartcardCode  string       `json:"smartcard_code"`   // รหัส smartcard
+	DateOfExpiry   string       `json:"date_of_expiry"`   // วันหมดอายุบัตร
+	DateOfIssuance string       `json:"date_of_issuance"` // วันออกบัตร
 }
 
-// ThaIDUser represents user information returned from ThaID userinfo endpoint.
-type ThaIDUser struct {
-	Sub            string `json:"sub"`
-	PID            string `json:"pid"`              // เลขบัตรประชาชน 13 หลัก
-	GivenName      string `json:"given_name"`       // ชื่อ (ไทย)
-	MiddleName     string `json:"middle_name"`      // ชื่อกลาง (ไทย)
-	FamilyName     string `json:"family_name"`      // นามสกุล (ไทย)
-	Name           string `json:"name"`             // ชื่อเต็ม (ไทย)
-	GivenNameEN    string `json:"given_name_en"`    // ชื่อ (อังกฤษ)
-	MiddleNameEN   string `json:"middle_name_en"`   // ชื่อกลาง (อังกฤษ)
-	FamilyNameEN   string `json:"family_name_en"`   // นามสกุล (อังกฤษ)
-	NameEN         string `json:"name_en"`          // ชื่อเต็ม (อังกฤษ)
-	Title          string `json:"title"`            // คำนำหน้า (ไทย)
-	TitleEN        string `json:"title_en"`         // คำนำหน้า (อังกฤษ)
-	Birthdate      string `json:"birthdate"`        // วันเกิด
-	Gender         string `json:"gender"`           // เพศ
-	Address        string `json:"address"`          // ที่อยู่
-	IAL            string `json:"ial"`              // Identity Assurance Level
-	SmartcardCode  string `json:"smartcard_code"`   // รหัส smartcard
-	DateOfExpiry   string `json:"date_of_expiry"`   // วันหมดอายุบัตร
-	DateOfIssuance string `json:"date_of_issuance"` // วันออกบัตร
+// addressClaim tolerates both shapes DOPA is observed to send for the
+// "address" claim: a plain string, or an object like house_address
+// ({"formatted": "...", "raw": "..."} per manual §6.1.1 item 19). Falls back
+// to the raw JSON text for any other shape rather than failing the whole
+// token decode.
+type addressClaim string
+
+func (a *addressClaim) UnmarshalJSON(data []byte) error {
+	var s string
+	if err := json.Unmarshal(data, &s); err == nil {
+		*a = addressClaim(s)
+		return nil
+	}
+
+	var obj struct {
+		Formatted string `json:"formatted"`
+		Raw       string `json:"raw"`
+	}
+	if err := json.Unmarshal(data, &obj); err == nil && (obj.Formatted != "" || obj.Raw != "") {
+		if obj.Formatted != "" {
+			*a = addressClaim(obj.Formatted)
+		} else {
+			*a = addressClaim(obj.Raw)
+		}
+		return nil
+	}
+
+	*a = addressClaim(data)
+	return nil
 }
 
 // generateState creates a random state string for CSRF protection.
@@ -68,9 +99,10 @@ func generateState() string {
 func (s *ThaIDService) BuildLoginURL() (string, string) {
 	state := generateState()
 
-	// ดึง scopes ทั้งหมดที่ ThaID รองรับ
+	// ไม่ใส่ "openid" — ตาม DOPA sandbox manual §6.2.2 การไม่ขอ openid ทำให้ claim ที่ขอ
+	// ทุกตัวถูกส่งกลับมาเป็น flat field บน token response โดยตรง (ไม่ต้อง decode id_token
+	// หรือยิง userinfo เพิ่ม) ส่วน scope ที่เหลือทั้งหมดนี้เป็นชื่อที่ DOPA รองรับจริง (manual §6.1.1)
 	scopes := strings.Join([]string{
-		"openid",
 		"pid",
 		"name",
 		"given_name",
@@ -127,39 +159,6 @@ func (s *ThaIDService) ExchangeCode(code string) (*ThaIDTokenResponse, error) {
 	}
 
 	return &token, nil
-}
-
-// GetUserInfo retrieves user information from ThaID userinfo endpoint.
-func (s *ThaIDService) GetUserInfo(accessToken string) (*ThaIDUser, error) {
-	req, err := http.NewRequest(http.MethodGet, s.cfg.ThaIDUserInfoURL, nil)
-	if err != nil {
-		return nil, fmt.Errorf("thaid userinfo request creation failed: %w", err)
-	}
-
-	req.Header.Set("Authorization", "Bearer "+accessToken)
-
-	client := &http.Client{Timeout: 10 * time.Second}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("thaid userinfo request failed: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode == http.StatusUnauthorized {
-		return nil, fmt.Errorf("thaid access token expired or invalid")
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return nil, fmt.Errorf("thaid userinfo failed: status=%d body=%s", resp.StatusCode, string(body))
-	}
-
-	var user ThaIDUser
-	if err := json.NewDecoder(resp.Body).Decode(&user); err != nil {
-		return nil, fmt.Errorf("thaid userinfo decode failed: %w", err)
-	}
-
-	return &user, nil
 }
 
 // Revoke revokes a ThaID token.

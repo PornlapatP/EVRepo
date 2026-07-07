@@ -161,7 +161,7 @@ func SetAuthCookies(c *gin.Context, token *TokenResponse) {
 		int(token.ExpiresIn),
 		"/",
 		"",
-		false,
+		SecureCookie(),
 		true,
 	)
 
@@ -171,7 +171,7 @@ func SetAuthCookies(c *gin.Context, token *TokenResponse) {
 		7*24*60*60,
 		"/",
 		"",
-		false,
+		SecureCookie(),
 		true,
 	)
 }

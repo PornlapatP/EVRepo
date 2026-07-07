@@ -119,7 +119,7 @@ func main() {
 	// ThaIDProfileHandler checks its own access_token cookie internally — it
 	// must NOT sit behind the Keycloak-only AuthMiddleware, which cannot
 	// verify DOPA-issued tokens.
-	r.GET("/api/thaid/profile", handler.ThaIDProfileHandler(thaidService))
+	r.GET("/api/thaid/profile", handler.ThaIDProfileHandler())
 
 	port := os.Getenv("PORT")
 	if port == "" {

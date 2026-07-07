@@ -29,7 +29,7 @@ func (h *ThaIDHandler) Login(c *gin.Context) {
 	loginURL, state := h.thaidService.BuildLoginURL()
 
 	// เก็บ state ใน cookie เพื่อตรวจสอบ CSRF ตอน callback
-	c.SetCookie("thaid_state", state, 300, "/", "", false, true)
+	c.SetCookie("thaid_state", state, 300, "/", "", service.SecureCookie(), true)
 
 	c.Redirect(http.StatusFound, loginURL)
 }
@@ -65,7 +65,7 @@ func (h *ThaIDHandler) Callback(c *gin.Context) {
 	}
 
 	// ลบ state cookie หลังใช้งาน
-	c.SetCookie("thaid_state", "", -1, "/", "", false, true)
+	c.SetCookie("thaid_state", "", -1, "/", "", service.SecureCookie(), true)
 
 	// แลก code เป็น token
 	token, err := h.thaidService.ExchangeCode(code)
@@ -75,10 +75,10 @@ func (h *ThaIDHandler) Callback(c *gin.Context) {
 		return
 	}
 
-	// ดึงข้อมูลผู้ใช้ (PID) ทันที เพื่อออก citizen session ของเราเอง
-	user, err := h.thaidService.GetUserInfo(token.AccessToken)
-	if err != nil {
-		log.Printf("ThaID userinfo error: %v", err)
+	// ไม่มี userinfo endpoint แยกใน DOPA sandbox — pid/name/address ฯลฯ มากับ token
+	// response ชุดนี้เลย (manual §6.2.2) จึงออก citizen session จาก token ตรงๆ
+	if token.PID == "" {
+		log.Printf("ThaID token response missing pid (scope=%s)", token.Scope)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user info"})
 		return
 	}
@@ -89,20 +89,20 @@ func (h *ThaIDHandler) Callback(c *gin.Context) {
 		RefreshToken: token.RefreshToken,
 		ExpiresIn:    token.ExpiresIn,
 	})
-	c.SetCookie("auth_provider", "thaid", token.ExpiresIn, "/", "", false, true)
+	c.SetCookie("auth_provider", "thaid", token.ExpiresIn, "/", "", service.SecureCookie(), true)
 
 	citizenSession, err := service.IssueCitizenSession(service.CitizenClaims{
-		PID:       user.PID,
-		FirstName: user.GivenName,
-		LastName:  user.FamilyName,
-		Address:   user.Address,
+		PID:       token.PID,
+		FirstName: token.GivenName,
+		LastName:  token.FamilyName,
+		Address:   string(token.Address),
 	})
 	if err != nil {
 		log.Printf("issue citizen session error: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to start session"})
 		return
 	}
-	c.SetCookie("citizen_session", citizenSession, 24*60*60, "/", "", false, true)
+	c.SetCookie("citizen_session", citizenSession, 24*60*60, "/", "", service.SecureCookie(), true)
 
 	c.Redirect(http.StatusFound, fmt.Sprintf("%s/registrationForm", h.cfg.FrontendURL))
 }
@@ -117,51 +117,38 @@ func (h *ThaIDHandler) Logout(c *gin.Context) {
 	}
 
 	service.ClearAuthCookies(c)
-	c.SetCookie("auth_provider", "", -1, "/", "", false, true)
-	c.SetCookie("citizen_session", "", -1, "/", "", false, true)
+	c.SetCookie("auth_provider", "", -1, "/", "", service.SecureCookie(), true)
+	c.SetCookie("citizen_session", "", -1, "/", "", service.SecureCookie(), true)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "logged out from ThaID",
 	})
 }
 
-// ThaIDProfileHandler returns user info from ThaID userinfo endpoint.
-func ThaIDProfileHandler(thaidService *service.ThaIDService) gin.HandlerFunc {
+// ThaIDProfileHandler returns the identity carried in the app's own
+// "citizen_session" cookie. There's no DOPA userinfo endpoint to re-query
+// (see Callback) so this reflects whatever was captured from the token
+// response at login time, not a live ThaID lookup.
+func ThaIDProfileHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		accessToken, err := c.Cookie("access_token")
+		sessionCookie, err := c.Cookie("citizen_session")
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "missing access token"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "missing citizen session"})
 			return
 		}
 
-		user, err := thaidService.GetUserInfo(accessToken)
+		claims, err := service.ParseCitizenSession(sessionCookie)
 		if err != nil {
-			log.Printf("ThaID userinfo error: %v", err)
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "failed to get user info"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid citizen session"})
 			return
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"provider":         "thaid",
-			"sub":              user.Sub,
-			"pid":              user.PID,
-			"name":             user.Name,
-			"given_name":       user.GivenName,
-			"middle_name":      user.MiddleName,
-			"family_name":      user.FamilyName,
-			"name_en":          user.NameEN,
-			"given_name_en":    user.GivenNameEN,
-			"middle_name_en":   user.MiddleNameEN,
-			"family_name_en":   user.FamilyNameEN,
-			"title":            user.Title,
-			"title_en":         user.TitleEN,
-			"birthdate":        user.Birthdate,
-			"gender":           user.Gender,
-			"address":          user.Address,
-			"ial":              user.IAL,
-			"smartcard_code":   user.SmartcardCode,
-			"date_of_expiry":   user.DateOfExpiry,
-			"date_of_issuance": user.DateOfIssuance,
+			"provider":  "thaid",
+			"pid":       claims.PID,
+			"firstName": claims.FirstName,
+			"lastName":  claims.LastName,
+			"address":   claims.Address,
 		})
 	}
 }
