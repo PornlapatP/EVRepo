@@ -20,11 +20,14 @@ func NewGeneralService(db *gorm.DB, peaCS *peacs.Client) *GeneralService {
 	return &GeneralService{db: db, peaCS: peaCS}
 }
 
-// CreateGeneralInfoWithRelations attaches chargers/EVs to the GeneralInfo row
-// that CheckCA already created for this ca+pid — it does NOT create a new
-// GeneralInfo itself. pid comes from the authenticated ThaID session
+// CreateGeneralInfoWithRelations is the only place a GeneralInfo row is ever
+// persisted — CheckCA is read-only (see below) and just previews the data.
+// If this ca+pid has no GeneralInfo row yet, one is created here (re-querying
+// PEA's cs-service for the real name/address) before chargers/EVs are
+// attached to it. pid comes from the authenticated ThaID session
 // (CitizenAuthMiddleware) — never trusted from the request body.
 func (s *GeneralService) CreateGeneralInfoWithRelations(
+	ctx context.Context,
 	req *model.CreateGeneralInfoRequest,
 	pid string,
 ) error {
@@ -32,7 +35,27 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 	return s.db.Transaction(func(tx *gorm.DB) error {
 
 		var general models.GeneralInfo
-		if err := tx.Where("ca = ? AND pid = ?", req.Ca, pid).First(&general).Error; err != nil {
+		err := tx.Where("ca = ? AND pid = ?", req.Ca, pid).First(&general).Error
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			detail, err := s.peaCS.GetCustomerDetail(ctx, req.Ca)
+			if err != nil {
+				return err
+			}
+			if !detail.Success || detail.Data == nil {
+				return ErrCANotFound
+			}
+
+			general = models.GeneralInfo{
+				PID:       pid,
+				FirstName: detail.Data.FirstName,
+				LastName:  detail.Data.LastName,
+				Address:   detail.Data.Address.FullAddress,
+				Ca:        req.Ca,
+			}
+			if err := tx.Create(&general).Error; err != nil {
+				return err
+			}
+		} else if err != nil {
 			return fmt.Errorf("กรุณาตรวจสอบเลข CA ก่อนส่งข้อมูลลงทะเบียน")
 		}
 
@@ -117,14 +140,16 @@ func (s *GeneralService) GetGeneralInfoByPID(pid string) ([]models.GeneralInfo, 
 
 var ErrCANotFound = errors.New("ca not found")
 
-// CheckCA looks up a CA number: if it already has a registration on file,
-// the existing record (including its chargers/EVs, so the wizard can show a
-// read-only "you already registered this" summary) is returned — not an
-// error — the citizen can keep adding more chargers/EVs to it, "resuming"
-// rather than being blocked. Otherwise it queries PEA's real customer master
-// data (cs-service); if found there, a new GeneralInfo row is created
-// immediately using that real name/address so the rest of the wizard has
-// somewhere to attach chargers/EVs.
+// CheckCA is read-only — it never writes to the database. It looks up a CA
+// number: if it already has a registration on file, the existing record
+// (including its chargers/EVs, so the wizard can show a read-only "you
+// already registered this" summary) is returned — not an error — the citizen
+// can keep adding more chargers/EVs to it, "resuming" rather than being
+// blocked. Otherwise it queries PEA's real customer master data (cs-service);
+// if found there, an unsaved GeneralInfo is built from that real name/address
+// purely as a preview so the wizard can show it before the citizen fills in
+// the rest of the form. The row itself is only ever persisted by
+// CreateGeneralInfoWithRelations, once the citizen submits the completed form.
 func (s *GeneralService) CheckCA(ctx context.Context, ca, pid string) (*models.GeneralInfo, error) {
 	var existing models.GeneralInfo
 	err := s.db.
@@ -153,9 +178,6 @@ func (s *GeneralService) CheckCA(ctx context.Context, ca, pid string) (*models.G
 		LastName:  detail.Data.LastName,
 		Address:   detail.Data.Address.FullAddress,
 		Ca:        ca,
-	}
-	if err := s.db.Create(&general).Error; err != nil {
-		return nil, err
 	}
 
 	return &general, nil

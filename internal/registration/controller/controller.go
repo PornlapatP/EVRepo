@@ -60,7 +60,15 @@ func (c *RegistrationController) CreateWithRelations(ctx *gin.Context) {
 		req.Chargers[i].LabelImageKey = labelImageKey
 	}
 
-	if err := c.regisService.CreateGeneralInfoWithRelations(&req, citizen.PID); err != nil {
+	if err := c.regisService.CreateGeneralInfoWithRelations(ctx.Request.Context(), &req, citizen.PID); err != nil {
+		if errors.Is(err, regisservice.ErrCANotFound) {
+			ctx.JSON(404, gin.H{
+				"success": false,
+				"code":    "CUSTOMER_NOT_FOUND",
+				"message": "ไม่พบข้อมูลผู้ใช้ไฟฟ้า",
+			})
+			return
+		}
 		ctx.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
@@ -130,13 +138,15 @@ func (c *RegistrationController) GetMine(ctx *gin.Context) {
 
 // CheckCA handles GET /api/v1/general-info/check-ca?ca=... (citizen-gated —
 // by the time a user reaches the registration wizard's CA step they've
-// already completed ThaID login). If the CA already has a registration on
-// file, that record's owner name AND its existing chargers/EVs (with
-// presigned image URLs) are returned — not an error — so the wizard can show
-// a read-only "you already registered this" summary before the citizen adds
-// more. Otherwise PEA's real customer master data (cs-service) is queried; if
-// found there, a GeneralInfo row is created immediately so the rest of the
-// wizard has somewhere to attach chargers/EVs.
+// already completed ThaID login). This endpoint only checks/previews — it
+// never creates anything. If the CA already has a registration on file, that
+// record's owner name AND its existing chargers/EVs (with presigned image
+// URLs) are returned — not an error — so the wizard can show a read-only
+// "you already registered this" summary before the citizen adds more.
+// Otherwise PEA's real customer master data (cs-service) is queried and, if
+// found, its name/address is returned as a preview only; the GeneralInfo row
+// itself is only created once the citizen finishes and submits the form (see
+// CreateWithRelations).
 func (c *RegistrationController) CheckCA(ctx *gin.Context) {
 	ca := ctx.Query("ca")
 	if ca == "" {
