@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"mime/multipart"
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -46,13 +47,19 @@ func (c *RegistrationController) CreateWithRelations(ctx *gin.Context) {
 	}
 
 	for i := range req.Chargers {
+		// ID set (editing an existing charger) + no new file part = keep the
+		// existing image, so a missing file is only an error for a brand-new
+		// charger (ID == nil). See GeneralService for how an empty ImageKey
+		// here resolves to "reuse whatever this charger already had".
+		isEdit := req.Chargers[i].ID != nil
+
 		imageKey, err := c.uploadChargerFile(ctx, pid, i, "image")
-		if err != nil {
+		if err != nil && !(isEdit && errors.Is(err, http.ErrMissingFile)) {
 			ctx.JSON(400, gin.H{"error": err.Error()})
 			return
 		}
 		labelImageKey, err := c.uploadChargerFile(ctx, pid, i, "labelImage")
-		if err != nil {
+		if err != nil && !(isEdit && errors.Is(err, http.ErrMissingFile)) {
 			ctx.JSON(400, gin.H{"error": err.Error()})
 			return
 		}
@@ -60,12 +67,20 @@ func (c *RegistrationController) CreateWithRelations(ctx *gin.Context) {
 		req.Chargers[i].LabelImageKey = labelImageKey
 	}
 
-	if err := c.regisService.CreateGeneralInfoWithRelations(ctx.Request.Context(), &req, citizen.PID); err != nil {
+	if err := c.regisService.CreateGeneralInfoWithRelations(ctx.Request.Context(), &req, citizen.PID, citizen.EntrySource); err != nil {
 		if errors.Is(err, regisservice.ErrCANotFound) {
 			ctx.JSON(404, gin.H{
 				"success": false,
 				"code":    "CUSTOMER_NOT_FOUND",
 				"message": "ไม่พบข้อมูลผู้ใช้ไฟฟ้า",
+			})
+			return
+		}
+		if errors.Is(err, regisservice.ErrEditForbidden) {
+			ctx.JSON(403, gin.H{
+				"success": false,
+				"code":    "EDIT_FORBIDDEN",
+				"message": "CA นี้ลงทะเบียนไว้แล้ว แก้ไขได้เฉพาะผ่าน PEA Smart Plus เท่านั้น",
 			})
 			return
 		}
@@ -172,12 +187,20 @@ func (c *RegistrationController) CheckCA(ctx *gin.Context) {
 
 	resp := ToGeneralInfoResponse(ctx.Request.Context(), *general, c.storageSvc)
 
+	// general.ID == 0 means CheckCA built an unsaved preview (no registration
+	// exists for this CA yet) — anyone can proceed to a first submission. Once
+	// a row exists, only a Smart Plus session may edit it further (§4).
+	alreadyRegistered := general.ID != 0
+	editable := !alreadyRegistered || citizen.EntrySource == authservice.EntrySourceSmartPlus
+
 	ctx.JSON(200, gin.H{
-		"ca":        resp.Ca,
-		"eligible":  true,
-		"firstName": resp.FirstName,
-		"lastName":  resp.LastName,
-		"chargers":  resp.Chargers,
-		"evs":       resp.Evs,
+		"ca":                resp.Ca,
+		"eligible":          true,
+		"alreadyRegistered": alreadyRegistered,
+		"editable":          editable,
+		"firstName":         resp.FirstName,
+		"lastName":          resp.LastName,
+		"chargers":          resp.Chargers,
+		"evs":               resp.Evs,
 	})
 }

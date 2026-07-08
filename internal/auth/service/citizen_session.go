@@ -10,14 +10,35 @@ import (
 
 const citizenSessionTTL = 24 * time.Hour
 
+// EntrySource identifies which app launched the ThaID login, since editing
+// rights differ by channel (design/03-role-matrix.md §PLANNED): Smart Plus
+// can edit an existing registration, a direct ThaID login can only view one.
+type EntrySource string
+
+const (
+	EntrySourceSmartPlus EntrySource = "smartplus"
+	EntrySourceThaID     EntrySource = "thaid"
+)
+
+// ParseEntrySource normalizes an untrusted "source" query value — anything
+// other than the recognized Smart Plus value is treated as a direct ThaID
+// login (the more restrictive, view-only default).
+func ParseEntrySource(raw string) EntrySource {
+	if EntrySource(raw) == EntrySourceSmartPlus {
+		return EntrySourceSmartPlus
+	}
+	return EntrySourceThaID
+}
+
 // CitizenClaims is the identity carried in the app-issued citizen session —
 // sourced once from ThaID's userinfo at callback time, so the registration
 // wizard never has to (re-)collect name/address itself.
 type CitizenClaims struct {
-	PID       string
-	FirstName string
-	LastName  string
-	Address   string
+	PID         string
+	FirstName   string
+	LastName    string
+	Address     string
+	EntrySource EntrySource
 }
 
 // citizenSessionSecret returns the HMAC secret used to sign/verify the app's
@@ -42,12 +63,13 @@ func IssueCitizenSession(claims CitizenClaims) (string, error) {
 	}
 
 	jwtClaims := jwt.MapClaims{
-		"pid":       claims.PID,
-		"firstName": claims.FirstName,
-		"lastName":  claims.LastName,
-		"address":   claims.Address,
-		"iat":       time.Now().Unix(),
-		"exp":       time.Now().Add(citizenSessionTTL).Unix(),
+		"pid":         claims.PID,
+		"firstName":   claims.FirstName,
+		"lastName":    claims.LastName,
+		"address":     claims.Address,
+		"entrySource": string(claims.EntrySource),
+		"iat":         time.Now().Unix(),
+		"exp":         time.Now().Add(citizenSessionTTL).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwtClaims)
@@ -85,11 +107,13 @@ func ParseCitizenSession(tokenString string) (CitizenClaims, error) {
 	firstName, _ := claims["firstName"].(string)
 	lastName, _ := claims["lastName"].(string)
 	address, _ := claims["address"].(string)
+	entrySource, _ := claims["entrySource"].(string)
 
 	return CitizenClaims{
-		PID:       pid,
-		FirstName: firstName,
-		LastName:  lastName,
-		Address:   address,
+		PID:         pid,
+		FirstName:   firstName,
+		LastName:    lastName,
+		Address:     address,
+		EntrySource: ParseEntrySource(entrySource),
 	}, nil
 }

@@ -16,6 +16,13 @@ type GeneralInfo struct {
 	Address   string `gorm:"not null"`
 	Ca        string `gorm:"not null;uniqueIndex"`
 
+	// EntrySource is the channel (auth/service.EntrySource: "smartplus" or
+	// "thaid") that most recently wrote this row — set on first registration
+	// and refreshed on every edit (edits are only ever done via smartplus, see
+	// ReService.ErrEditForbidden). Kept as a plain string so this base models
+	// package doesn't depend on the auth package.
+	EntrySource string `gorm:"column:entry_source;type:varchar(20);not null;default:'thaid'"`
+
 	Chargers []Charger `gorm:"foreignKey:GeneralInfoID"`
 	Evs      []Ev      `gorm:"foreignKey:GeneralInfoID"`
 

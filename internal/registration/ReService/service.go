@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	authservice "github.com/pornlapatP/EV/internal/auth/service"
 	"github.com/pornlapatP/EV/internal/models"
 	"github.com/pornlapatP/EV/internal/peacs"
 	"github.com/pornlapatP/EV/internal/registration/model"
@@ -22,21 +23,31 @@ func NewGeneralService(db *gorm.DB, peaCS *peacs.Client) *GeneralService {
 
 // CreateGeneralInfoWithRelations is the only place a GeneralInfo row is ever
 // persisted — CheckCA is read-only (see below) and just previews the data.
-// If this ca+pid has no GeneralInfo row yet, one is created here (re-querying
-// PEA's cs-service for the real name/address) before chargers/EVs are
-// attached to it. pid comes from the authenticated ThaID session
-// (CitizenAuthMiddleware) — never trusted from the request body.
+// Ca is globally unique, so this upserts on it: a CA with no row yet is
+// created (re-querying PEA's cs-service for the real name/address); a CA
+// that already has a row is an edit, which only EntrySourceSmartPlus may do
+// (design/03-role-matrix.md §PLANNED — direct ThaID logins are view-only
+// after their first submission) and replaces its chargers/EVs outright
+// rather than appending to them. pid comes from the authenticated ThaID
+// session (CitizenAuthMiddleware) — never trusted from the request body.
 func (s *GeneralService) CreateGeneralInfoWithRelations(
 	ctx context.Context,
 	req *model.CreateGeneralInfoRequest,
 	pid string,
+	source authservice.EntrySource,
 ) error {
 
 	return s.db.Transaction(func(tx *gorm.DB) error {
 
+		// keptChargerIDs/keptEvIDs stay nil (all lookups false) on the
+		// create-new-CA path — there's nothing existing to match against, so
+		// every charger/EV below naturally takes the "insert new" branch.
+		var keptChargerIDs, keptEvIDs map[uint]bool
+
 		var general models.GeneralInfo
-		err := tx.Where("ca = ? AND pid = ?", req.Ca, pid).First(&general).Error
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+		err := tx.Where("ca = ?", req.Ca).First(&general).Error
+		switch {
+		case errors.Is(err, gorm.ErrRecordNotFound):
 			detail, err := s.peaCS.GetCustomerDetail(ctx, req.Ca)
 			if err != nil {
 				return err
@@ -46,17 +57,90 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 			}
 
 			general = models.GeneralInfo{
-				PID:       pid,
-				FirstName: detail.Data.FirstName,
-				LastName:  detail.Data.LastName,
-				Address:   detail.Data.Address.FullAddress,
-				Ca:        req.Ca,
+				PID:         pid,
+				FirstName:   detail.Data.FirstName,
+				LastName:    detail.Data.LastName,
+				Address:     detail.Data.Address.FullAddress,
+				Ca:          req.Ca,
+				EntrySource: string(source),
 			}
 			if err := tx.Create(&general).Error; err != nil {
 				return err
 			}
-		} else if err != nil {
+		case err != nil:
 			return fmt.Errorf("กรุณาตรวจสอบเลข CA ก่อนส่งข้อมูลลงทะเบียน")
+		default:
+			// Editing an existing CA (only EntrySourceSmartPlus may do this,
+			// §4). Reconcile by ID instead of wiping everything: a charger/EV
+			// the payload still references by ID is kept (and updated in
+			// place, preserving its image if no new file was uploaded — see
+			// controller.uploadChargerFile); anything not referenced anymore
+			// was removed by the citizen and gets deleted; anything with no
+			// ID is a brand-new addition.
+			if source != authservice.EntrySourceSmartPlus {
+				return ErrEditForbidden
+			}
+
+			if err := tx.Model(&models.GeneralInfo{}).
+				Where("id = ?", general.ID).
+				Update("entry_source", string(source)).Error; err != nil {
+				return err
+			}
+
+			var existingChargers []models.Charger
+			if err := tx.Where("general_info_id = ?", general.ID).Find(&existingChargers).Error; err != nil {
+				return err
+			}
+			keptChargerIDs = make(map[uint]bool, len(existingChargers))
+			existingChargerByID := make(map[uint]models.Charger, len(existingChargers))
+			for _, ec := range existingChargers {
+				existingChargerByID[ec.ID] = ec
+			}
+			for i, c := range req.Chargers {
+				if c.ID == nil {
+					continue
+				}
+				existingCharger, ok := existingChargerByID[*c.ID]
+				if !ok {
+					continue // foreign/stale ID — treated as a new charger below
+				}
+				keptChargerIDs[*c.ID] = true
+				if req.Chargers[i].ImageKey == "" {
+					req.Chargers[i].ImageKey = existingCharger.ImageKey
+				}
+				if req.Chargers[i].LabelImageKey == "" {
+					req.Chargers[i].LabelImageKey = existingCharger.LabelImageKey
+				}
+			}
+			for id := range existingChargerByID {
+				if !keptChargerIDs[id] {
+					if err := tx.Delete(&models.Charger{}, id).Error; err != nil {
+						return err
+					}
+				}
+			}
+
+			var existingEvs []models.Ev
+			if err := tx.Where("general_info_id = ?", general.ID).Find(&existingEvs).Error; err != nil {
+				return err
+			}
+			keptEvIDs = make(map[uint]bool, len(existingEvs))
+			existingEvIDs := make(map[uint]bool, len(existingEvs))
+			for _, ee := range existingEvs {
+				existingEvIDs[ee.ID] = true
+			}
+			for _, e := range req.Evs {
+				if e.ID != nil && existingEvIDs[*e.ID] {
+					keptEvIDs[*e.ID] = true
+				}
+			}
+			for id := range existingEvIDs {
+				if !keptEvIDs[id] {
+					if err := tx.Delete(&models.Ev{}, id).Error; err != nil {
+						return err
+					}
+				}
+			}
 		}
 
 		for _, c := range req.Chargers {
@@ -76,6 +160,14 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 				LabelImageKey: c.LabelImageKey,
 				Brand:         c.Brand,
 				Model:         c.Model,
+			}
+
+			if c.ID != nil && keptChargerIDs[*c.ID] {
+				charger.ID = *c.ID
+				if err := tx.Model(&models.Charger{}).Where("id = ?", charger.ID).Updates(charger).Error; err != nil {
+					return err
+				}
+				continue
 			}
 
 			if err := tx.Create(&charger).Error; err != nil {
@@ -102,6 +194,14 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 				ChargingPeriod:     e.Charging.Period,
 				ChargingStartTime:  e.Charging.StartTime,
 				ChargingFinishTime: e.Charging.FinishTime,
+			}
+
+			if e.ID != nil && keptEvIDs[*e.ID] {
+				ev.ID = *e.ID
+				if err := tx.Model(&models.Ev{}).Where("id = ?", ev.ID).Updates(ev).Error; err != nil {
+					return err
+				}
+				continue
 			}
 
 			if err := tx.Create(&ev).Error; err != nil {
@@ -139,6 +239,10 @@ func (s *GeneralService) GetGeneralInfoByPID(pid string) ([]models.GeneralInfo, 
 }
 
 var ErrCANotFound = errors.New("ca not found")
+
+// ErrEditForbidden is returned when a non-Smart-Plus session (i.e. a direct
+// ThaID login) tries to submit against a CA that already has a registration.
+var ErrEditForbidden = errors.New("editing an existing registration requires Smart Plus")
 
 // CheckCA is read-only — it never writes to the database. It looks up a CA
 // number: if it already has a registration on file, the existing record

@@ -12,6 +12,11 @@ type CreateGeneralInfoRequest struct {
 }
 
 type CreateChargerRequest struct {
+	// ID references an existing Charger row owned by this CA's GeneralInfo —
+	// set only when editing (Smart Plus); omitted/nil always means "new charger".
+	// A foreign or unmatched ID is treated as new (see GeneralService), never
+	// trusted to reach across to another citizen's data.
+	ID            *uint                `json:"id,omitempty"`
 	VendorID      *uint                `json:"vendorId,omitempty"`
 	Vendor        *CreateVendorRequest `json:"vendor,omitempty"`
 	SerialNumber  string               `json:"serialNumber" binding:"required"`
@@ -21,12 +26,16 @@ type CreateChargerRequest struct {
 	Model         string               `json:"model"`
 
 	// S3 object keys, populated server-side after the matching multipart file
-	// parts are uploaded — never bound from the "data" JSON part itself.
+	// parts are uploaded — never bound from the "data" JSON part itself. Left
+	// empty on an edit means "keep the existing image" (see uploadChargerFile).
 	ImageKey      string `json:"-"`
 	LabelImageKey string `json:"-"`
 }
 
 type CreateEvRequest struct {
+	// ID references an existing Ev row owned by this CA's GeneralInfo — set
+	// only when editing (Smart Plus); omitted/nil always means "new EV".
+	ID       *uint                `json:"id,omitempty"`
 	VendorID *uint                `json:"vendorId,omitempty"`
 	Vendor   *CreateVendorRequest `json:"vendor,omitempty"`
 	// PlateNumber/Province are optional — the frontend wizard doesn't collect them today.

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pornlapatP/EV/internal/auth/config"
@@ -24,12 +25,18 @@ func NewThaIDHandler(thaidService *service.ThaIDService, cfg *config.Config) *Th
 	}
 }
 
-// Login redirects the user to ThaID authorization page.
+// Login redirects the user to ThaID authorization page. A caller (e.g. a
+// Smart Plus deep-link) can mark itself with ?source=smartplus; anything else
+// (including a direct ThaID login) is treated as EntrySourceThaID — the
+// more restrictive, view-only default (see CitizenClaims.EntrySource).
+// DOPA's callback only echoes back "code" and "state", so the source rides
+// along inside the thaid_state cookie value rather than as its own param.
 func (h *ThaIDHandler) Login(c *gin.Context) {
 	loginURL, state := h.thaidService.BuildLoginURL()
+	source := service.ParseEntrySource(c.Query("source"))
 
-	// เก็บ state ใน cookie เพื่อตรวจสอบ CSRF ตอน callback
-	c.SetCookie("thaid_state", state, 300, "/", "", service.SecureCookie(), true)
+	// เก็บ state+source ใน cookie เพื่อตรวจสอบ CSRF ตอน callback
+	c.SetCookie("thaid_state", state+"."+string(source), 300, "/", "", service.SecureCookie(), true)
 
 	c.Redirect(http.StatusFound, loginURL)
 }
@@ -56,13 +63,15 @@ func (h *ThaIDHandler) Callback(c *gin.Context) {
 		return
 	}
 
-	// ตรวจสอบ state เพื่อป้องกัน CSRF
+	// ตรวจสอบ state เพื่อป้องกัน CSRF — cookie เก็บเป็น "state.source" (ดู Login)
 	state := c.Query("state")
-	savedState, err := c.Cookie("thaid_state")
-	if err != nil || state != savedState {
+	savedStateAndSource, err := c.Cookie("thaid_state")
+	savedState, source, _ := strings.Cut(savedStateAndSource, ".")
+	if err != nil || state == "" || state != savedState {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid state parameter"})
 		return
 	}
+	entrySource := service.ParseEntrySource(source)
 
 	// ลบ state cookie หลังใช้งาน
 	c.SetCookie("thaid_state", "", -1, "/", "", service.SecureCookie(), true)
@@ -92,10 +101,11 @@ func (h *ThaIDHandler) Callback(c *gin.Context) {
 	c.SetCookie("auth_provider", "thaid", token.ExpiresIn, "/", "", service.SecureCookie(), true)
 
 	citizenSession, err := service.IssueCitizenSession(service.CitizenClaims{
-		PID:       token.PID,
-		FirstName: token.GivenName,
-		LastName:  token.FamilyName,
-		Address:   string(token.Address),
+		PID:         token.PID,
+		FirstName:   token.GivenName,
+		LastName:    token.FamilyName,
+		Address:     string(token.Address),
+		EntrySource: entrySource,
 	})
 	if err != nil {
 		log.Printf("issue citizen session error: %v", err)
@@ -144,11 +154,12 @@ func ThaIDProfileHandler() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"provider":  "thaid",
-			"pid":       claims.PID,
-			"firstName": claims.FirstName,
-			"lastName":  claims.LastName,
-			"address":   claims.Address,
+			"provider":    "thaid",
+			"pid":         claims.PID,
+			"firstName":   claims.FirstName,
+			"lastName":    claims.LastName,
+			"address":     claims.Address,
+			"entrySource": claims.EntrySource,
 		})
 	}
 }
