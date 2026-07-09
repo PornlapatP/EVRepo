@@ -26,9 +26,32 @@ type GeneralInfo struct {
 	Chargers []Charger `gorm:"foreignKey:GeneralInfoID"`
 	Evs      []Ev      `gorm:"foreignKey:GeneralInfoID"`
 
-	Status     string `gorm:"type:varchar(20);not null;default:'pending'"` // pending|approved|rejected
+	// WattdId links this registration to a Watt-D account (entered by the
+	// citizen during the wizard, optional) — having one is a precondition for
+	// earning Watt-D Points (see internal/admin's points engine). Nil = not
+	// linked, submitted straight via ThaID without Smart Plus/Watt-D.
+	WattdId *string `gorm:"column:wattd_id;type:varchar(50)"`
+
+	// RegistrantName is the back-office's editable "ผู้ลงทะเบียน" display name,
+	// distinct from FirstName/LastName (which is the CA *owner*'s name from
+	// PEA's customer master — the two can differ, e.g. a tenant registering a
+	// CA billed to the landlord). Empty until a staff member edits it or it's
+	// captured at submission time; the admin package falls back to
+	// FirstName+LastName when empty.
+	RegistrantName string `gorm:"column:registrant_name;type:varchar(200)"`
+
+	Status     string `gorm:"type:varchar(20);not null;default:'pending'"` // pending|approved|rejected|needs_info
 	ReviewedBy string `gorm:"type:varchar(100)"`                           // Employee.Sub, nullable
 	ReviewedAt *time.Time
+
+	// Notes/checklist/PointsAwarded are the back-office review layer added on
+	// top of the citizen's submission (internal/admin) — nil PointsAwarded
+	// means "not decided yet"; 0 means "approved but not eligible for points".
+	Notes            string `gorm:"type:text"`
+	ChecklistReg     bool
+	ChecklistCharger bool
+	ChecklistEv      bool
+	PointsAwarded    *int
 
 	CreatedAt time.Time
 	UpdatedAt time.Time

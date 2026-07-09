@@ -62,8 +62,10 @@ func (h *AuthHandler) Callback(c *gin.Context) {
 		log.Printf("keycloak userinfo error: %v", err)
 	}
 
-	// redirect กลับ frontend — no staff/admin page exists yet, land on home for now
-	c.Redirect(http.StatusFound, fmt.Sprintf("%s/", h.cfg.FrontendURL))
+	// redirect กลับ frontend's back-office console — this is the only page
+	// Keycloak login exists for (staff review, see internal/admin); citizens
+	// never hit this route (they use /thaid/login instead).
+	c.Redirect(http.StatusFound, fmt.Sprintf("%s/backoffice", h.cfg.FrontendURL))
 }
 
 func ProfileHandler(authService *service.AuthService) gin.HandlerFunc {

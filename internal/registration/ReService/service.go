@@ -63,6 +63,7 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 				Address:     detail.Data.Address.FullAddress,
 				Ca:          req.Ca,
 				EntrySource: string(source),
+				WattdId:     req.WattdId,
 			}
 			if err := tx.Create(&general).Error; err != nil {
 				return err
@@ -83,7 +84,10 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 
 			if err := tx.Model(&models.GeneralInfo{}).
 				Where("id = ?", general.ID).
-				Update("entry_source", string(source)).Error; err != nil {
+				Updates(map[string]any{
+					"entry_source": string(source),
+					"wattd_id":     req.WattdId,
+				}).Error; err != nil {
 				return err
 			}
 

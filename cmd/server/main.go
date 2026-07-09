@@ -8,6 +8,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	adminhandler "github.com/pornlapatP/EV/internal/admin/handler"
+	adminservice "github.com/pornlapatP/EV/internal/admin/service"
 	"github.com/pornlapatP/EV/internal/auth/config"
 	"github.com/pornlapatP/EV/internal/auth/handler"
 	"github.com/pornlapatP/EV/internal/auth/service"
@@ -25,7 +27,7 @@ func main() {
 	cfg := config.Load()
 	database.Connect()
 
-	database.DB.AutoMigrate(&models.GeneralInfo{}, &models.Charger{}, &models.Vendor{}, &models.Ev{}, &models.Employee{})
+	database.DB.AutoMigrate(&models.GeneralInfo{}, &models.Charger{}, &models.Vendor{}, &models.Ev{}, &models.Employee{}, &models.AuditLog{})
 	rawKey := os.Getenv("KEYCLOAK_PUBLIC_KEY")
 	if rawKey == "" {
 		log.Fatal("KEYCLOAK_PUBLIC_KEY missing")
@@ -61,7 +63,7 @@ func main() {
 			"http://127.0.0.1:3001",
 		},
 		AllowMethods: []string{
-			"GET", "POST", "PUT", "DELETE", "OPTIONS",
+			"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS",
 		},
 		AllowHeaders: []string{
 			"Origin",
@@ -74,6 +76,9 @@ func main() {
 	r.Use(cors.New(corsConfig))
 	RegisService := regisservice.NewGeneralService(database.DB, peacs.New())
 	regisController := controller.NewControllerHandler(RegisService, storageSvc)
+
+	AdminService := adminservice.NewAdminService(database.DB, storageSvc)
+	adminController := adminhandler.NewAdminHandler(AdminService, authService)
 
 	apiV1 := r.Group("/api/v1")
 	{
@@ -92,6 +97,21 @@ func main() {
 		staff.Use(middleware.AuthMiddleware(authService, publicKey))
 		{
 			staff.GET("", regisController.GetAll)
+		}
+
+		// Back-office review console (docs/backoffice-implementation-plan.md) —
+		// Keycloak-gated only, same as /general-info's staff group above.
+		admin := apiV1.Group("/admin")
+		admin.Use(middleware.AuthMiddleware(authService, publicKey))
+		{
+			admin.GET("/me", adminController.Me)
+			admin.GET("/stats", adminController.Stats)
+			admin.GET("/registrations", adminController.List)
+			admin.GET("/registrations/:id", adminController.Detail)
+			admin.PATCH("/registrations/:id", adminController.Patch)
+			admin.PATCH("/registrations/:id/checklist", adminController.Checklist)
+			admin.PATCH("/registrations/:id/notes", adminController.Notes)
+			admin.POST("/registrations/:id/decision", adminController.Decision)
 		}
 	}
 

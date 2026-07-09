@@ -7,6 +7,12 @@ package model
 type CreateGeneralInfoRequest struct {
 	Ca string `json:"ca" binding:"required"`
 
+	// WattdId links this registration to a Watt-D account — optional; a
+	// missing/empty value means the citizen submitted straight via ThaID
+	// without one, which makes the registration ineligible for Points
+	// (see internal/admin's points engine).
+	WattdId *string `json:"wattdId,omitempty"`
+
 	Chargers []CreateChargerRequest `json:"chargers"`
 	Evs      []CreateEvRequest      `json:"evs"`
 }
