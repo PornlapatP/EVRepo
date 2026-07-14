@@ -52,6 +52,16 @@ type CustomerDetail struct {
 	FirstName string          `json:"firstName"`
 	LastName  string          `json:"lastName"`
 	Address   CustomerAddress `json:"address"`
+
+	// PEA branch + business-type fields — captured for grid-planning
+	// reporting (design/07-reports-analytics.md), not shown in any UI yet.
+	PeaName          string `json:"peaName"`          // เช่น "กฟจ.ตรัง"
+	CaName           string `json:"caName"`           // ชื่อเจ้าของ CA แบบเต็ม (ต่างจาก FirstName/LastName ที่แยกคำ)
+	PeaOffice        string `json:"peaOffice"`        // รหัสเขต เช่น "KTRU"
+	BpNo             string `json:"bpNo"`             // Business Partner No
+	BusinessType     string `json:"businessType"`     // เช่น "TSIC"
+	BusinessTypeCode string `json:"businessTypeCode"` // เช่น "00001"
+	BusinessTypeText string `json:"businessTypeText"` // เช่น "บ้านอยู่อาศัย"
 }
 
 type CustomerDetailResponse struct {

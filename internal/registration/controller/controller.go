@@ -84,6 +84,14 @@ func (c *RegistrationController) CreateWithRelations(ctx *gin.Context) {
 			})
 			return
 		}
+		if errors.Is(err, regisservice.ErrNotOwner) {
+			ctx.JSON(403, gin.H{
+				"success": false,
+				"code":    "NOT_OWNER",
+				"message": "CA นี้ลงทะเบียนไว้โดยบัญชีอื่น ไม่สามารถแก้ไขได้",
+			})
+			return
+		}
 		ctx.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
@@ -188,16 +196,22 @@ func (c *RegistrationController) CheckCA(ctx *gin.Context) {
 	resp := ToGeneralInfoResponse(ctx.Request.Context(), *general, c.storageSvc)
 
 	// general.ID == 0 means CheckCA built an unsaved preview (no registration
-	// exists for this CA yet) — anyone can proceed to a first submission. Once
-	// a row exists, only a Smart Plus session may edit it further (§4).
+	// exists for this CA yet) — anyone can proceed to a first submission.
+	// Once a row exists: owned = this PID is the one who registered it (own-only,
+	// decided 2026-07-14 — design/03-role-matrix.md §Entry Source); editable
+	// requires *both* a Smart Plus session *and* ownership — a Smart Plus
+	// session browsing someone else's already-registered CA must not be able
+	// to edit it just because the channel is right.
 	alreadyRegistered := general.ID != 0
-	editable := !alreadyRegistered || citizen.EntrySource == authservice.EntrySourceSmartPlus
+	owned := alreadyRegistered && general.PID == citizen.PID
+	editable := !alreadyRegistered || (citizen.EntrySource == authservice.EntrySourceSmartPlus && owned)
 
 	ctx.JSON(200, gin.H{
 		"ca":                resp.Ca,
 		"eligible":          true,
 		"alreadyRegistered": alreadyRegistered,
 		"editable":          editable,
+		"owned":             owned,
 		"firstName":         resp.FirstName,
 		"lastName":          resp.LastName,
 		"chargers":          resp.Chargers,

@@ -4,7 +4,7 @@
 //
 // Usage:
 //
-//	go run ./cmd/mockcitizen -pid 1234567890123 -first-name ทดสอบ -last-name ระบบ
+//	go run ./cmd/mockcitizen -pid 1234567890123 -first-name ทดสอบ -last-name ระบบ -entry-source smartplus
 //
 // Then:
 //
@@ -29,13 +29,15 @@ func main() {
 	firstName := flag.String("first-name", "ทดสอบ", "first name")
 	lastName := flag.String("last-name", "ระบบ", "last name")
 	address := flag.String("address", "123 ถนนทดสอบ แขวงทดสอบ เขตทดสอบ กรุงเทพฯ 10900", "address")
+	entrySource := flag.String("entry-source", "thaid", `entry channel: "smartplus" or "thaid" (anything else falls back to "thaid" — see ParseEntrySource)`)
 	flag.Parse()
 
 	token, err := service.IssueCitizenSession(service.CitizenClaims{
-		PID:       *pid,
-		FirstName: *firstName,
-		LastName:  *lastName,
-		Address:   *address,
+		PID:         *pid,
+		FirstName:   *firstName,
+		LastName:    *lastName,
+		Address:     *address,
+		EntrySource: service.ParseEntrySource(*entrySource),
 	})
 	if err != nil {
 		log.Fatal("failed to issue citizen session (is CITIZEN_SESSION_SECRET set in .env?): ", err)

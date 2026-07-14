@@ -40,6 +40,18 @@ type GeneralInfo struct {
 	// FirstName+LastName when empty.
 	RegistrantName string `gorm:"column:registrant_name;type:varchar(200)"`
 
+	// PEA branch + business-type fields from cs-service's /customer/detail —
+	// captured for grid-planning reporting (design/07-reports-analytics.md),
+	// not surfaced in any UI yet. Only populated on first creation (cs-service
+	// isn't re-queried on edit, since the CA itself doesn't change).
+	PeaName          string `gorm:"column:pea_name;type:varchar(100)"`           // เช่น "กฟจ.ตรัง"
+	CaName           string `gorm:"column:ca_name;type:varchar(200)"`            // ชื่อเจ้าของ CA แบบเต็มจาก cs-service (ต่างจาก FirstName/LastName ที่แยกคำ)
+	PeaOffice        string `gorm:"column:pea_office;type:varchar(20)"`          // รหัสเขต เช่น "KTRU"
+	BpNo             string `gorm:"column:bp_no;type:varchar(50)"`               // Business Partner No
+	BusinessType     string `gorm:"column:business_type;type:varchar(20)"`       // เช่น "TSIC"
+	BusinessTypeCode string `gorm:"column:business_type_code;type:varchar(20)"`  // เช่น "00001"
+	BusinessTypeText string `gorm:"column:business_type_text;type:varchar(200)"` // เช่น "บ้านอยู่อาศัย"
+
 	Status     string `gorm:"type:varchar(20);not null;default:'pending'"` // pending|approved|rejected|needs_info
 	ReviewedBy string `gorm:"type:varchar(100)"`                           // Employee.Sub, nullable
 	ReviewedAt *time.Time

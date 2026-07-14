@@ -57,13 +57,19 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 			}
 
 			general = models.GeneralInfo{
-				PID:         pid,
-				FirstName:   detail.Data.FirstName,
-				LastName:    detail.Data.LastName,
-				Address:     detail.Data.Address.FullAddress,
-				Ca:          req.Ca,
-				EntrySource: string(source),
-				WattdId:     req.WattdId,
+				PID:              pid,
+				FirstName:        detail.Data.FirstName,
+				LastName:         detail.Data.LastName,
+				Address:          detail.Data.Address.FullAddress,
+				Ca:               req.Ca,
+				EntrySource:      string(source),
+				PeaName:          detail.Data.PeaName,
+				CaName:           detail.Data.CaName,
+				PeaOffice:        detail.Data.PeaOffice,
+				BpNo:             detail.Data.BpNo,
+				BusinessType:     detail.Data.BusinessType,
+				BusinessTypeCode: detail.Data.BusinessTypeCode,
+				BusinessTypeText: detail.Data.BusinessTypeText,
 			}
 			if err := tx.Create(&general).Error; err != nil {
 				return err
@@ -82,12 +88,24 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 				return ErrEditForbidden
 			}
 
+			// Own-only (decided 2026-07-14, design/03-role-matrix.md §Entry
+			// Source): a Smart Plus session may only edit a CA *it itself*
+			// registered — being on the right channel isn't enough on its own,
+			// otherwise any Smart Plus session could edit any citizen's CA
+			// just by knowing the number.
+			if general.PID != pid {
+				return ErrNotOwner
+			}
+
+			// WattdId is intentionally NOT touched here — the citizen wizard no
+			// longer collects it (see registration.model.CreateGeneralInfoRequest),
+			// so this request never carries a value for it. It's now managed
+			// exclusively through the back-office (internal/admin PatchField);
+			// blindly writing req.WattdId here would silently wipe out
+			// whatever staff had set.
 			if err := tx.Model(&models.GeneralInfo{}).
 				Where("id = ?", general.ID).
-				Updates(map[string]any{
-					"entry_source": string(source),
-					"wattd_id":     req.WattdId,
-				}).Error; err != nil {
+				Update("entry_source", string(source)).Error; err != nil {
 				return err
 			}
 
@@ -247,6 +265,12 @@ var ErrCANotFound = errors.New("ca not found")
 // ErrEditForbidden is returned when a non-Smart-Plus session (i.e. a direct
 // ThaID login) tries to submit against a CA that already has a registration.
 var ErrEditForbidden = errors.New("editing an existing registration requires Smart Plus")
+
+// ErrNotOwner is returned when a Smart Plus session tries to edit a CA that
+// was registered by a *different* citizen (PID) — own-only, decided
+// 2026-07-14 (design/03-role-matrix.md §Entry Source). Being on the Smart
+// Plus channel is necessary but not sufficient; the PID must match too.
+var ErrNotOwner = errors.New("editing this registration requires being its original owner")
 
 // CheckCA is read-only — it never writes to the database. It looks up a CA
 // number: if it already has a registration on file, the existing record
