@@ -88,6 +88,11 @@ type Charger struct {
 	LabelImageKey string `gorm:"column:label_image_url;type:text;not null"` // spec/serial label photo
 	Brand         string `gorm:"type:varchar(100)"`
 	Model         string `gorm:"type:varchar(100)"`
+
+	// MasterChargerID = ลิงก์ไปบัญชี master (nullable). set ตอน create เมื่อ brand+model
+	// ตรงกับแถวใน master_chargers (ค่าปกติมาจาก dropdown จึงตรงเป๊ะ); null = ตู้นอกบัญชี catalog.
+	MasterChargerID *uint          `gorm:"column:master_charger_id;index"`
+	MasterCharger   *MasterCharger `gorm:"foreignKey:MasterChargerID;references:ID"`
 }
 
 // Vendor covers both charger and EV vendors, distinguished by Type ("charger"|"ev").
@@ -109,17 +114,17 @@ type Ev struct {
 	VendorID uint
 	Vendor   Vendor `gorm:"foreignKey:VendorID;references:ID"`
 
-	// PlateNumber/Province are not collected by the frontend's registration
-	// wizard today (only brand/model/year/battery/charging schedule are) —
-	// kept nullable so the schema doesn't require data that never arrives.
-	PlateNumber string `gorm:"type:varchar(20)"`
-	Province    string
-	Brand       string
-	Model       string
-	Year        string `gorm:"type:varchar(4);not null"`
-	Battery     string `gorm:"type:varchar(50);not null"`
+	Brand   string
+	Model   string
+	Year    string `gorm:"type:varchar(4);not null"`
+	Battery string `gorm:"type:varchar(50);not null"`
 
 	ChargingPeriod     string `gorm:"type:varchar(255);not null"`
 	ChargingStartTime  string `gorm:"type:varchar(5);not null"` // HH:mm
 	ChargingFinishTime string `gorm:"type:varchar(5);not null"` // HH:mm
+
+	// MasterEvID = ลิงก์ไปบัญชี master (nullable). set ตอน create เมื่อ brand+model+battery
+	// ตรงกับแถวใน master_evs (ค่าปกติมาจาก dropdown จึงตรงเป๊ะ); null = รถนอกบัญชี catalog.
+	MasterEvID *uint     `gorm:"column:master_ev_id;index"`
+	MasterEV   *MasterEV `gorm:"foreignKey:MasterEvID;references:ID"`
 }

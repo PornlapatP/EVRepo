@@ -1,0 +1,7589 @@
+[
+  {
+    "name": "ABARTH",
+    "models": [
+      {
+        "name": "500E SCORPIONISSIMA",
+        "source_names": [
+          "500E SCORPIONISSIMA"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 42.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "42.2 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "AION",
+    "models": [
+      {
+        "name": "ES",
+        "source_names": [
+          "AION ES"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 55.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "55.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HYPER GT",
+        "source_names": [
+          "HYPER GT"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 80.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "80 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HYPER SSR",
+        "source_names": [
+          "HYPER SSR"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 74.69,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "74.69 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HYPTEC HL",
+        "source_names": [
+          "HYPTEC HL"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 60.33,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "60.33 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HYPTEC HT 620",
+        "source_names": [
+          "HYPTEC HT 620"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 83.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "83.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HYPTEC SSR",
+        "source_names": [
+          "HYPTEC SSR"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 74.69,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "74.69 kWh"
+          }
+        ]
+      },
+      {
+        "name": "UT",
+        "source_names": [
+          "UT"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50 kWh"
+          }
+        ]
+      },
+      {
+        "name": "UT 420 STANDARD",
+        "source_names": [
+          "AION UT 420 STANDARD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 45.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "45.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "UT 500",
+        "source_names": [
+          "AION UT 500"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 55.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "55.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "V",
+        "source_names": [
+          "V"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 75.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "75.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "V 500",
+        "source_names": [
+          "AION V 500"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 60.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "60 kWh"
+          }
+        ]
+      },
+      {
+        "name": "V 505",
+        "source_names": [
+          "AION V 505"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 65.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "65 kWh"
+          }
+        ]
+      },
+      {
+        "name": "V 602",
+        "source_names": [
+          "AION V 602"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 80.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "80 kWh"
+          }
+        ]
+      },
+      {
+        "name": "Y",
+        "source_names": [
+          "AION Y",
+          "Y"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 51.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "51.9 kWh"
+          },
+          {
+            "capacity_kwh": 63.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "63.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "Y 410",
+        "source_names": [
+          "AION Y 410"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 49.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "49.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "Y 490",
+        "source_names": [
+          "AION Y 490"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 63.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "63.2 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "AIWAYS",
+    "models": [
+      {
+        "name": "U6",
+        "source_names": [
+          "U6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 63.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "63 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "AUDI",
+    "models": [
+      {
+        "name": "A6 SPORTBACK E-TRON",
+        "source_names": [
+          "A6 SPORTBACK E-TRON"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 100.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "100 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E-TRON",
+        "source_names": [
+          "E-TRON"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 95.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "95 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E-TRON 55 Q",
+        "source_names": [
+          "E-TRON 55 Q"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 95.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "95 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E-TRON GT QUATTRO",
+        "source_names": [
+          "E-TRON GT QUATTRO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 95.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "95 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E-TRON GT QUATTRO PF",
+        "source_names": [
+          "E-TRON GT QUATTRO PF"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 93.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "93.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E-TRON SB 55 Q S LINE",
+        "source_names": [
+          "E-TRON SB 55 Q S LINE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 95.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "95 kWh"
+          }
+        ]
+      },
+      {
+        "name": "Q5 SPORTBACK TFSI E",
+        "source_names": [
+          "Q5 SPORTBACK TFSI E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 17.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "17.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "Q6 E-TRON",
+        "source_names": [
+          "Q6 E-TRON"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 94.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "94.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "Q6 E-TRON QUATTRO",
+        "source_names": [
+          "Q6 E-TRON QUATTRO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 94.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "94.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "Q8 E-TRON",
+        "source_names": [
+          "Q8 E-TRON"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 95.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "95 kWh"
+          }
+        ]
+      },
+      {
+        "name": "Q8 E-TRON 50 Q",
+        "source_names": [
+          "Q8 E-TRON 50 Q"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 95.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "95 kWh"
+          }
+        ]
+      },
+      {
+        "name": "Q8 ETRON 55 Q BE",
+        "source_names": [
+          "Q8 ETRON 55 Q BE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 114.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "114 kWh"
+          }
+        ]
+      },
+      {
+        "name": "Q8 SB E-TRON 50 Q S LINE",
+        "source_names": [
+          "Q8 SB E-TRON 50 Q S LINE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 95.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "95 kWh"
+          }
+        ]
+      },
+      {
+        "name": "Q8 SB ETRON 55 Q SLINE BE",
+        "source_names": [
+          "Q8 SB ETRON 55 Q SLINE BE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 114.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "114 kWh"
+          }
+        ]
+      },
+      {
+        "name": "Q8 SPORTBACK E-TRON",
+        "source_names": [
+          "Q8 SPORTBACK E-TRON"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 114.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "114 kWh"
+          }
+        ]
+      },
+      {
+        "name": "RS E-TRON GT QUATTRO",
+        "source_names": [
+          "RS E-TRON GT QUATTRO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 97.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "97 kWh"
+          }
+        ]
+      },
+      {
+        "name": "S6 SPORTBACK E-TRON",
+        "source_names": [
+          "S6 SPORTBACK E-TRON"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 100.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "100 kWh"
+          }
+        ]
+      },
+      {
+        "name": "S6 SPORTBACK E-TRON QUATTRO",
+        "source_names": [
+          "S6 SPORTBACK E-TRON QUATTRO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 94.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "94.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SQ6 E-TRON",
+        "source_names": [
+          "SQ6 E-TRON"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 94.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "94.4 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "AVATR",
+    "models": [
+      {
+        "name": "07",
+        "source_names": [
+          "AVATR 07"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 82.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "82 kWh"
+          }
+        ]
+      },
+      {
+        "name": "11",
+        "source_names": [
+          "AVATR 11"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 90.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "90 kWh"
+          }
+        ]
+      },
+      {
+        "name": "11 ROYAL EDITION",
+        "source_names": [
+          "AVATR 11 ROYAL EDITION"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 116.79,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "116.79 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "AXION",
+    "models": [
+      {
+        "name": "T5",
+        "source_names": [
+          "T5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 65.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "65 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "BMW",
+    "models": [
+      {
+        "name": "300E",
+        "source_names": [
+          "300E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 13.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "13.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "330E",
+        "source_names": [
+          "330E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 13.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "13.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "I3",
+        "source_names": [
+          "I3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 10.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "10 kWh"
+          }
+        ]
+      },
+      {
+        "name": "I4",
+        "source_names": [
+          "I4"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 83.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "83.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "I4 EDRIVE35 GRAN COUPE RH",
+        "source_names": [
+          "I4 EDRIVE35 GRAN COUPE RH"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 70.2,
+            "usable_kwh": 67.0,
+            "capacity_max_kwh": null,
+            "label": "70.2 kWh (ใช้งานจริง 67)"
+          }
+        ]
+      },
+      {
+        "name": "I4 EDRIVE40 GRAN COUPE RH",
+        "source_names": [
+          "I4 EDRIVE40 GRAN COUPE RH"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 83.9,
+            "usable_kwh": 81.1,
+            "capacity_max_kwh": null,
+            "label": "83.9 kWh (ใช้งานจริง 81.1)"
+          }
+        ]
+      },
+      {
+        "name": "I4 M50",
+        "source_names": [
+          "I4 M50"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 83.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "83.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "I4 M50 GRAN COUPE",
+        "source_names": [
+          "I4 M50 GRAN COUPE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 83.9,
+            "usable_kwh": 81.1,
+            "capacity_max_kwh": null,
+            "label": "83.9 kWh (ใช้งานจริง 81.1)"
+          }
+        ]
+      },
+      {
+        "name": "I5",
+        "source_names": [
+          "I5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 83.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "83.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "I5 EDRIVE40",
+        "source_names": [
+          "I5 EDRIVE40"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 83.9,
+            "usable_kwh": 81.2,
+            "capacity_max_kwh": null,
+            "label": "83.9 kWh (ใช้งานจริง 81.2)"
+          }
+        ]
+      },
+      {
+        "name": "I5 EDRIVE40 M SPORT",
+        "source_names": [
+          "I5 EDRIVE40 M SPORT"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 83.9,
+            "usable_kwh": 81.2,
+            "capacity_max_kwh": null,
+            "label": "83.9 kWh (ใช้งานจริง 81.2)"
+          }
+        ]
+      },
+      {
+        "name": "I5 M60 XDRIVE",
+        "source_names": [
+          "I5 M60 XDRIVE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 84.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "84.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "I7",
+        "source_names": [
+          "I7"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 105.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "105.7 kWh"
+          }
+        ]
+      },
+      {
+        "name": "I7 EDRIVE50",
+        "source_names": [
+          "I7 EDRIVE50"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 112.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "112.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "I7 M70 XDRIVE",
+        "source_names": [
+          "I7 M70 XDRIVE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 112.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "112.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "I7 XDRIVE60",
+        "source_names": [
+          "I7 XDRIVE60"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 105.7,
+            "usable_kwh": 101.7,
+            "capacity_max_kwh": null,
+            "label": "105.7 kWh (ใช้งานจริง 101.7)"
+          }
+        ]
+      },
+      {
+        "name": "IX",
+        "source_names": [
+          "IX"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 111.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "111.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IX XDRIVE40",
+        "source_names": [
+          "IX XDRIVE40"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 76.6,
+            "usable_kwh": 71.0,
+            "capacity_max_kwh": null,
+            "label": "76.6 kWh (ใช้งานจริง 71)"
+          }
+        ]
+      },
+      {
+        "name": "IX XDRIVE50",
+        "source_names": [
+          "IX XDRIVE50"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 109.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "109.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IX1 EDRIVE20L",
+        "source_names": [
+          "IX1 EDRIVE20L"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 64.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "64.7 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IX2",
+        "source_names": [
+          "IX2"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 64.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "64.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IX2 XDRIVE30",
+        "source_names": [
+          "IX2 XDRIVE30"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 66.5,
+            "usable_kwh": 64.7,
+            "capacity_max_kwh": null,
+            "label": "66.5 kWh (ใช้งานจริง 64.7)"
+          }
+        ]
+      },
+      {
+        "name": "IX3",
+        "source_names": [
+          "IX3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 80.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "80 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IX3 M SPORT",
+        "source_names": [
+          "IX3 M SPORT"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 80.0,
+            "usable_kwh": 74.0,
+            "capacity_max_kwh": null,
+            "label": "80 kWh (ใช้งานจริง 74)"
+          }
+        ]
+      },
+      {
+        "name": "X1",
+        "source_names": [
+          "X1"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 16.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "16.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "X3",
+        "source_names": [
+          "X3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 13.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "13 kWh"
+          }
+        ]
+      },
+      {
+        "name": "X5",
+        "source_names": [
+          "X5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 24.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "24 kWh"
+          }
+        ]
+      },
+      {
+        "name": "XM",
+        "source_names": [
+          "XM"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 29.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "29.5 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "BYD",
+    "models": [
+      {
+        "name": "ATTO 1",
+        "source_names": [
+          "BYD ATTO 1"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 43.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "43.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ATTO 2",
+        "source_names": [
+          "ATTO 2",
+          "BYD ATTO 2"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 32.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "32.2 kWh"
+          },
+          {
+            "capacity_kwh": 42.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "42 kWh"
+          },
+          {
+            "capacity_kwh": 45.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "45.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ATTO 3",
+        "source_names": [
+          "ATTO 3",
+          "BYD ATTO 3",
+          "BYD ATTO3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 60.48,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "60.48 kWh"
+          }
+        ]
+      },
+      {
+        "name": "DENZA D9",
+        "source_names": [
+          "DENZA D9"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 103.36,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "103.36 kWh"
+          }
+        ]
+      },
+      {
+        "name": "DOLPHIN",
+        "source_names": [
+          "BYD DOLPHIN",
+          "DOLPHIN"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 44.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "44.9 kWh"
+          },
+          {
+            "capacity_kwh": 46.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "46 kWh"
+          }
+        ]
+      },
+      {
+        "name": "DOLPHIN EXD",
+        "source_names": [
+          "BYD DOLPHIN EXD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 60.48,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "60.48 kWh"
+          }
+        ]
+      },
+      {
+        "name": "DOLPHIN STD",
+        "source_names": [
+          "BYD DOLPHIN STD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 44.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "44.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E6",
+        "source_names": [
+          "E6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 80.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "80 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HAN",
+        "source_names": [
+          "HAN"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 76.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "76.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "M3",
+        "source_names": [
+          "M3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "M6",
+        "source_names": [
+          "BYD M6",
+          "M6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 55.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "55.4 kWh"
+          },
+          {
+            "capacity_kwh": 71.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "71.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "M6 EXTENDED",
+        "source_names": [
+          "BYD M6 EXTENDED"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 71.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "71.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "QIN L",
+        "source_names": [
+          "QIN L"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 46.08,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "46.08 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SEAGULL",
+        "source_names": [
+          "SEAGULL"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 38.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "38 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SEAL",
+        "source_names": [
+          "SEAL"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 82.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "82.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SEAL 6",
+        "source_names": [
+          "BYD SEAL 6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 18.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "18.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SEAL DM-I",
+        "source_names": [
+          "SEAL DM-I"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 18.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "18.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SEAL EXD",
+        "source_names": [
+          "BYD SEAL EXD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 82.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "82.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SEAL EXD RWD",
+        "source_names": [
+          "BYD SEAL EXD RWD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 82.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "82.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SEAL STD RWD",
+        "source_names": [
+          "BYD SEAL STD RWD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 61.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "61.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SEALION 6",
+        "source_names": [
+          "SEALION 6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 18.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "18.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SEALION 7",
+        "source_names": [
+          "BYD SEALION 7",
+          "SEALION 7"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 82.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "82.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SEALION 7 RWD",
+        "source_names": [
+          "BYD SEALION 7 RWD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 82.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "82.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SHARK 6",
+        "source_names": [
+          "SHARK 6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 29.58,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "29.58 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SONG",
+        "source_names": [
+          "SONG"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 26.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "26.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SONG L",
+        "source_names": [
+          "SONG L"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 87.04,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "87.04 kWh"
+          }
+        ]
+      },
+      {
+        "name": "T3",
+        "source_names": [
+          "T3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 60.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "60 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TANG",
+        "source_names": [
+          "TANG"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 108.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "108.8 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "CHANGAN",
+    "models": [
+      {
+        "name": "AVATR 06",
+        "source_names": [
+          "AVATR 06"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 45.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "45.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "AVATR 07",
+        "source_names": [
+          "AVATR 07"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 82.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "82 kWh"
+          }
+        ]
+      },
+      {
+        "name": "AVATR 11",
+        "source_names": [
+          "AVATR 11"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 90.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "90 kWh"
+          }
+        ]
+      },
+      {
+        "name": "AVATR 12",
+        "source_names": [
+          "AVATR 12"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 94.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "94.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "DEEPAL E07",
+        "source_names": [
+          "DEEPAL E07"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 89.98,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "89.98 kWh"
+          }
+        ]
+      },
+      {
+        "name": "DEEPAL L07",
+        "source_names": [
+          "DEEPAL L07"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 66.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "66.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "DEEPAL S05",
+        "source_names": [
+          "DEEPAL S05"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 56.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "56.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "DEEPAL S07",
+        "source_names": [
+          "DEEPAL S07"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 66.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "66.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "DEEPAL S7",
+        "source_names": [
+          "DEEPAL S7"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 66.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "66.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "DEEPAL SL03",
+        "source_names": [
+          "DEEPAL SL03"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 79.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "79.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HUNTER",
+        "source_names": [
+          "HUNTER"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 31.18,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "31.18 kWh"
+          }
+        ]
+      },
+      {
+        "name": "LUMIN",
+        "source_names": [
+          "LUMIN"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 17.65,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "17.65 kWh"
+          }
+        ]
+      },
+      {
+        "name": "LUMIN L",
+        "source_names": [
+          "LUMIN L"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 28.08,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "28.08 kWh"
+          }
+        ]
+      },
+      {
+        "name": "LUMIN L DC",
+        "source_names": [
+          "LUMIN L DC"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 27.99,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "27.99 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "CHENGLONG",
+    "models": [
+      {
+        "name": "LZ5180XXYM3AZBEV12T",
+        "source_names": [
+          "LZ5180XXYM3AZBEV12T"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 281.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "281.9 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "CHERY",
+    "models": [
+      {
+        "name": "EQ1",
+        "source_names": [
+          "EQ1"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 30.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "30.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQ7 MY 2025",
+        "source_names": [
+          "EQ7 MY 2025"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 67.12,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "67.12 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EXEED EXLANTIX ES",
+        "source_names": [
+          "EXEED EXLANTIX ES"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 100.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "100 kWh"
+          }
+        ]
+      },
+      {
+        "name": "JAECOO",
+        "source_names": [
+          "JAECOO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 65.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "65.7 kWh"
+          }
+        ]
+      },
+      {
+        "name": "JAECOO 5 EV",
+        "source_names": [
+          "JAECOO 5 EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 69.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "69.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "JAECOO 6 EV",
+        "source_names": [
+          "JAECOO 6 EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 69.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "69.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "JAECOO 7 SHS",
+        "source_names": [
+          "JAECOO 7 SHS"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 18.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "18.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "OMADA 5 EV",
+        "source_names": [
+          "OMADA 5 EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 61.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "61 kWh"
+          }
+        ]
+      },
+      {
+        "name": "OMODA C7 SHS",
+        "source_names": [
+          "OMODA C7 SHS"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 18.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "18.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "OMODA C9 SHS",
+        "source_names": [
+          "OMODA C9 SHS"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 34.46,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "34.46 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TIGGO",
+        "source_names": [
+          "TIGGO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 19.27,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "19.27 kWh"
+          }
+        ]
+      },
+      {
+        "name": "V23",
+        "source_names": [
+          "V23"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 59.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "59.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "V23 PEAK",
+        "source_names": [
+          "V23 PEAK"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 59.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "59.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "V23 PLAY",
+        "source_names": [
+          "V23 PLAY"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 51.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "51.7 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "DAYUN",
+    "models": [
+      {
+        "name": "DYQ1033BEV1R-H",
+        "source_names": [
+          "DYQ1033BEV1R-H"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 54.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "54.7 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "DEEPAL",
+    "models": [
+      {
+        "name": "E07",
+        "source_names": [
+          "E07"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 89.98,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "89.98 kWh"
+          }
+        ]
+      },
+      {
+        "name": "L07",
+        "source_names": [
+          "L07"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 66.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "66.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "L07 S",
+        "source_names": [
+          "L07 S"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 56.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "56.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "S05",
+        "source_names": [
+          "S05"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 56.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "56.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "S07",
+        "source_names": [
+          "S07"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 66.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "66.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "S07 L",
+        "source_names": [
+          "S07 L"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 66.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "66.8 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "DENZA",
+    "models": [
+      {
+        "name": "D9",
+        "source_names": [
+          "D9",
+          "DENZA D9"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 103.36,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "103.36 kWh"
+          }
+        ]
+      },
+      {
+        "name": "N7",
+        "source_names": [
+          "N7"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 91.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "91.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "N8",
+        "source_names": [
+          "N8"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 45.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "45.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "Z9 GT",
+        "source_names": [
+          "Z9 GT"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 38.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "38.5 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "DONGFENG",
+    "models": [
+      {
+        "name": "E-STAR T",
+        "source_names": [
+          "E-STAR T"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 42.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "42 kWh"
+          }
+        ]
+      },
+      {
+        "name": "NAMMI 06",
+        "source_names": [
+          "NAMMI 06"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 42.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "42.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "S73",
+        "source_names": [
+          "S73"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 65.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "65 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "EVT",
+    "models": [
+      {
+        "name": "E-VAN",
+        "source_names": [
+          "E-VAN"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 45.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "45 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "FARIZON",
+    "models": [
+      {
+        "name": "SUPERVAN SV",
+        "source_names": [
+          "SUPERVAN SV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 86.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "86 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SUPERVAN SV6",
+        "source_names": [
+          "FARIZON SUPERVAN SV6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 86.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "86 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SUPERVAN SV9",
+        "source_names": [
+          "SUPERVAN SV9"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 106.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "106 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SV",
+        "source_names": [
+          "SV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 86.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "86 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SV9",
+        "source_names": [
+          "SV9"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 106.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "106 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "FENGCHI",
+    "models": [
+      {
+        "name": "DYQ1030BEV1-H",
+        "source_names": [
+          "DYQ1030BEV1-H"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 54.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "54.7 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "FIAT",
+    "models": [
+      {
+        "name": "500E",
+        "source_names": [
+          "500E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 42.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "42 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "FOMM",
+    "models": [
+      {
+        "name": "FOMMONE",
+        "source_names": [
+          "FOMMONE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 30.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "30 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ONE",
+        "source_names": [
+          "FOMM ONE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 11.84,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "11.84 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "FORD",
+    "models": [
+      {
+        "name": "E-TRANSIT",
+        "source_names": [
+          "E-TRANSIT"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 68.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "68 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQUATOR",
+        "source_names": [
+          "EQUATOR"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 18.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "18.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MUSTANG MACH-E",
+        "source_names": [
+          "MUSTANG MACH-E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 91.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "91 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MUSTANG MARCH-E",
+        "source_names": [
+          "MUSTANG MARCH-E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 68.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "68 kWh"
+          }
+        ]
+      },
+      {
+        "name": "PUMA EV",
+        "source_names": [
+          "PUMA EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50 kWh"
+          }
+        ]
+      },
+      {
+        "name": "RANGER PHEV",
+        "source_names": [
+          "RANGER PHEV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 11.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "11.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TOUENEO CUSTOM",
+        "source_names": [
+          "TOUENEO CUSTOM"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 64.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "64 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TRANSIT COURIER",
+        "source_names": [
+          "TRANSIT COURIER"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 62.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "62 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "FOTON",
+    "models": [
+      {
+        "name": "AUMAN EST IBLUE280",
+        "source_names": [
+          "AUMAN EST IBLUE280"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 282.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "282 kWh"
+          }
+        ]
+      },
+      {
+        "name": "AUMAN EST MIXE",
+        "source_names": [
+          "AUMAN EST MIXE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 422.87,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "422.87 kWh"
+          }
+        ]
+      },
+      {
+        "name": "AUMARK 4W IBLUE85",
+        "source_names": [
+          "AUMARK 4W IBLUE85"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 81.14,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "81.14 kWh"
+          }
+        ]
+      },
+      {
+        "name": "AUMARK 6W IBLUE",
+        "source_names": [
+          "AUMARK 6W IBLUE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 81.14,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "81.14 kWh"
+          }
+        ]
+      },
+      {
+        "name": "BJ1031EVJA3",
+        "source_names": [
+          "BJ1031EVJA3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 38.64,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "38.64 kWh"
+          }
+        ]
+      },
+      {
+        "name": "BJ1031EVJA4",
+        "source_names": [
+          "BJ1031EVJA4"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 38.64,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "38.64 kWh"
+          }
+        ]
+      },
+      {
+        "name": "BJ1044EVJAR",
+        "source_names": [
+          "BJ1044EVJAR"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 63.76,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "63.76 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E-TUNLAND",
+        "source_names": [
+          "E-TUNLAND"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 88.55,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "88.55 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E-VIEW CS2 CARGO",
+        "source_names": [
+          "E-VIEW CS2 CARGO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.23,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50.23 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E-VIEW CS2 PASSENGER",
+        "source_names": [
+          "E-VIEW CS2 PASSENGER"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.23,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50.23 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ETUNLAND",
+        "source_names": [
+          "ETUNLAND"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 88.55,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "88.55 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EVIEW",
+        "source_names": [
+          "EVIEW"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.23,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50.23 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "GEELY",
+    "models": [
+      {
+        "name": "EX2",
+        "source_names": [
+          "EX2"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 39.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "39.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EX5",
+        "source_names": [
+          "EX5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 60.22,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "60.22 kWh"
+          }
+        ]
+      },
+      {
+        "name": "GALAXY E5",
+        "source_names": [
+          "GALAXY E5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 60.22,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "60.22 kWh"
+          }
+        ]
+      },
+      {
+        "name": "GALAXY E8",
+        "source_names": [
+          "GALAXY E8"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 75.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "75.6 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "GMC",
+    "models": [
+      {
+        "name": "HUMMER EV EDITION 1",
+        "source_names": [
+          "HUMMER EV EDITION 1"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 212.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "212.7 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HUMMER EV2X",
+        "source_names": [
+          "HUMMER EV2X"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 170.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "170 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "GWM",
+    "models": [
+      {
+        "name": "HAVAL-H6",
+        "source_names": [
+          "HAVAL-H6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 30.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "30 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ORA 07",
+        "source_names": [
+          "ORA 07"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 83.499,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "83.499 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ORA 5",
+        "source_names": [
+          "ORA 5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 63.13,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "63.13 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ORA BLACK CAT",
+        "source_names": [
+          "ORA BLACK CAT"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 37.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "37 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ORA GOOD CAT",
+        "source_names": [
+          "ORA GOOD CAT"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 30.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "30 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ORA GRAND CAT",
+        "source_names": [
+          "ORA GRAND CAT"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 83.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "83.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "POER",
+        "source_names": [
+          "POER"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 37.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "37 kWh"
+          }
+        ]
+      },
+      {
+        "name": "POER SAHAR",
+        "source_names": [
+          "POER SAHAR"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 86.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "86 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TANK 500",
+        "source_names": [
+          "GWM TANK 500"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 37.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "37.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TANK 700 HI4-T",
+        "source_names": [
+          "TANK 700 HI4-T"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 37.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "37.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "WEY 80 PHEV",
+        "source_names": [
+          "WEY 80 PHEV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 51.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "51 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "HIGER",
+    "models": [
+      {
+        "name": "E-BUS",
+        "source_names": [
+          "E-BUS"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 422.87,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "422.87 kWh"
+          }
+        ]
+      },
+      {
+        "name": "H5",
+        "source_names": [
+          "H5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 70.47,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "70.47 kWh"
+          }
+        ]
+      },
+      {
+        "name": "KLQ6540EVN3R",
+        "source_names": [
+          "KLQ6540EVN3R"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.23,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50.23 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "HOMIDA",
+    "models": [
+      {
+        "name": "PICKMAN KAI",
+        "source_names": [
+          "PICKMAN KAI"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 7.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "7.2 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "HONDA",
+    "models": [
+      {
+        "name": "0",
+        "source_names": [
+          "0"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 80.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "80 kWh"
+          }
+        ]
+      },
+      {
+        "name": "0 SALOON",
+        "source_names": [
+          "0 SALOON"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 80.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "80 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E",
+        "source_names": [
+          "E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 35.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "35.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E ADVANCE",
+        "source_names": [
+          "E ADVANCE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 35.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "35.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E:N1",
+        "source_names": [
+          "E:N1"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 68.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "68.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E:N2",
+        "source_names": [
+          "E:N2"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 68.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "68.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ENP1",
+        "source_names": [
+          "ENP1"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 53.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "53.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ENS1",
+        "source_names": [
+          "ENS1"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 53.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "53.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ENY1",
+        "source_names": [
+          "ENY1"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 68.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "68.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "PROLOGUE 2024",
+        "source_names": [
+          "PROLOGUE 2024"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 85.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "85 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "HYUNDAI",
+    "models": [
+      {
+        "name": "CRETA ELECTRIC",
+        "source_names": [
+          "CRETA ELECTRIC"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 51.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "51.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "INSTER",
+        "source_names": [
+          "INSTER"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 49.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "49 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IONIQ",
+        "source_names": [
+          "IONIQ"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 28.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "28 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IONIQ 5",
+        "source_names": [
+          "IONIQ 5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 28.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "28 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IONIQ 6",
+        "source_names": [
+          "IONIQ 6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 28.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "28 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IONIQ 9",
+        "source_names": [
+          "IONIQ 9"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 110.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "110.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IONIQ EV",
+        "source_names": [
+          "IONIQ EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 38.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "38.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IONIQ5",
+        "source_names": [
+          "IONIQ5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 58.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "58 kWh"
+          },
+          {
+            "capacity_kwh": 84.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "84 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IONIQ5 N",
+        "source_names": [
+          "IONIQ5 N"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 84.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "84 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IONIQ6",
+        "source_names": [
+          "IONIQ6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 77.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "77.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "KONA",
+        "source_names": [
+          "KONA"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 64.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "64 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ISUZU",
+    "models": [
+      {
+        "name": "D- EV",
+        "source_names": [
+          "D- EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 66.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "66.9 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "JAC",
+    "models": [
+      {
+        "name": "EVO-T8",
+        "source_names": [
+          "EVO-T8"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 65.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "65.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HFC1040EV2",
+        "source_names": [
+          "HFC1040EV2"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 64.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "64 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HFC1040EV3",
+        "source_names": [
+          "HFC1040EV3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 64.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "64 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HUNTER EV",
+        "source_names": [
+          "HUNTER EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 31.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "31.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "T8 EV",
+        "source_names": [
+          "T8 EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 67.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "67 kWh"
+          }
+        ]
+      },
+      {
+        "name": "T8EV",
+        "source_names": [
+          "T8EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 65.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "65.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "T9 EV",
+        "source_names": [
+          "T9 EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 88.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "88 kWh"
+          }
+        ]
+      },
+      {
+        "name": "T9EV",
+        "source_names": [
+          "T9EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 88.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "88 kWh"
+          }
+        ]
+      },
+      {
+        "name": "YIWEI 3",
+        "source_names": [
+          "YIWEI 3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 23.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "23.2 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "JAECOO",
+    "models": [
+      {
+        "name": "5 EV",
+        "source_names": [
+          "5 EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 69.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "69.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "5 EV +",
+        "source_names": [
+          "5 EV +"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 61.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "61.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "6 EV",
+        "source_names": [
+          "6 EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 69.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "69.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "6T EV",
+        "source_names": [
+          "6T EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 65.69,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "65.69 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "JAGUAR",
+    "models": [
+      {
+        "name": "I-PACE",
+        "source_names": [
+          "I-PACE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 90.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "90 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TYPE 00",
+        "source_names": [
+          "TYPE 00"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 40.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "40 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "JIAYUAN",
+    "models": [
+      {
+        "name": "JY1320-ZLH",
+        "source_names": [
+          "JY1320-ZLH"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 10.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "10 kWh"
+          }
+        ]
+      },
+      {
+        "name": "JY7222-ZQR",
+        "source_names": [
+          "JY7222-ZQR"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 10.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "10 kWh"
+          }
+        ]
+      },
+      {
+        "name": "JY7252-ZQR",
+        "source_names": [
+          "JY7252-ZQR"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 10.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "10 kWh"
+          }
+        ]
+      },
+      {
+        "name": "KOMI",
+        "source_names": [
+          "KOMI"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 17.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "17.8 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "JONWAY",
+    "models": [
+      {
+        "name": "IONAXS",
+        "source_names": [
+          "IONAXS"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 12.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "12 kWh"
+          }
+        ]
+      },
+      {
+        "name": "T21",
+        "source_names": [
+          "T21"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 12.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "12 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "JR",
+    "models": [
+      {
+        "name": "JY AIR",
+        "source_names": [
+          "JY AIR"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 64.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "64 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "JUNEYAO",
+    "models": [
+      {
+        "name": "JY AIR",
+        "source_names": [
+          "JY AIR"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50.8 kWh"
+          },
+          {
+            "capacity_kwh": 63.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "63 kWh"
+          }
+        ]
+      },
+      {
+        "name": "JY AIR STANDARD",
+        "source_names": [
+          "JY AIR STANDARD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50.8 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "KAMA",
+    "models": [
+      {
+        "name": "ESP7",
+        "source_names": [
+          "ESP7"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 54.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "54.7 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "KEYTON",
+    "models": [
+      {
+        "name": "M70L",
+        "source_names": [
+          "M70L"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 21.82,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "21.82 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "KIA",
+    "models": [
+      {
+        "name": "EV3",
+        "source_names": [
+          "EV3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 81.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "81.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EV5",
+        "source_names": [
+          "EV5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 88.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "88.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EV6",
+        "source_names": [
+          "EV6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 64.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "64 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EV9",
+        "source_names": [
+          "EV9"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 99.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "99.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EV9 GT LINE",
+        "source_names": [
+          "EV9 GT LINE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 99.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "99.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SORENTO PHEV",
+        "source_names": [
+          "SORENTO PHEV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 13.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "13.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SOUL-EV",
+        "source_names": [
+          "SOUL-EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 64.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "64 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "KING LONG",
+    "models": [
+      {
+        "name": "DRACON",
+        "source_names": [
+          "DRACON"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 59.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "59.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "VENUS 3",
+        "source_names": [
+          "VENUS 3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 45.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "45 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "KYC",
+    "models": [
+      {
+        "name": "V5",
+        "source_names": [
+          "V5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 41.86,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "41.86 kWh"
+          }
+        ]
+      },
+      {
+        "name": "V7",
+        "source_names": [
+          "V7"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.23,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50.23 kWh"
+          }
+        ]
+      },
+      {
+        "name": "X1",
+        "source_names": [
+          "X1"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 41.86,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "41.86 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "LEAPMOTOR",
+    "models": [
+      {
+        "name": "B10",
+        "source_names": [
+          "B10"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 56.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "56.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "B10 DESIGN BEV",
+        "source_names": [
+          "B10 DESIGN BEV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 67.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "67.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "B10 LIFE BEV",
+        "source_names": [
+          "B10 LIFE BEV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 56.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "56.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "B10 STYLE BEV",
+        "source_names": [
+          "B10 STYLE BEV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 67.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "67.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "C10",
+        "source_names": [
+          "C10"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 69.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "69.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "C10 EV",
+        "source_names": [
+          "C10 EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 69.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "69.9 kWh"
+          },
+          {
+            "capacity_kwh": 81.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "81.9 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "LEVC",
+    "models": [
+      {
+        "name": "L380",
+        "source_names": [
+          "L380"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 100.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "100 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TX",
+        "source_names": [
+          "TX"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 34.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "34.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "VN5",
+        "source_names": [
+          "VN5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 31.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "31 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "LEXUS",
+    "models": [
+      {
+        "name": "ES 300H",
+        "source_names": [
+          "ES 300H"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 1.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": 1.6,
+            "label": "1.3–1.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IS 300H",
+        "source_names": [
+          "IS 300H"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 1.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": 1.6,
+            "label": "1.3–1.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "LS 500H",
+        "source_names": [
+          "LS 500H"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 1.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": 1.6,
+            "label": "1.3–1.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "NX 350H",
+        "source_names": [
+          "NX 350H"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 18.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "18.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "NX 450H+",
+        "source_names": [
+          "NX 450H+"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 18.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "18.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "RX 450H+",
+        "source_names": [
+          "RX 450H+"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 18.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "18.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "RZ 450E",
+        "source_names": [
+          "RZ 450E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 71.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "71.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "RZ350E",
+        "source_names": [
+          "RZ350E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 71.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "71.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "RZ450E",
+        "source_names": [
+          "RZ450E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 71.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "71.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "RZ500E",
+        "source_names": [
+          "RZ500E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 71.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "71.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "UX 250H",
+        "source_names": [
+          "UX 250H"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 1.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "1.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "UX 300E",
+        "source_names": [
+          "UX 300E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 72.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "72.8 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "LINXYS",
+    "models": [
+      {
+        "name": "G100P-R",
+        "source_names": [
+          "G100P-R"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 42.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "42 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "LOTUS",
+    "models": [
+      {
+        "name": "ELETRE",
+        "source_names": [
+          "ELETRE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 109.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "109 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ELETRE 600 GT SE",
+        "source_names": [
+          "ELETRE 600 GT SE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 112.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "112 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ELETRE 600 SPORT SE",
+        "source_names": [
+          "ELETRE 600 SPORT SE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 112.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "112 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ELETRE R",
+        "source_names": [
+          "ELETRE R"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 109.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "109 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ELETRE S",
+        "source_names": [
+          "ELETRE S"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 109.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "109 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EMEYA",
+        "source_names": [
+          "EMEYA"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 102.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "102 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EMEYA 600",
+        "source_names": [
+          "EMEYA 600"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 102.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "102 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EMEYA 900 SPORT CARBON",
+        "source_names": [
+          "EMEYA 900 SPORT CARBON"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 102.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "102 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EMEYA R",
+        "source_names": [
+          "EMEYA R"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 98.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "98.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EMEYA S",
+        "source_names": [
+          "EMEYA S"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 98.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "98.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EVIJA",
+        "source_names": [
+          "EVIJA"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 93.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "93 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "MASERATI",
+    "models": [
+      {
+        "name": "GRANCABRIO FOLGORE",
+        "source_names": [
+          "GRANCABRIO FOLGORE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 83.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "83 kWh"
+          }
+        ]
+      },
+      {
+        "name": "GRANTURISMO FOLGORE",
+        "source_names": [
+          "GRANTURISMO FOLGORE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 92.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "92.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "GRECALE FOLGORE",
+        "source_names": [
+          "GRECALE FOLGORE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 105.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "105 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "MAXUS",
+    "models": [
+      {
+        "name": "EPC1A",
+        "source_names": [
+          "EPC1A"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 45.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "45 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MIFA9",
+        "source_names": [
+          "MIFA9"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 90.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "90 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "MERCEDES-BENZ",
+    "models": [
+      {
+        "name": "AMG EQE 53 4MATIC+",
+        "source_names": [
+          "AMG EQE 53 4MATIC+"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 90.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "90.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "C 350E",
+        "source_names": [
+          "C 350E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 31.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "31 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E 300E",
+        "source_names": [
+          "E 300E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 13.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "13.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQA 250",
+        "source_names": [
+          "EQA 250"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 66.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "66.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQB 250",
+        "source_names": [
+          "EQB 250"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 73.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "73.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQB 250+",
+        "source_names": [
+          "EQB 250+"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 73.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "73.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQC 400",
+        "source_names": [
+          "EQC 400"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 80.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "80 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQE",
+        "source_names": [
+          "EQE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 90.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "90.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQE 300",
+        "source_names": [
+          "EQE 300"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 89.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "89 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQE 350",
+        "source_names": [
+          "EQE 350"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 90.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "90.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQE 350 4MATIC",
+        "source_names": [
+          "EQE 350 4MATIC"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 98.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "98 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQE 500",
+        "source_names": [
+          "EQE 500"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 90.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "90.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQE 53",
+        "source_names": [
+          "EQE 53"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 90.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "90.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQE 53 4MATIC+",
+        "source_names": [
+          "EQE 53 4MATIC+"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 100.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "100 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQS",
+        "source_names": [
+          "EQS"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 120.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "120 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQS 450",
+        "source_names": [
+          "EQS 450"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 122.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "122 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQS 450 4MATIC",
+        "source_names": [
+          "EQS 450 4MATIC"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 118.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "118 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQS 450+",
+        "source_names": [
+          "EQS 450+"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 118.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "118 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQS 500",
+        "source_names": [
+          "EQS 500"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 120.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "120 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EQS 500 4MATIC",
+        "source_names": [
+          "EQS 500 4MATIC"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 122.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "122 kWh"
+          }
+        ]
+      },
+      {
+        "name": "G 580",
+        "source_names": [
+          "G 580"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 116.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "116 kWh"
+          }
+        ]
+      },
+      {
+        "name": "G580 EQ",
+        "source_names": [
+          "G580 EQ"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 116.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "116 kWh"
+          }
+        ]
+      },
+      {
+        "name": "GLC 300E",
+        "source_names": [
+          "GLC 300E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 31.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "31.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "GLC 350E",
+        "source_names": [
+          "GLC 350E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 31.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "31.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "GLC COUPE300E",
+        "source_names": [
+          "GLC COUPE300E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 31.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "31.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "GLE 350DE",
+        "source_names": [
+          "GLE 350DE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 31.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "31.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "GLE 500E",
+        "source_names": [
+          "GLE 500E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 8.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "8.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MAYBACH EQS 680",
+        "source_names": [
+          "MAYBACH EQS 680"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 118.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "118 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MAYBACH S580E",
+        "source_names": [
+          "MAYBACH S580E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 28.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "28 kWh"
+          }
+        ]
+      },
+      {
+        "name": "PHEV",
+        "source_names": [
+          "PHEV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 28.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "28 kWh"
+          }
+        ]
+      },
+      {
+        "name": "S 500E",
+        "source_names": [
+          "S 500E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 8.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "8.7 kWh"
+          }
+        ]
+      },
+      {
+        "name": "S 580E",
+        "source_names": [
+          "S 580E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 28.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "28.6 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "MG",
+    "models": [
+      {
+        "name": "CYBERSTER",
+        "source_names": [
+          "CYBERSTER"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 44.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "44.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EP",
+        "source_names": [
+          "EP"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 44.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "44.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ES",
+        "source_names": [
+          "ES"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ES5",
+        "source_names": [
+          "ES5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 64.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "64 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HS",
+        "source_names": [
+          "HS"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 16.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "16 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IM L6",
+        "source_names": [
+          "IM L6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 75.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "75 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IM5",
+        "source_names": [
+          "IM5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 90.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "90 kWh"
+          },
+          {
+            "capacity_kwh": 100.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "100 kWh"
+          }
+        ]
+      },
+      {
+        "name": "IM6",
+        "source_names": [
+          "IM6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 100.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "100 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MAXUS 7",
+        "source_names": [
+          "MAXUS 7"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 90.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "90 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MAXUS 9",
+        "source_names": [
+          "MAXUS 9"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 90.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "90 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MG4 ELECTRIC",
+        "source_names": [
+          "MG4 ELECTRIC"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 44.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "44.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MG4 XPOWER",
+        "source_names": [
+          "MG4 XPOWER"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 64.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "64 kWh"
+          }
+        ]
+      },
+      {
+        "name": "S5",
+        "source_names": [
+          "S5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 64.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "64 kWh"
+          }
+        ]
+      },
+      {
+        "name": "S5 EV",
+        "source_names": [
+          "S5 EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50 kWh"
+          },
+          {
+            "capacity_kwh": 62.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "62.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "VS",
+        "source_names": [
+          "MG VS"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 16.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "16.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ZS",
+        "source_names": [
+          "ZS"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 44.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "44.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ZS EV",
+        "source_names": [
+          "ZS EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50.3 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "MINE",
+    "models": [
+      {
+        "name": "MT30",
+        "source_names": [
+          "MINE MT30"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 30.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "30 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "MINE MOBILITY",
+    "models": [
+      {
+        "name": "MTS-MT30",
+        "source_names": [
+          "MTS-MT30"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 30.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "30 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SPA1",
+        "source_names": [
+          "SPA1"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 30.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "30 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "MINI",
+    "models": [
+      {
+        "name": "ACEMAN SE",
+        "source_names": [
+          "ACEMAN SE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 54.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "54.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "COOPER SE",
+        "source_names": [
+          "COOPER SE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 54.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "54.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "COOPER SE HATCH",
+        "source_names": [
+          "COOPER SE HATCH"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 40.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "40.7 kWh"
+          },
+          {
+            "capacity_kwh": 54.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "54.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "COUNTRYMAN SE ALL4",
+        "source_names": [
+          "COUNTRYMAN SE ALL4"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 66.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "66.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ELECTRIC",
+        "source_names": [
+          "ELECTRIC"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 28.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "28 kWh"
+          }
+        ]
+      },
+      {
+        "name": "JCW ACEMAN E",
+        "source_names": [
+          "JCW ACEMAN E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 54.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "54.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "JCW E",
+        "source_names": [
+          "JCW E"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 54.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "54.2 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "MITSUBISHI",
+    "models": [
+      {
+        "name": "OUTLANDER",
+        "source_names": [
+          "OUTLANDER"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 13.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "13.2 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "NEOMOR",
+    "models": [
+      {
+        "name": "D 01",
+        "source_names": [
+          "D 01"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 9.98,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "9.98 kWh"
+          }
+        ]
+      },
+      {
+        "name": "D 05",
+        "source_names": [
+          "D 05"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 23.96,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "23.96 kWh"
+          }
+        ]
+      },
+      {
+        "name": "D 08",
+        "source_names": [
+          "D 08"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 45.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "45 kWh"
+          }
+        ]
+      },
+      {
+        "name": "D01",
+        "source_names": [
+          "D01"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 9.98,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "9.98 kWh"
+          },
+          {
+            "capacity_kwh": 14.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "14 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "NETA",
+    "models": [
+      {
+        "name": "GT",
+        "source_names": [
+          "NETA GT"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 78.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "78 kWh"
+          }
+        ]
+      },
+      {
+        "name": "L",
+        "source_names": [
+          "NETA L"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 74.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "74 kWh"
+          }
+        ]
+      },
+      {
+        "name": "S",
+        "source_names": [
+          "NETA S"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 117.04,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "117.04 kWh"
+          }
+        ]
+      },
+      {
+        "name": "U",
+        "source_names": [
+          "NETA U"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 81.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "81.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "V",
+        "source_names": [
+          "NETA V"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 40.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "40.7 kWh"
+          }
+        ]
+      },
+      {
+        "name": "V-II",
+        "source_names": [
+          "NETA V-II"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 36.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "36.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "X",
+        "source_names": [
+          "NETA X"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 68.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "68 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "NEX",
+    "models": [
+      {
+        "name": "BEV",
+        "source_names": [
+          "BEV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 59.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "59.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "BEV COACH",
+        "source_names": [
+          "BEV COACH"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 404.06,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "404.06 kWh"
+          }
+        ]
+      },
+      {
+        "name": "DAYUN",
+        "source_names": [
+          "DAYUN"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 31.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "31.7 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EV TRACTOR",
+        "source_names": [
+          "EV TRACTOR"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 423.93,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "423.93 kWh"
+          }
+        ]
+      },
+      {
+        "name": "NPD",
+        "source_names": [
+          "NPD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 86.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": 281.9,
+            "label": "86.1–281.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "NPS",
+        "source_names": [
+          "NPS"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 86.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": 281.9,
+            "label": "86.1–281.9 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "NEXTEM",
+    "models": [
+      {
+        "name": "ORCA",
+        "source_names": [
+          "ORCA"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 33.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "33 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ORCA MINI EV TRUCK",
+        "source_names": [
+          "ORCA MINI EV TRUCK"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 33.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "33 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "NIO",
+    "models": [
+      {
+        "name": "FIREFLY",
+        "source_names": [
+          "FIREFLY"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 45.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "45 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "NISSAN",
+    "models": [
+      {
+        "name": "E-NV200",
+        "source_names": [
+          "E-NV200"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 40.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "40 kWh"
+          }
+        ]
+      },
+      {
+        "name": "LEAF",
+        "source_names": [
+          "LEAF"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 40.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "40 kWh"
+          }
+        ]
+      },
+      {
+        "name": "LEAF2018",
+        "source_names": [
+          "LEAF2018"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 28.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "28 kWh"
+          }
+        ]
+      },
+      {
+        "name": "LEAF2019",
+        "source_names": [
+          "LEAF2019"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 40.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "40 kWh"
+          }
+        ]
+      },
+      {
+        "name": "LEAF2025",
+        "source_names": [
+          "LEAF2025"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 62.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "62 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SAKURA G",
+        "source_names": [
+          "SAKURA G"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 20.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "20 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "OMODA",
+    "models": [
+      {
+        "name": "C5 EV",
+        "source_names": [
+          "C5 EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 61.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "61 kWh"
+          }
+        ]
+      },
+      {
+        "name": "C5 EV +",
+        "source_names": [
+          "C5 EV +"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 61.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "61 kWh"
+          }
+        ]
+      },
+      {
+        "name": "C5 EV ULTIMATE",
+        "source_names": [
+          "C5 EV ULTIMATE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 61.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "61 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ORA",
+    "models": [
+      {
+        "name": "07",
+        "source_names": [
+          "ORA 07"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 63.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "63.8 kWh"
+          },
+          {
+            "capacity_kwh": 83.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "83.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "GOOD CAT",
+        "source_names": [
+          "GOOD CAT"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 47.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "47.8 kWh"
+          },
+          {
+            "capacity_kwh": 63.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "63.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "GRAND CAT",
+        "source_names": [
+          "GRAND CAT"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 63.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "63.8 kWh"
+          },
+          {
+            "capacity_kwh": 83.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "83.5 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "PEUGEOT",
+    "models": [
+      {
+        "name": "E-2008",
+        "source_names": [
+          "E-2008"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 54.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "54 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E-3008",
+        "source_names": [
+          "E-3008"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 77.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "77 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E-5008",
+        "source_names": [
+          "E-5008"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 98.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "98 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "POCCO",
+    "models": [
+      {
+        "name": "DD K",
+        "source_names": [
+          "DD K"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 10.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "10.3 kWh"
+          },
+          {
+            "capacity_kwh": 14.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "14.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MM YX",
+        "source_names": [
+          "MM YX"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 10.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "10.3 kWh"
+          },
+          {
+            "capacity_kwh": 14.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "14.5 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "PORSCHE",
+    "models": [
+      {
+        "name": "BOXSTER",
+        "source_names": [
+          "BOXSTER"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 82.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "82 kWh"
+          }
+        ]
+      },
+      {
+        "name": "CAYENNE",
+        "source_names": [
+          "CAYENNE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 25.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "25.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MACAN",
+        "source_names": [
+          "MACAN"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 100.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "100 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MACAN 4",
+        "source_names": [
+          "MACAN 4"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 100.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "100 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MACAN 4 ELECTRIC",
+        "source_names": [
+          "MACAN 4 ELECTRIC"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 94.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "94.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MACAN 4S",
+        "source_names": [
+          "MACAN 4S"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 94.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "94.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MACAN TURBO",
+        "source_names": [
+          "MACAN TURBO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 94.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "94.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "PANAMERA 4 E-HYBRID",
+        "source_names": [
+          "PANAMERA 4 E-HYBRID"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 17.95,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "17.95 kWh"
+          }
+        ]
+      },
+      {
+        "name": "PANAMERA 4S E-HYBRID",
+        "source_names": [
+          "PANAMERA 4S E-HYBRID"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 17.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "17.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TAYCAN",
+        "source_names": [
+          "TAYCAN"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 93.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "93.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TAYCAN 4",
+        "source_names": [
+          "TAYCAN 4"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 89.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "89 kWh"
+          },
+          {
+            "capacity_kwh": 105.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "105 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TAYCAN 4 CROSS TURISMO",
+        "source_names": [
+          "TAYCAN 4 CROSS TURISMO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 93.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "93.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TAYCAN 4S",
+        "source_names": [
+          "TAYCAN 4S"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 79.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "79.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TAYCAN 4S CROSS TURISMO",
+        "source_names": [
+          "TAYCAN 4S CROSS TURISMO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 89.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "89 kWh"
+          },
+          {
+            "capacity_kwh": 105.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "105 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TAYCAN GTS",
+        "source_names": [
+          "TAYCAN GTS"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 93.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "93.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TAYCAN SPORT TURISMO",
+        "source_names": [
+          "TAYCAN SPORT TURISMO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 89.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "89 kWh"
+          },
+          {
+            "capacity_kwh": 105.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "105 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TAYCAN TURBO",
+        "source_names": [
+          "TAYCAN TURBO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 97.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "97 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TAYCAN TURBO CROSS TURIS",
+        "source_names": [
+          "TAYCAN TURBO CROSS TURIS"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 105.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "105 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TAYCAN TURBO CROSS TURISMO",
+        "source_names": [
+          "TAYCAN TURBO CROSS TURISMO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 93.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "93.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TAYCAN TURBO GT",
+        "source_names": [
+          "TAYCAN TURBO GT"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 105.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "105 kWh"
+          }
+        ]
+      },
+      {
+        "name": "TAYCAN TURBO S",
+        "source_names": [
+          "TAYCAN TURBO S"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 93.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "93.4 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "RIDDARA",
+    "models": [
+      {
+        "name": "HORIZON",
+        "source_names": [
+          "HORIZON"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 86.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "86 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HORIZON SUNROOF",
+        "source_names": [
+          "HORIZON SUNROOF"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 86.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "86 kWh"
+          }
+        ]
+      },
+      {
+        "name": "RD6",
+        "source_names": [
+          "RD6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 86.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "86 kWh"
+          }
+        ]
+      },
+      {
+        "name": "RD6 86KWH",
+        "source_names": [
+          "RD6 86KWH"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 73.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "73 kWh"
+          },
+          {
+            "capacity_kwh": 86.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "86 kWh"
+          }
+        ]
+      },
+      {
+        "name": "RD6 ECON",
+        "source_names": [
+          "RD6 ECON"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 73.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "73 kWh"
+          },
+          {
+            "capacity_kwh": 86.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "86 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ROLLS-ROYCE",
+    "models": [
+      {
+        "name": "BLACK BADGE SPECTRE",
+        "source_names": [
+          "BLACK BADGE SPECTRE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 102.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "102 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SPECTRE",
+        "source_names": [
+          "SPECTRE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 102.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "102 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "SANY",
+    "models": [
+      {
+        "name": "SYM1030T1BEVH3",
+        "source_names": [
+          "SYM1030T1BEVH3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 61.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "61.8 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "SERES",
+    "models": [
+      {
+        "name": "3",
+        "source_names": [
+          "SERES 3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 53.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "53.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "5",
+        "source_names": [
+          "SERES 5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 80.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "80 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EC31",
+        "source_names": [
+          "EC31"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 38.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "38.6 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "SKYWELL",
+    "models": [
+      {
+        "name": "FREGATA ARIEL 8",
+        "source_names": [
+          "FREGATA ARIEL 8"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 55.33,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "55.33 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "SOKON",
+    "models": [
+      {
+        "name": "EC31",
+        "source_names": [
+          "EC31"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 38.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "38.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EC35",
+        "source_names": [
+          "EC35"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 38.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "38.7 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "SOLARKY",
+    "models": [
+      {
+        "name": "MODEL C11A",
+        "source_names": [
+          "MODEL C11A"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 54.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "54.7 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "SRM",
+    "models": [
+      {
+        "name": "T3EV",
+        "source_names": [
+          "T3EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 41.93,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "41.93 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "STELATO",
+    "models": [
+      {
+        "name": "S9",
+        "source_names": [
+          "S9"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 100.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "100 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "STROM",
+    "models": [
+      {
+        "name": "RED",
+        "source_names": [
+          "STROM RED"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 8.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "8 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "SUZUKI",
+    "models": [
+      {
+        "name": "E VITARA",
+        "source_names": [
+          "E VITARA"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 49.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "49 kWh"
+          },
+          {
+            "capacity_kwh": 61.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "61 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "TESLA",
+    "models": [
+      {
+        "name": "CYBERTRUCK",
+        "source_names": [
+          "CYBERTRUCK"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 122.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "122.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MODEL 3",
+        "source_names": [
+          "MODEL 3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 85.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "85 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MODEL 3 RWD",
+        "source_names": [
+          "MODEL 3 REAR-WHEEL DRIVE",
+          "MODEL 3 RWD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 60.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "60 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MODEL 3 STANDARD",
+        "source_names": [
+          "MODEL 3 STANDARD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 60.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "60 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MODEL S",
+        "source_names": [
+          "MODEL S"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 100.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "100 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MODEL X",
+        "source_names": [
+          "MODEL X"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 95.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "95 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MODEL Y",
+        "source_names": [
+          "MODEL Y"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 60.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "60 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MODEL Y L",
+        "source_names": [
+          "MODEL Y L"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 78.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "78.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MODEL Y RWD",
+        "source_names": [
+          "MODEL Y REAR WHEEL DRIVE",
+          "MODEL Y REAR-WHEEL DRIVE",
+          "MODEL Y RWD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 60.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "60 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MODEL Y STANDARD",
+        "source_names": [
+          "MODEL Y STANDARD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 60.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "60 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MODELX",
+        "source_names": [
+          "MODELX"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 85.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "85 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ROADSTER",
+        "source_names": [
+          "ROADSTER"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 200.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "200 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "TOYOTA",
+    "models": [
+      {
+        "name": "BZ4X",
+        "source_names": [
+          "BZ4X"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 64.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "64 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HILUX BEV",
+        "source_names": [
+          "HILUX BEV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50 kWh"
+          }
+        ]
+      },
+      {
+        "name": "HILUX TRAVO",
+        "source_names": [
+          "HILUX TRAVO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 71.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "71.4 kWh"
+          }
+        ]
+      },
+      {
+        "name": "URBAN CRUISER",
+        "source_names": [
+          "URBAN CRUISER"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 61.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "61 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "VIAUTO",
+    "models": [
+      {
+        "name": "BOMA",
+        "source_names": [
+          "BOMA"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 11.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "11.9 kWh"
+          },
+          {
+            "capacity_kwh": 18.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "18.5 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "VINFAST",
+    "models": [
+      {
+        "name": "VF WILD",
+        "source_names": [
+          "VF WILD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 37.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "37.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "VF3",
+        "source_names": [
+          "VF3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 18.64,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "18.64 kWh"
+          }
+        ]
+      },
+      {
+        "name": "VF5",
+        "source_names": [
+          "VF5"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 37.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "37.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "VF6",
+        "source_names": [
+          "VF6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 59.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "59.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "VF7",
+        "source_names": [
+          "VF7"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 75.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "75.3 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "VOLKSWAGEN",
+    "models": [
+      {
+        "name": "ID BUZZ",
+        "source_names": [
+          "ID BUZZ"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 77.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "77 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ID BUZZ 1ST EDITION",
+        "source_names": [
+          "ID BUZZ 1ST EDITION"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 82.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "82 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ID. BUZZ",
+        "source_names": [
+          "ID. BUZZ"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 77.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "77 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ID.3",
+        "source_names": [
+          "ID.3"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 52.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "52 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ID.4",
+        "source_names": [
+          "ID.4"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 62.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "62 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ID.6",
+        "source_names": [
+          "ID.6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 45.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "45 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ID.7",
+        "source_names": [
+          "ID.7"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 77.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "77 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "VOLT",
+    "models": [
+      {
+        "name": "FOR FOUR",
+        "source_names": [
+          "VOLT FOR FOUR"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 16.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "16.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "FOR2",
+        "source_names": [
+          "FOR2"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 11.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "11.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "FOR4",
+        "source_names": [
+          "FOR4"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 16.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "16.5 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "VOLVO",
+    "models": [
+      {
+        "name": "C40",
+        "source_names": [
+          "C40"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 82.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "82 kWh"
+          }
+        ]
+      },
+      {
+        "name": "C40 RECHARGE",
+        "source_names": [
+          "C40 RECHARGE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 78.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "78 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EC40",
+        "source_names": [
+          "EC40"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 82.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "82 kWh"
+          }
+        ]
+      },
+      {
+        "name": "ES90",
+        "source_names": [
+          "ES90"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 111.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "111 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EX30",
+        "source_names": [
+          "EX30"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 69.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "69 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EX40",
+        "source_names": [
+          "EX40"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 69.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "69 kWh"
+          }
+        ]
+      },
+      {
+        "name": "EX90",
+        "source_names": [
+          "EX90"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 111.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "111 kWh"
+          }
+        ]
+      },
+      {
+        "name": "S60 RECHARGE",
+        "source_names": [
+          "S60 RECHARGE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 18.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "18.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "XC40",
+        "source_names": [
+          "XC40"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 69.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "69 kWh"
+          },
+          {
+            "capacity_kwh": 82.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "82 kWh"
+          }
+        ]
+      },
+      {
+        "name": "XC40 PURE ELECTRIC",
+        "source_names": [
+          "XC40 PURE ELECTRIC"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 78.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "78 kWh"
+          }
+        ]
+      },
+      {
+        "name": "XC40 RECHARGE",
+        "source_names": [
+          "XC40 RECHARGE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 69.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "69 kWh"
+          }
+        ]
+      },
+      {
+        "name": "XC40-PHEV",
+        "source_names": [
+          "XC40-PHEV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 10.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "10.7 kWh"
+          }
+        ]
+      },
+      {
+        "name": "XC60 RECHARGE",
+        "source_names": [
+          "XC60 RECHARGE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 18.8,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "18.8 kWh"
+          }
+        ]
+      },
+      {
+        "name": "XC90 RECHARGE",
+        "source_names": [
+          "XC90 RECHARGE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 34.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "34.1 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "WULING",
+    "models": [
+      {
+        "name": "AIR EV LR",
+        "source_names": [
+          "AIR EV LR"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 26.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "26.7 kWh"
+          }
+        ]
+      },
+      {
+        "name": "AIR EV SR",
+        "source_names": [
+          "AIR EV SR"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 17.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "17.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "BAOJUN YEP",
+        "source_names": [
+          "BAOJUN YEP"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 28.1,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "28.1 kWh"
+          }
+        ]
+      },
+      {
+        "name": "BINGOU SRDTH CCS2",
+        "source_names": [
+          "BINGOU SRDTH CCS2"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 31.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "31.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "BINGUO SRD",
+        "source_names": [
+          "BINGUO SRD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 31.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "31.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "BINGUO SRDTH",
+        "source_names": [
+          "BINGUO SRDTH"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 31.9,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "31.9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "CLOUD EV",
+        "source_names": [
+          "CLOUD EV"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 50.6,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "50.6 kWh"
+          }
+        ]
+      },
+      {
+        "name": "E10",
+        "source_names": [
+          "E10"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 9.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "9 kWh"
+          }
+        ]
+      },
+      {
+        "name": "MINI EV CONVERTIBLE",
+        "source_names": [
+          "MINI EV CONVERTIBLE"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 26.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "26.5 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "XEV",
+    "models": [
+      {
+        "name": "YOYO",
+        "source_names": [
+          "YOYO"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 10.4,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "10.4 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "XIAOMI",
+    "models": [
+      {
+        "name": "SU 7",
+        "source_names": [
+          "SU 7"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 101.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "101 kWh"
+          }
+        ]
+      },
+      {
+        "name": "SU7",
+        "source_names": [
+          "SU7"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 101.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "101 kWh"
+          }
+        ]
+      },
+      {
+        "name": "YU7",
+        "source_names": [
+          "YU7"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 101.7,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "101.7 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "XPENG",
+    "models": [
+      {
+        "name": "G6",
+        "source_names": [
+          "G6"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 87.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "87.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "G6 RWD",
+        "source_names": [
+          "G6 RWD"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 66.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "66 kWh"
+          },
+          {
+            "capacity_kwh": 87.5,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "87.5 kWh"
+          }
+        ]
+      },
+      {
+        "name": "G9",
+        "source_names": [
+          "G9"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 98.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "98 kWh"
+          }
+        ]
+      },
+      {
+        "name": "P7",
+        "source_names": [
+          "P7"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 86.2,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "86.2 kWh"
+          }
+        ]
+      },
+      {
+        "name": "X9",
+        "source_names": [
+          "X9"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 84.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "84 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ZEEKR",
+    "models": [
+      {
+        "name": "009",
+        "source_names": [
+          "ZEEKR 009"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 116.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "116 kWh"
+          }
+        ]
+      },
+      {
+        "name": "7X",
+        "source_names": [
+          "ZEEKR 7X"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 75.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "75 kWh"
+          },
+          {
+            "capacity_kwh": 100.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "100 kWh"
+          }
+        ]
+      },
+      {
+        "name": "9",
+        "source_names": [
+          "9"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 116.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "116 kWh"
+          }
+        ]
+      },
+      {
+        "name": "X",
+        "source_names": [
+          "X",
+          "ZEEKR X"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 67.0,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "67 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ZX AUTO",
+    "models": [
+      {
+        "name": "FP3A",
+        "source_names": [
+          "FP3A"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 65.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "65.3 kWh"
+          }
+        ]
+      },
+      {
+        "name": "FP3B",
+        "source_names": [
+          "FP3B"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 65.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "65.3 kWh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ZXAUTO",
+    "models": [
+      {
+        "name": "FIREBRIGHT YDYX",
+        "source_names": [
+          "FIREBRIGHT YDYX"
+        ],
+        "batteries": [
+          {
+            "capacity_kwh": 65.3,
+            "usable_kwh": null,
+            "capacity_max_kwh": null,
+            "label": "65.3 kWh"
+          }
+        ]
+      }
+    ]
+  }
+]

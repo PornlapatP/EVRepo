@@ -11,6 +11,7 @@ import (
 	adminhandler "github.com/pornlapatP/EV/internal/admin/handler"
 	adminservice "github.com/pornlapatP/EV/internal/admin/service"
 	"github.com/pornlapatP/EV/internal/auth/config"
+	"github.com/pornlapatP/EV/internal/catalog"
 	"github.com/pornlapatP/EV/internal/auth/handler"
 	"github.com/pornlapatP/EV/internal/auth/service"
 	"github.com/pornlapatP/EV/internal/database"
@@ -27,7 +28,7 @@ func main() {
 	cfg := config.Load()
 	database.Connect()
 
-	database.DB.AutoMigrate(&models.GeneralInfo{}, &models.Charger{}, &models.Vendor{}, &models.Ev{}, &models.Employee{}, &models.AuditLog{})
+	database.DB.AutoMigrate(&models.GeneralInfo{}, &models.Charger{}, &models.Vendor{}, &models.Ev{}, &models.Employee{}, &models.AuditLog{}, &models.MasterEV{}, &models.MasterCharger{})
 	rawKey := os.Getenv("KEYCLOAK_PUBLIC_KEY")
 	if rawKey == "" {
 		log.Fatal("KEYCLOAK_PUBLIC_KEY missing")
@@ -80,8 +81,14 @@ func main() {
 	AdminService := adminservice.NewAdminService(database.DB, storageSvc)
 	adminController := adminhandler.NewAdminHandler(AdminService, authService)
 
+	catalogController := catalog.NewController(catalog.NewService(database.DB))
+
 	apiV1 := r.Group("/api/v1")
 	{
+		// EV master catalog — public reference data (no auth), cacheable. Feeds
+		// the registration wizard's cascading brand→model→battery dropdowns.
+		apiV1.GET("/ev-catalog", catalogController.Get)
+
 		// Citizen-gated: the registration wizard's CA step is only ever reached
 		// after ThaID login (Entry -> ManualLogin -> registrationForm), so
 		// check-ca can safely require — and use — the citizen session too.

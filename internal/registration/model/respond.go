@@ -25,13 +25,11 @@ type ChargerResponse struct {
 }
 
 type EvResponse struct {
-	ID          uint   `json:"id"`
-	PlateNumber string `json:"plateNumber"`
-	Province    string `json:"province"`
-	Brand       string `json:"brand"`
-	Model       string `json:"model"`
-	Year        string `json:"year"`
-	Battery     string `json:"battery"`
+	ID      uint   `json:"id"`
+	Brand   string `json:"brand"`
+	Model   string `json:"model"`
+	Year    string `json:"year"`
+	Battery string `json:"battery"`
 
 	ChargingPeriod     string `json:"chargingPeriod"`
 	ChargingStartTime  string `json:"chargingStartTime"`

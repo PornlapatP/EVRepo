@@ -61,8 +61,6 @@ func toEvResponses(evs []models.Ev) []model.EvResponse {
 	for _, e := range evs {
 		res = append(res, model.EvResponse{
 			ID:                 e.ID,
-			PlateNumber:        e.PlateNumber,
-			Province:           e.Province,
 			Brand:              e.Brand,
 			Model:              e.Model,
 			Year:               e.Year,

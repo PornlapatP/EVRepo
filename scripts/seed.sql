@@ -29,9 +29,9 @@ FROM general_infos g, vendors v
 WHERE g.pid = '1234567890123' AND v.vendor_name = 'Delta' AND v.type = 'charger'
 ON CONFLICT (serial_number) DO NOTHING;
 
-INSERT INTO evs (general_info_id, vendor_id, plate_number, province, brand, model, year, battery,
+INSERT INTO evs (general_info_id, vendor_id, brand, model, year, battery,
                   charging_period, charging_start_time, charging_finish_time)
-SELECT g.id, v.id, NULL, NULL, 'Tesla', 'Model 3', '2023', '60 kWh',
+SELECT g.id, v.id, 'Tesla', 'Model 3', '2023', '60 kWh',
        'ทุกวัน', '22:00', '06:00'
 FROM general_infos g, vendors v
 WHERE g.pid = '1234567890123' AND v.vendor_name = 'Tesla' AND v.type = 'ev';

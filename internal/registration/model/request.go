@@ -37,14 +37,11 @@ type CreateEvRequest struct {
 	// only when editing (Smart Plus); omitted/nil always means "new EV".
 	ID       *uint                `json:"id,omitempty"`
 	VendorID *uint                `json:"vendorId,omitempty"`
-	Vendor   *CreateVendorRequest `json:"vendor,omitempty"`
-	// PlateNumber/Province are optional — the frontend wizard doesn't collect them today.
-	PlateNumber string `json:"plateNumber"`
-	Province    string `json:"province"`
-	Brand       string `json:"brand"`
-	Model       string `json:"model"`
-	Year        string `json:"year" binding:"required"`
-	Battery     string `json:"battery" binding:"required"`
+	Vendor  *CreateVendorRequest `json:"vendor,omitempty"`
+	Brand   string               `json:"brand"`
+	Model   string               `json:"model"`
+	Year    string               `json:"year" binding:"required"`
+	Battery string               `json:"battery" binding:"required"`
 
 	Charging CreateChargingRequest `json:"charging" binding:"required"`
 }

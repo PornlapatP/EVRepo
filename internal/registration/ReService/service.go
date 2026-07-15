@@ -168,16 +168,27 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 				return err
 			}
 
+			// resolve FK จาก catalog — match ด้วย (brand, model) ที่มาจาก dropdown (ตรงเป๊ะอยู่แล้ว).
+			// จับไม่ได้ (ErrRecordNotFound) → masterID = nil = ตู้นอกบัญชี catalog (ยอมรับได้).
+			var masterID *uint
+			var master models.MasterCharger
+			if err := tx.Select("id").
+				Where("brand = ? AND model = ?", c.Brand, c.Model).
+				First(&master).Error; err == nil {
+				masterID = &master.ID
+			}
+
 			charger := models.Charger{
-				GeneralInfoID: general.ID,
-				VendorID:      vendorID,
-				SerialNumber:  c.SerialNumber,
-				ConnectorType: c.ConnectorType,
-				Kw:            c.Kw,
-				ImageKey:      c.ImageKey,
-				LabelImageKey: c.LabelImageKey,
-				Brand:         c.Brand,
-				Model:         c.Model,
+				GeneralInfoID:   general.ID,
+				VendorID:        vendorID,
+				SerialNumber:    c.SerialNumber,
+				ConnectorType:   c.ConnectorType,
+				Kw:              c.Kw,
+				ImageKey:        c.ImageKey,
+				LabelImageKey:   c.LabelImageKey,
+				Brand:           c.Brand,
+				Model:           c.Model,
+				MasterChargerID: masterID,
 			}
 
 			if c.ID != nil && keptChargerIDs[*c.ID] {
@@ -200,11 +211,19 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 				return err
 			}
 
+			// resolve FK จาก catalog — match ด้วย 3 คีย์ที่มาจาก dropdown (ตรงเป๊ะอยู่แล้ว).
+			// จับไม่ได้ (ErrRecordNotFound) → masterID = nil = รถนอกบัญชี catalog (ยอมรับได้).
+			var masterID *uint
+			var master models.MasterEV
+			if err := tx.Select("id").
+				Where("brand = ? AND model = ? AND battery_label = ?", e.Brand, e.Model, e.Battery).
+				First(&master).Error; err == nil {
+				masterID = &master.ID
+			}
+
 			ev := models.Ev{
 				GeneralInfoID:      general.ID,
 				VendorID:           vendorID,
-				PlateNumber:        e.PlateNumber,
-				Province:           e.Province,
 				Brand:              e.Brand,
 				Model:              e.Model,
 				Year:               e.Year,
@@ -212,6 +231,7 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 				ChargingPeriod:     e.Charging.Period,
 				ChargingStartTime:  e.Charging.StartTime,
 				ChargingFinishTime: e.Charging.FinishTime,
+				MasterEvID:         masterID,
 			}
 
 			if e.ID != nil && keptEvIDs[*e.ID] {
