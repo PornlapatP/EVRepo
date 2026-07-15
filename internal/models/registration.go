@@ -18,8 +18,8 @@ type GeneralInfo struct {
 
 	// EntrySource is the channel (auth/service.EntrySource: "smartplus" or
 	// "thaid") that most recently wrote this row — set on first registration
-	// and refreshed on every edit (edits are only ever done via smartplus, see
-	// ReService.ErrEditForbidden). Kept as a plain string so this base models
+	// and refreshed on every edit (edits are gated on PID ownership only, see
+	// ReService.ErrNotOwner). Kept as a plain string so this base models
 	// package doesn't depend on the auth package.
 	EntrySource string `gorm:"column:entry_source;type:varchar(20);not null;default:'thaid'"`
 

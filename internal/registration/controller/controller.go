@@ -76,14 +76,6 @@ func (c *RegistrationController) CreateWithRelations(ctx *gin.Context) {
 			})
 			return
 		}
-		if errors.Is(err, regisservice.ErrEditForbidden) {
-			ctx.JSON(403, gin.H{
-				"success": false,
-				"code":    "EDIT_FORBIDDEN",
-				"message": "CA นี้ลงทะเบียนไว้แล้ว แก้ไขได้เฉพาะผ่าน PEA Smart Plus เท่านั้น",
-			})
-			return
-		}
 		if errors.Is(err, regisservice.ErrNotOwner) {
 			ctx.JSON(403, gin.H{
 				"success": false,
@@ -197,14 +189,14 @@ func (c *RegistrationController) CheckCA(ctx *gin.Context) {
 
 	// general.ID == 0 means CheckCA built an unsaved preview (no registration
 	// exists for this CA yet) — anyone can proceed to a first submission.
-	// Once a row exists: owned = this PID is the one who registered it (own-only,
-	// decided 2026-07-14 — design/03-role-matrix.md §Entry Source); editable
-	// requires *both* a Smart Plus session *and* ownership — a Smart Plus
-	// session browsing someone else's already-registered CA must not be able
-	// to edit it just because the channel is right.
+	// Once a row exists: owned = this PID is the one who registered it —
+	// that's the *sole* edit requirement now (own-only, decided 2026-07-14 —
+	// design/03-role-matrix.md §Entry Source). Every login channel goes
+	// through real ThaID OAuth, so PID is equally trustworthy regardless of
+	// entrySource; there's no separate Smart-Plus-channel gate anymore.
 	alreadyRegistered := general.ID != 0
 	owned := alreadyRegistered && general.PID == citizen.PID
-	editable := !alreadyRegistered || (citizen.EntrySource == authservice.EntrySourceSmartPlus && owned)
+	editable := !alreadyRegistered || owned
 
 	ctx.JSON(200, gin.H{
 		"ca":                resp.Ca,

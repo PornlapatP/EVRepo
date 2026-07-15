@@ -77,22 +77,18 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 		case err != nil:
 			return fmt.Errorf("กรุณาตรวจสอบเลข CA ก่อนส่งข้อมูลลงทะเบียน")
 		default:
-			// Editing an existing CA (only EntrySourceSmartPlus may do this,
-			// §4). Reconcile by ID instead of wiping everything: a charger/EV
-			// the payload still references by ID is kept (and updated in
-			// place, preserving its image if no new file was uploaded — see
-			// controller.uploadChargerFile); anything not referenced anymore
-			// was removed by the citizen and gets deleted; anything with no
-			// ID is a brand-new addition.
-			if source != authservice.EntrySourceSmartPlus {
-				return ErrEditForbidden
-			}
-
+			// Editing an existing CA. Reconcile by ID instead of wiping
+			// everything: a charger/EV the payload still references by ID is
+			// kept (and updated in place, preserving its image if no new file
+			// was uploaded — see controller.uploadChargerFile); anything not
+			// referenced anymore was removed by the citizen and gets deleted;
+			// anything with no ID is a brand-new addition.
+			//
 			// Own-only (decided 2026-07-14, design/03-role-matrix.md §Entry
-			// Source): a Smart Plus session may only edit a CA *it itself*
-			// registered — being on the right channel isn't enough on its own,
-			// otherwise any Smart Plus session could edit any citizen's CA
-			// just by knowing the number.
+			// Source): the *only* requirement to edit is being the CA's
+			// original owner (PID match) — every login channel goes through
+			// real ThaID OAuth now, so PID is equally trustworthy regardless
+			// of entrySource; there's no separate channel gate anymore.
 			if general.PID != pid {
 				return ErrNotOwner
 			}
@@ -262,14 +258,10 @@ func (s *GeneralService) GetGeneralInfoByPID(pid string) ([]models.GeneralInfo, 
 
 var ErrCANotFound = errors.New("ca not found")
 
-// ErrEditForbidden is returned when a non-Smart-Plus session (i.e. a direct
-// ThaID login) tries to submit against a CA that already has a registration.
-var ErrEditForbidden = errors.New("editing an existing registration requires Smart Plus")
-
-// ErrNotOwner is returned when a Smart Plus session tries to edit a CA that
-// was registered by a *different* citizen (PID) — own-only, decided
-// 2026-07-14 (design/03-role-matrix.md §Entry Source). Being on the Smart
-// Plus channel is necessary but not sufficient; the PID must match too.
+// ErrNotOwner is returned when a session tries to edit a CA that was
+// registered by a *different* citizen (PID) — own-only, decided 2026-07-14
+// (design/03-role-matrix.md §Entry Source): PID match is the sole edit
+// requirement now that every login channel goes through real ThaID OAuth.
 var ErrNotOwner = errors.New("editing this registration requires being its original owner")
 
 // CheckCA is read-only — it never writes to the database. It looks up a CA
