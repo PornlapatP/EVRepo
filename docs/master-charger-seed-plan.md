@@ -313,8 +313,9 @@ SELECT DISTINCT connector_type FROM master_chargers;           -- ต้อง�
 
 ## 9. Downstream (PR แยก — ยังไม่อยู่ใน scope นี้)
 
-- **API:** `GET /api/v1/master-chargers` (list brands/models + spec) ให้ frontend ดึงไป render dropdown — ตัดสินว่าจะ public หรือหลัง `CitizenAuthMiddleware`
-- **Frontend:** แก้ `brand`/`model` ใน `registrationSchema.ts` จาก text input → select + auto-fill `CurrentType→connectorType`, `RatedPowerKw→kw`; ต้องเก็บ free-text fallback "รุ่นอื่น ๆ (ไม่มีในรายการ)" ไว้เผื่อรุ่นนอกบัญชี
+- [x] **API:** `GET /api/v1/charger-catalog` (brand → models + spec) — ทำแล้วใน `internal/catalog` (method `GetChargerCatalog` + handler `GetChargers`, wire ที่ `cmd/server/main.go`). **public/cacheable เหมือน `/ev-catalog`** (ไม่ใส่ `CitizenAuthMiddleware`) เพื่อ consistent กับ EV catalog ที่ feed wizard เดียวกัน · **ชื่อ endpoint = `/charger-catalog`** (ไม่ใช่ `/master-chargers` ที่ร่างไว้ตอนแรก) ให้เข้าชุดกับ `/ev-catalog`
+  - contract: `{ "data": [ { "brand", "models": [ { "model", "currentType", "connectorType", "totalConnectors", "ratedPowerKw" } ] } ] }`
+- **Frontend:** แก้ `brand`/`model` ใน `registrationSchema.ts` จาก text input → select + auto-fill `currentType→connectorType`, `ratedPowerKw→kw`; ต้องเก็บ free-text fallback "รุ่นอื่น ๆ (ไม่มีในรายการ)" ไว้เผื่อรุ่นนอกบัญชี
 
 ---
 

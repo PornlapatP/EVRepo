@@ -89,6 +89,10 @@ func main() {
 		// the registration wizard's cascading brand→model→battery dropdowns.
 		apiV1.GET("/ev-catalog", catalogController.Get)
 
+		// Charger master catalog — same treatment as /ev-catalog. Feeds the
+		// wizard's brand→model charger dropdown + spec auto-fill (master-charger-seed-plan.md §9).
+		apiV1.GET("/charger-catalog", catalogController.GetChargers)
+
 		// Citizen-gated: the registration wizard's CA step is only ever reached
 		// after ThaID login (Entry -> ManualLogin -> registrationForm), so
 		// check-ca can safely require — and use — the citizen session too.
