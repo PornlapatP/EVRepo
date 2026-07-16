@@ -315,7 +315,12 @@ SELECT DISTINCT connector_type FROM master_chargers;           -- ต้อง�
 
 - [x] **API:** `GET /api/v1/charger-catalog` (brand → models + spec) — ทำแล้วใน `internal/catalog` (method `GetChargerCatalog` + handler `GetChargers`, wire ที่ `cmd/server/main.go`). **public/cacheable เหมือน `/ev-catalog`** (ไม่ใส่ `CitizenAuthMiddleware`) เพื่อ consistent กับ EV catalog ที่ feed wizard เดียวกัน · **ชื่อ endpoint = `/charger-catalog`** (ไม่ใช่ `/master-chargers` ที่ร่างไว้ตอนแรก) ให้เข้าชุดกับ `/ev-catalog`
   - contract: `{ "data": [ { "brand", "models": [ { "model", "currentType", "connectorType", "totalConnectors", "ratedPowerKw" } ] } ] }`
-- **Frontend:** แก้ `brand`/`model` ใน `registrationSchema.ts` จาก text input → select + auto-fill `currentType→connectorType`, `ratedPowerKw→kw`; ต้องเก็บ free-text fallback "รุ่นอื่น ๆ (ไม่มีในรายการ)" ไว้เผื่อรุ่นนอกบัญชี
+- [x] **Frontend:** ✅ **done 2026-07-16** — `ChargerTab.tsx` เปลี่ยน `brand`/`model` จาก text input → **cascade Select**
+  (brand→model) + **auto-fill** `currentType→connectorType`, `ratedPowerKw→kw` (แก้ต่อได้) + **free-text fallback
+  "อื่น ๆ (ไม่มีในรายการ)"** ทั้ง brand และ model (รองรับตู้นอกบัญชี → backend resolve เป็น `master_charger_id = null`
+  ตาม §7) · schema (`chargerSchema`) **ไม่ต้องแก้** (ยังเป็น string เดิม) · ไฟล์: `services/charger-catalog.service.ts`
+  (+`.mock.ts`), `hooks/use-charger-catalog.ts`, `components/registration-form/ChargerTab.tsx` · `tsc`+`build`+`lint` ผ่าน
+  · ⚠️ kW ของรุ่น DC (เช่น "180") อยู่นอก preset 7.4/11/22 → เข้าโหมด "อื่น ๆ" อัตโนมัติ (แสดงค่าถูกต้อง)
 
 ---
 

@@ -483,11 +483,12 @@ func (s *AdminService) PatchField(ctx context.Context, id uint, actor Actor, req
 		}
 		for i, c := range req.Chargers {
 			if err := s.db.Model(&models.Charger{}).Where("id = ?", g.Chargers[i].ID).Updates(map[string]any{
-				"brand":          c.Brand,
-				"model":          c.Model,
-				"serial_number":  c.SerialNo,
-				"connector_type": c.ConnectorType,
-				"kw":             c.Kw,
+				"brand":             c.Brand,
+				"model":             c.Model,
+				"serial_number":     c.SerialNo,
+				"connector_type":    c.ConnectorType,
+				"kw":                c.Kw,
+				"master_charger_id": s.resolveMasterChargerID(c.Brand, c.Model),
 			}).Error; err != nil {
 				return nil, fmt.Errorf("อัปเดตข้อมูลเครื่องชาร์จไม่สำเร็จ (อาจเป็นเพราะ Serial ซ้ำ): %w", err)
 			}
@@ -505,6 +506,7 @@ func (s *AdminService) PatchField(ctx context.Context, id uint, actor Actor, req
 				"charging_period":      c.Charging.Period,
 				"charging_start_time":  c.Charging.StartTime,
 				"charging_finish_time": c.Charging.FinishTime,
+				"master_ev_id":         s.resolveMasterEvID(c.Brand, c.Model, c.Battery),
 			}).Error; err != nil {
 				return nil, err
 			}
@@ -523,6 +525,31 @@ func (s *AdminService) PatchField(ctx context.Context, id uint, actor Actor, req
 	}
 
 	return s.Detail(ctx, id)
+}
+
+// resolveMasterChargerID / resolveMasterEvID มิเรอร์ logic ตอน create ใน
+// registration/ReService (service.go §resolve FK จาก catalog): เจ้าหน้าที่แก้ยี่ห้อ/รุ่น
+// แล้ว FK ต้องขยับตาม ไม่งั้นคอลัมน์ text กับ FK จะขัดกันเอง (แก้ให้ถูกแล้ว FK ยังเป็น NULL
+// หรือแก้เป็นรุ่นอื่นแล้ว FK ค้างชี้รุ่นเก่า).
+// จับไม่ได้ → nil = นอกบัญชี catalog (ยอมรับได้ เหมือนฝั่ง create).
+func (s *AdminService) resolveMasterChargerID(brand, model string) *uint {
+	var master models.MasterCharger
+	if err := s.db.Select("id").
+		Where("brand = ? AND model = ?", brand, model).
+		First(&master).Error; err != nil {
+		return nil
+	}
+	return &master.ID
+}
+
+func (s *AdminService) resolveMasterEvID(brand, model, battery string) *uint {
+	var master models.MasterEV
+	if err := s.db.Select("id").
+		Where("brand = ? AND model = ? AND battery_label = ?", brand, model, battery).
+		First(&master).Error; err != nil {
+		return nil
+	}
+	return &master.ID
 }
 
 func splitName(full string) (first, last string) {
