@@ -25,9 +25,8 @@ type ReviewCharger struct {
 	ImageUrl      *string `json:"imageUrl"`
 	LabelImageUrl *string `json:"labelImageUrl"`
 	// Nameplate fields are always nil today — no OCR/manual nameplate capture
-	// exists yet (docs/backoffice-implementation-plan.md §9 open q.3) — kept
-	// so the frontend's existing rendering (which already treats null as
-	// "cannot cross-check") needs no changes.
+	// exists yet — kept so the frontend's existing rendering (which already
+	// treats null as "cannot cross-check") needs no changes.
 	NameplateSerial *string `json:"nameplateSerial"`
 	NameplateModel  *string `json:"nameplateModel"`
 	NameplateKw     *string `json:"nameplateKw"`
@@ -93,9 +92,9 @@ type ReviewRequest struct {
 	PointsAwarded *int            `json:"pointsAwarded"`
 	Activity      []ActivityEntry `json:"activity"`
 	// Flags/PointsPreview are backend-authoritative (business rules live here,
-	// not in the frontend — docs/backoffice-implementation-plan.md §1) — the
-	// frontend may keep computing its own copy for instant UI feedback, but
-	// approval is only ever actually gated server-side (see service.Decision).
+	// not in the frontend) — the frontend may keep computing its own copy for
+	// instant UI feedback, but approval is only ever gated server-side
+	// (see service.Decision).
 	Flags         []Flag        `json:"flags"`
 	PointsPreview PointsPreview `json:"pointsPreview"`
 }

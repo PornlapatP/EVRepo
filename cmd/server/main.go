@@ -110,8 +110,9 @@ func main() {
 			staff.GET("", regisController.GetAll)
 		}
 
-		// Back-office review console (docs/backoffice-implementation-plan.md) —
-		// Keycloak-gated only, same as /general-info's staff group above.
+		// Back-office review console (staff) — Keycloak-gated only, same as
+		// /general-info's staff group above. Handlers: internal/admin.
+
 		admin := apiV1.Group("/admin")
 		admin.Use(middleware.AuthMiddleware(authService, publicKey))
 		{
