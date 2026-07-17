@@ -4,8 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	authservice "github.com/pornlapatP/EV/internal/auth/service"
+	"github.com/pornlapatP/EV/internal/campaign"
 	"github.com/pornlapatP/EV/internal/models"
 	"github.com/pornlapatP/EV/internal/peacs"
 	"github.com/pornlapatP/EV/internal/registration/model"
@@ -13,12 +15,13 @@ import (
 )
 
 type GeneralService struct {
-	db    *gorm.DB
-	peaCS *peacs.Client
+	db       *gorm.DB
+	peaCS    *peacs.Client
+	campaign *campaign.Service
 }
 
-func NewGeneralService(db *gorm.DB, peaCS *peacs.Client) *GeneralService {
-	return &GeneralService{db: db, peaCS: peaCS}
+func NewGeneralService(db *gorm.DB, peaCS *peacs.Client, campaignSvc *campaign.Service) *GeneralService {
+	return &GeneralService{db: db, peaCS: peaCS, campaign: campaignSvc}
 }
 
 // CreateGeneralInfoWithRelations is the only place a GeneralInfo row is ever
@@ -36,6 +39,19 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 	pid string,
 	source authservice.EntrySource,
 ) error {
+
+	// Campaign submit gate — the one real (security) enforcement of the
+	// registration window. Frontend guards (entry page, proxy) are UX only;
+	// this choke point is what actually blocks an out-of-window POST
+	// (campaign-window-plan.md §"ด่านบังคับจริง"). Server clock, not the client's.
+	switch _, status, err := s.campaign.Status(time.Now().UTC()); {
+	case err != nil:
+		return err
+	case status == models.CampaignBefore:
+		return ErrCampaignNotOpen
+	case status == models.CampaignClosed:
+		return ErrCampaignClosed
+	}
 
 	return s.db.Transaction(func(tx *gorm.DB) error {
 
@@ -277,6 +293,15 @@ func (s *GeneralService) GetGeneralInfoByPID(pid string) ([]models.GeneralInfo, 
 }
 
 var ErrCANotFound = errors.New("ca not found")
+
+// ErrCampaignNotOpen / ErrCampaignClosed are the submit gate's rejections when
+// the registration window isn't open — mapped to 403 by the controller
+// (CAMPAIGN_NOT_OPEN / CAMPAIGN_CLOSED). "NotOpen" = before the window starts,
+// "Closed" = after it ends or no active campaign configured.
+var (
+	ErrCampaignNotOpen = errors.New("campaign has not opened yet")
+	ErrCampaignClosed  = errors.New("campaign has closed")
+)
 
 // ErrNotOwner is returned when a session tries to edit a CA that was
 // registered by a *different* citizen (PID) — own-only, decided 2026-07-14

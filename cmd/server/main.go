@@ -11,6 +11,7 @@ import (
 	adminhandler "github.com/pornlapatP/EV/internal/admin/handler"
 	adminservice "github.com/pornlapatP/EV/internal/admin/service"
 	"github.com/pornlapatP/EV/internal/auth/config"
+	"github.com/pornlapatP/EV/internal/campaign"
 	"github.com/pornlapatP/EV/internal/catalog"
 	"github.com/pornlapatP/EV/internal/auth/handler"
 	"github.com/pornlapatP/EV/internal/auth/service"
@@ -28,7 +29,7 @@ func main() {
 	cfg := config.Load()
 	database.Connect()
 
-	database.DB.AutoMigrate(&models.GeneralInfo{}, &models.Charger{}, &models.Vendor{}, &models.Ev{}, &models.Employee{}, &models.AuditLog{}, &models.MasterEV{}, &models.MasterCharger{})
+	database.DB.AutoMigrate(&models.GeneralInfo{}, &models.Charger{}, &models.Vendor{}, &models.Ev{}, &models.Employee{}, &models.AuditLog{}, &models.MasterEV{}, &models.MasterCharger{}, &models.Campaign{})
 	rawKey := os.Getenv("KEYCLOAK_PUBLIC_KEY")
 	if rawKey == "" {
 		log.Fatal("KEYCLOAK_PUBLIC_KEY missing")
@@ -75,7 +76,10 @@ func main() {
 	}
 
 	r.Use(cors.New(corsConfig))
-	RegisService := regisservice.NewGeneralService(database.DB, peacs.New())
+	campaignService := campaign.NewService(database.DB)
+	campaignHandler := campaign.NewHandler(campaignService, authService)
+
+	RegisService := regisservice.NewGeneralService(database.DB, peacs.New(), campaignService)
 	regisController := controller.NewControllerHandler(RegisService, storageSvc)
 
 	AdminService := adminservice.NewAdminService(database.DB, storageSvc)
@@ -92,6 +96,11 @@ func main() {
 		// Charger master catalog — same treatment as /ev-catalog. Feeds the
 		// wizard's brand→model charger dropdown + spec auto-fill (master-charger-seed-plan.md §9).
 		apiV1.GET("/charger-catalog", catalogController.GetChargers)
+
+		// Registration campaign window — public (no auth), sits outside the
+		// citizen group so the entry page + proxy guard can read the status
+		// before login. Server-computed status; fail-closed when unset.
+		apiV1.GET("/campaign", campaignHandler.Public)
 
 		// Citizen-gated: the registration wizard's CA step is only ever reached
 		// after ThaID login (Entry -> ManualLogin -> registrationForm), so
@@ -124,6 +133,11 @@ func main() {
 			admin.PATCH("/registrations/:id/checklist", adminController.Checklist)
 			admin.PATCH("/registrations/:id/notes", adminController.Notes)
 			admin.POST("/registrations/:id/decision", adminController.Decision)
+
+			// Campaign window management (staff) — get the current window to
+			// prefill, patch its name/start/end.
+			admin.GET("/campaign", campaignHandler.AdminGet)
+			admin.PATCH("/campaign", campaignHandler.AdminUpdate)
 		}
 	}
 

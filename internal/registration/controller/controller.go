@@ -84,6 +84,22 @@ func (c *RegistrationController) CreateWithRelations(ctx *gin.Context) {
 			})
 			return
 		}
+		if errors.Is(err, regisservice.ErrCampaignNotOpen) {
+			ctx.JSON(403, gin.H{
+				"success": false,
+				"code":    "CAMPAIGN_NOT_OPEN",
+				"message": "ยังไม่ถึงเวลาเปิดลงทะเบียน กรุณากลับมาใหม่เมื่อถึงกำหนด",
+			})
+			return
+		}
+		if errors.Is(err, regisservice.ErrCampaignClosed) {
+			ctx.JSON(403, gin.H{
+				"success": false,
+				"code":    "CAMPAIGN_CLOSED",
+				"message": "หมดเวลาลงทะเบียนแล้ว ไม่สามารถส่งข้อมูลได้",
+			})
+			return
+		}
 		ctx.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
