@@ -188,6 +188,8 @@ func (h *AdminHandler) respondDetail(c *gin.Context, resp *adminmodel.ReviewRequ
 		c.JSON(http.StatusBadRequest, gin.H{"code": "REASON_REQUIRED", "message": "กรุณาระบุเหตุผลก่อนบันทึกการแก้ไข"})
 	case errors.Is(err, adminservice.ErrCardMismatch):
 		c.JSON(http.StatusBadRequest, gin.H{"error": "payload does not match existing record shape"})
+	case errors.Is(err, adminservice.ErrCaseClosed):
+		c.JSON(http.StatusConflict, gin.H{"code": "CASE_CLOSED", "message": "คำขอนี้ปิดแล้ว ไม่สามารถแก้ไขได้"})
 	case err != nil:
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	default:

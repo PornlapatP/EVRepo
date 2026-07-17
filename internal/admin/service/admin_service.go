@@ -2,7 +2,8 @@
 // validation-flag engine, the Watt-D points engine, listing/filtering, and
 // the mutations (inline edit, checklist, decision) with their audit trail.
 // This is the single source of truth for all of it — the frontend must never
-// be trusted to compute flags/points itself (docs/backoffice-implementation-plan.md §1, §6).
+// be trusted to compute flags/points itself; it may keep an equivalent copy
+// only for instant UI feedback (approval is always gated server-side).
 package service
 
 import (
@@ -21,9 +22,8 @@ import (
 	"gorm.io/gorm"
 )
 
-// CAPoints is the flat Watt-D Points award per CA (design/00-system-overview.md §5,
-// docs/backoffice-implementation-plan.md §6.1 — agreed 2026-07: flat, not an
-// accumulating cap engine).
+// CAPoints is the flat Watt-D Points award per CA (design/00-system-overview.md §5;
+// agreed 2026-07: flat, not an accumulating cap engine).
 const CAPoints = 500
 
 var caFormatRe = regexp.MustCompile(`^\d{12}$`)
@@ -34,7 +34,17 @@ var (
 	ErrHasCriticalFlags  = errors.New("registration has unresolved critical flags")
 	ErrInvalidTransition = errors.New("decision not allowed from current status")
 	ErrCardMismatch      = errors.New("payload does not match card count")
+	ErrCaseClosed        = errors.New("registration is closed for edits")
 )
+
+// isReviewable reports whether a request is still open for staff edits/checklist/
+// notes/decisions (pending|needs_info). Mirrors the frontend canReview/canEdit gate
+// so a closed case (approved|rejected) is frozen server-side too, not just in the UI —
+// its decision and awarded points are already locked, so editing it would desync the
+// record from what was decided. Decision() enforces the same rule via ErrInvalidTransition.
+func isReviewable(status string) bool {
+	return status == "pending" || status == "needs_info"
+}
 
 type AdminService struct {
 	db         *gorm.DB
@@ -262,10 +272,9 @@ func (s *AdminService) loadActivity(generalInfoID uint) []model.ActivityEntry {
 }
 
 // ---------------------------------------------------------------------------
-// Flag engine (docs/backoffice-implementation-plan.md §6.2) — mirrors
-// ev-regis/utils/backoffice.ts computeFlags() so backend and (any remaining
-// client-side) frontend logic agree. Nameplate/kW-mismatch flags are omitted
-// (§9 open q.3): no nameplate OCR/manual-entry data exists in this schema.
+// Flag engine — mirrors ev-regis/utils/backoffice.ts computeFlags() so backend
+// and (any remaining client-side) frontend logic agree. Nameplate/kW-mismatch
+// flags are omitted: no nameplate OCR/manual-entry data exists in this schema.
 // ---------------------------------------------------------------------------
 
 func computeFlags(g models.GeneralInfo, all []models.GeneralInfo) []model.Flag {
@@ -397,8 +406,8 @@ func criticalCount(flags []model.Flag) int {
 }
 
 // ---------------------------------------------------------------------------
-// Points engine (docs/backoffice-implementation-plan.md §6.1) — flat
-// CAPoints per CA; mirrors ev-regis/utils/backoffice.ts computePointsEligibility.
+// Points engine — flat CAPoints per CA; mirrors
+// ev-regis/utils/backoffice.ts computePointsEligibility.
 // ---------------------------------------------------------------------------
 
 func computePointsPreview(g models.GeneralInfo, all []models.GeneralInfo, flags []model.Flag) model.PointsPreview {
@@ -459,6 +468,9 @@ func (s *AdminService) PatchField(ctx context.Context, id uint, actor Actor, req
 	g, err := s.findByID(id)
 	if err != nil {
 		return nil, err
+	}
+	if !isReviewable(g.Status) {
+		return nil, ErrCaseClosed
 	}
 
 	switch req.Card {
@@ -562,7 +574,14 @@ func splitName(full string) (first, last string) {
 }
 
 func (s *AdminService) PatchChecklist(ctx context.Context, id uint, checklist model.Checklist) (*model.ReviewRequest, error) {
-	if err := s.db.Model(&models.GeneralInfo{}).Where("id = ?", id).Updates(map[string]any{
+	g, err := s.findByID(id)
+	if err != nil {
+		return nil, err
+	}
+	if !isReviewable(g.Status) {
+		return nil, ErrCaseClosed
+	}
+	if err := s.db.Model(&models.GeneralInfo{}).Where("id = ?", g.ID).Updates(map[string]any{
 		"checklist_reg":     checklist.Reg,
 		"checklist_charger": checklist.Charger,
 		"checklist_ev":      checklist.Ev,
@@ -573,7 +592,14 @@ func (s *AdminService) PatchChecklist(ctx context.Context, id uint, checklist mo
 }
 
 func (s *AdminService) PatchNotes(ctx context.Context, id uint, notes string) (*model.ReviewRequest, error) {
-	if err := s.db.Model(&models.GeneralInfo{}).Where("id = ?", id).Update("notes", notes).Error; err != nil {
+	g, err := s.findByID(id)
+	if err != nil {
+		return nil, err
+	}
+	if !isReviewable(g.Status) {
+		return nil, ErrCaseClosed
+	}
+	if err := s.db.Model(&models.GeneralInfo{}).Where("id = ?", g.ID).Update("notes", notes).Error; err != nil {
 		return nil, err
 	}
 	return s.Detail(ctx, id)
