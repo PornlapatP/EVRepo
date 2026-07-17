@@ -17,11 +17,16 @@ type Registrant struct {
 }
 
 type ReviewCharger struct {
-	Brand         string  `json:"brand"`
-	Model         string  `json:"model"`
-	SerialNo      string  `json:"serialNo"`
-	ConnectorType string  `json:"connectorType"`
-	Kw            string  `json:"kw"`
+	Brand    string `json:"brand"`
+	Model    string `json:"model"`
+	SerialNo string `json:"serialNo"`
+	// AC|DC only — the frontend parses this with a strict Zod enum
+	// (schemas/backofficeSchema.ts) and DROPS THE WHOLE REGISTRATION from the
+	// staff list if it doesn't match, so an unexpected value written here makes a
+	// request silently un-reviewable. binding applies to PatchRequest only
+	// (response marshalling ignores it).
+	ConnectorType string `json:"connectorType" binding:"omitempty,oneof=AC DC"`
+	Kw            string `json:"kw"`
 	ImageUrl      *string `json:"imageUrl"`
 	LabelImageUrl *string `json:"labelImageUrl"`
 	// Nameplate fields are always nil today — no OCR/manual nameplate capture
