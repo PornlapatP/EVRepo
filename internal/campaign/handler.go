@@ -46,13 +46,27 @@ func toResponse(c *models.Campaign, status models.CampaignStatus, now time.Time)
 	return resp
 }
 
+// errorJSON is the error envelope every handler here answers with. The frontend
+// reads {code, message} (services/http-client.ts) and shows `message` verbatim to
+// staff, so message must always be Thai — an English-only string reaching the UI
+// violates the project's language rule. Without this shape the client falls back
+// to axios's raw "Request failed with status code 500". The underlying err stays
+// server-side (logged), never surfaced to the user.
+func errorJSON(c *gin.Context, httpStatus int, code, message string, err error) {
+	if err != nil {
+		log.Printf("campaign: %s: %v", code, err)
+	}
+	c.JSON(httpStatus, gin.H{"code": code, "message": message})
+}
+
 // Public handles GET /api/v1/campaign — no auth (sits outside the citizen
 // group). Feeds the entry page's UX gate and the proxy deep-link guard.
 func (h *Handler) Public(c *gin.Context) {
 	now := time.Now().UTC()
 	campaign, status, err := h.svc.Status(now)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		errorJSON(c, http.StatusInternalServerError, "CAMPAIGN_FETCH_FAILED",
+			"โหลดข้อมูลช่วงเวลากิจกรรมไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", err)
 		return
 	}
 	c.JSON(http.StatusOK, toResponse(campaign, status, now))
@@ -75,20 +89,20 @@ type updateRequest struct {
 func (h *Handler) AdminUpdate(c *gin.Context) {
 	var req updateRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		errorJSON(c, http.StatusBadRequest, "INVALID_BODY",
+			"ข้อมูลที่ส่งมาไม่ถูกต้อง กรุณาตรวจสอบเวลาเริ่มและเวลาสิ้นสุด", err)
 		return
 	}
 
 	campaign, err := h.svc.Update(req.Name, req.StartAt, req.EndAt)
 	if err == ErrStartNotBeforeEnd {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"code":    "INVALID_WINDOW",
-			"message": "เวลาเริ่มต้องมาก่อนเวลาสิ้นสุด",
-		})
+		errorJSON(c, http.StatusBadRequest, "INVALID_WINDOW",
+			"เวลาเริ่มต้องมาก่อนเวลาสิ้นสุด", nil)
 		return
 	}
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		errorJSON(c, http.StatusInternalServerError, "CAMPAIGN_UPDATE_FAILED",
+			"บันทึกช่วงเวลากิจกรรมไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", err)
 		return
 	}
 
