@@ -11,10 +11,10 @@ import (
 	adminhandler "github.com/pornlapatP/EV/internal/admin/handler"
 	adminservice "github.com/pornlapatP/EV/internal/admin/service"
 	"github.com/pornlapatP/EV/internal/auth/config"
-	"github.com/pornlapatP/EV/internal/campaign"
-	"github.com/pornlapatP/EV/internal/catalog"
 	"github.com/pornlapatP/EV/internal/auth/handler"
 	"github.com/pornlapatP/EV/internal/auth/service"
+	"github.com/pornlapatP/EV/internal/campaign"
+	"github.com/pornlapatP/EV/internal/catalog"
 	"github.com/pornlapatP/EV/internal/database"
 	"github.com/pornlapatP/EV/internal/middleware"
 	"github.com/pornlapatP/EV/internal/models"
@@ -133,6 +133,12 @@ func main() {
 			admin.PATCH("/registrations/:id/checklist", adminController.Checklist)
 			admin.PATCH("/registrations/:id/notes", adminController.Notes)
 			admin.POST("/registrations/:id/decision", adminController.Decision)
+			admin.POST("/registrations/:id/claim", adminController.Claim)
+			admin.POST("/registrations/:id/release", adminController.Release)
+
+			// Dashboard tab — stat-card summary + Excel export of the current scope.
+			admin.GET("/dashboard/summary", adminController.DashboardSummary)
+			admin.GET("/dashboard/export", adminController.Export)
 
 			// Campaign window management (staff) — get the current window to
 			// prefill, patch its name/start/end.

@@ -25,8 +25,8 @@ type ReviewCharger struct {
 	// staff list if it doesn't match, so an unexpected value written here makes a
 	// request silently un-reviewable. binding applies to PatchRequest only
 	// (response marshalling ignores it).
-	ConnectorType string `json:"connectorType" binding:"omitempty,oneof=AC DC"`
-	Kw            string `json:"kw"`
+	ConnectorType string  `json:"connectorType" binding:"omitempty,oneof=AC DC"`
+	Kw            string  `json:"kw"`
 	ImageUrl      *string `json:"imageUrl"`
 	LabelImageUrl *string `json:"labelImageUrl"`
 	// Nameplate fields are always nil today — no OCR/manual nameplate capture
@@ -85,10 +85,16 @@ type PointsPreview struct {
 // ReviewRequest is the shape returned for both list items and single-record
 // detail — list items simply omit Activity (always []) to keep payload small.
 type ReviewRequest struct {
-	ID            string          `json:"id"`
-	ReferenceNo   string          `json:"referenceNo"`
-	SubmittedAt   string          `json:"submittedAt"`
-	Status        string          `json:"status"`
+	ID          string `json:"id"`
+	ReferenceNo string `json:"referenceNo"`
+	SubmittedAt string `json:"submittedAt"`
+	Status      string `json:"status"`
+	// Claim-queue fields (empty/nil = nobody has claimed this request yet) — see
+	// AdminService.Claim/Release. ClaimedByName is a display-name snapshot so the
+	// dashboard table doesn't need to join Employee.
+	ClaimedBy     string          `json:"claimedBy,omitempty"`
+	ClaimedByName string          `json:"claimedByName,omitempty"`
+	ClaimedAt     *string         `json:"claimedAt,omitempty"`
 	Registrant    Registrant      `json:"registrant"`
 	Chargers      []ReviewCharger `json:"chargers"`
 	Cars          []ReviewEvCar   `json:"cars"`
@@ -119,9 +125,26 @@ type StatsResponse struct {
 	TotalPoints int `json:"totalPoints"`
 }
 
+// DashboardSummaryResponse is the back-office dashboard tab's stat-card row —
+// Stats-like system-wide counts plus the caller's own claim-queue standing.
+type DashboardSummaryResponse struct {
+	Total       int `json:"total"`
+	Pending     int `json:"pending"`
+	Flagged     int `json:"flagged"`
+	Approved    int `json:"approved"`
+	TotalPoints int `json:"totalPoints"`
+	Unclaimed   int `json:"unclaimed"`   // open pool available to claim
+	MyActive    int `json:"myActive"`    // 0 or 1 — the caller's currently claimed task
+	MyCompleted int `json:"myCompleted"` // approved/rejected decisions made by the caller
+}
+
 type MeResponse struct {
 	Name       string `json:"name"`
 	EmployeeId string `json:"employeeId"`
+	// Sub = Keycloak sub of the caller — lets the frontend tell "claimed by me"
+	// apart from "claimed by another staff member" by comparing against
+	// ReviewRequest.ClaimedBy, without trusting any client-supplied identity.
+	Sub string `json:"sub"`
 }
 
 // PatchRequest is the body of PATCH /admin/registrations/:id. Exactly one of

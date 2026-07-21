@@ -56,6 +56,15 @@ type GeneralInfo struct {
 	ReviewedBy string `gorm:"type:varchar(100)"`                           // Employee.Sub, nullable
 	ReviewedAt *time.Time
 
+	// ClaimedBy/ClaimedAt implement the "รับงาน" single-active-task queue: a staff
+	// member must claim a request before editing/deciding it, and can only hold one
+	// active claim at a time (AdminService.Claim enforces this under a row lock).
+	// Cleared on approve/reject (task done) or explicit release; kept through
+	// needs_info (still the claimant's task while waiting on the customer).
+	ClaimedBy   string `gorm:"column:claimed_by;type:varchar(100);index"` // Employee.Sub, nullable
+	ClaimedAt   *time.Time
+	ClaimedName string `gorm:"column:claimed_name;type:varchar(200)"` // display name snapshot, avoids joining Employee for the dashboard table
+
 	// Notes/checklist/PointsAwarded are the back-office review layer added on
 	// top of the citizen's submission (internal/admin) — nil PointsAwarded
 	// means "not decided yet"; 0 means "approved but not eligible for points".

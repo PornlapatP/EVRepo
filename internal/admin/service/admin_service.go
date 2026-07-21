@@ -20,6 +20,7 @@ import (
 	"github.com/pornlapatP/EV/internal/models"
 	"github.com/pornlapatP/EV/internal/storage"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // CAPoints is the flat Watt-D Points award per CA (design/00-system-overview.md §5;
@@ -35,6 +36,14 @@ var (
 	ErrInvalidTransition = errors.New("decision not allowed from current status")
 	ErrCardMismatch      = errors.New("payload does not match card count")
 	ErrCaseClosed        = errors.New("registration is closed for edits")
+
+	// Claim-queue errors (see GeneralInfo.ClaimedBy) — a staff member must hold
+	// the claim on a request before editing/deciding it, and may only hold one
+	// active claim at a time.
+	ErrAlreadyClaimed = errors.New("registration already claimed by someone else")
+	ErrHasActiveClaim = errors.New("actor already has another active claimed task")
+	ErrNotClaimed     = errors.New("registration must be claimed before editing")
+	ErrNotClaimant    = errors.New("registration is claimed by someone else")
 )
 
 // isReviewable reports whether a request is still open for staff edits/checklist/
@@ -62,18 +71,41 @@ func NewAdminService(db *gorm.DB, storageSvc *storage.Service) *AdminService {
 type ListFilter struct {
 	Status   string // "", "all", pending|approved|rejected|needs_info|flagged
 	Query    string
+	Scope    string // "", "mine" (claimed-by-me + decided-by-me), "unclaimed" (open pool)
 	Page     int
 	PageSize int
 }
 
-func (s *AdminService) List(ctx context.Context, f ListFilter) (*model.ListResponse, error) {
+// List scopes which GeneralInfo rows are visible before mapping to DTOs. actorSub
+// is only consulted when f.Scope == "mine" — every other caller may pass "".
+// scope="" (the main review console) intentionally shows everything, including
+// requests claimed by other staff — decision was "must still be viewable, just
+// not editable" (see PatchField/Decision's ensureClaimant guard).
+func (s *AdminService) List(ctx context.Context, actorSub string, f ListFilter) (*model.ListResponse, error) {
 	all, err := s.loadAll()
 	if err != nil {
 		return nil, err
 	}
 
-	items := make([]model.ReviewRequest, 0, len(all))
+	scoped := make([]models.GeneralInfo, 0, len(all))
 	for _, g := range all {
+		switch f.Scope {
+		case "mine":
+			isMyActiveClaim := g.ClaimedBy == actorSub
+			isMyCompletedDecision := g.ReviewedBy == actorSub && (g.Status == "approved" || g.Status == "rejected")
+			if !isMyActiveClaim && !isMyCompletedDecision {
+				continue
+			}
+		case "unclaimed":
+			if g.ClaimedBy != "" || !isReviewable(g.Status) {
+				continue
+			}
+		}
+		scoped = append(scoped, g)
+	}
+
+	items := make([]model.ReviewRequest, 0, len(scoped))
+	for _, g := range scoped {
 		items = append(items, s.toReviewRequest(ctx, g, all, false))
 	}
 
@@ -216,11 +248,20 @@ func (s *AdminService) toReviewRequest(ctx context.Context, g models.GeneralInfo
 		activity = s.loadActivity(g.ID)
 	}
 
+	var claimedAt *string
+	if g.ClaimedAt != nil {
+		s := thaiStamp(*g.ClaimedAt)
+		claimedAt = &s
+	}
+
 	return model.ReviewRequest{
-		ID:          fmt.Sprint(g.ID),
-		ReferenceNo: fmt.Sprintf("REG-%d", g.ID),
-		SubmittedAt: thaiStamp(g.CreatedAt),
-		Status:      g.Status,
+		ID:            fmt.Sprint(g.ID),
+		ReferenceNo:   fmt.Sprintf("REG-%d", g.ID),
+		SubmittedAt:   thaiStamp(g.CreatedAt),
+		Status:        g.Status,
+		ClaimedBy:     g.ClaimedBy,
+		ClaimedByName: g.ClaimedName,
+		ClaimedAt:     claimedAt,
 		Registrant: model.Registrant{
 			Name:    name,
 			WattdId: g.WattdId,
@@ -460,6 +501,95 @@ type Actor struct {
 	Name string
 }
 
+// ensureClaimant enforces the single-active-task rule at the edit boundary: a
+// request must be claimed, and claimed by this actor specifically, before its
+// fields/checklist/notes/decision can change. Viewing (Detail/List) is never
+// gated this way — only mutations.
+func ensureClaimant(g *models.GeneralInfo, actor Actor) error {
+	if g.ClaimedBy == "" {
+		return ErrNotClaimed
+	}
+	if g.ClaimedBy != actor.Sub {
+		return ErrNotClaimant
+	}
+	return nil
+}
+
+// Claim implements "รับงาน" — locks the row (SELECT ... FOR UPDATE) so two staff
+// clicking claim on the same request at once can't both win it, and rejects the
+// attempt outright if the actor already holds another active claim (one task at
+// a time, enforced server-side, not just disabled in the UI).
+func (s *AdminService) Claim(ctx context.Context, id uint, actor Actor) (*model.ReviewRequest, error) {
+	err := s.db.Transaction(func(tx *gorm.DB) error {
+		var g models.GeneralInfo
+		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&g, id).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return ErrNotFound
+			}
+			return err
+		}
+		if !isReviewable(g.Status) {
+			return ErrCaseClosed
+		}
+		if g.ClaimedBy == actor.Sub {
+			return nil // already claimed by this actor — idempotent no-op
+		}
+		if g.ClaimedBy != "" {
+			return ErrAlreadyClaimed
+		}
+
+		var activeCount int64
+		if err := tx.Model(&models.GeneralInfo{}).
+			Where("claimed_by = ? AND id != ?", actor.Sub, id).
+			Count(&activeCount).Error; err != nil {
+			return err
+		}
+		if activeCount > 0 {
+			return ErrHasActiveClaim
+		}
+
+		now := time.Now().UTC()
+		return tx.Model(&models.GeneralInfo{}).Where("id = ?", id).Updates(map[string]any{
+			"claimed_by":   actor.Sub,
+			"claimed_at":   now,
+			"claimed_name": actor.Name,
+		}).Error
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if auditErr := s.writeAudit(id, actor, "claim", "", "", "รับงานนี้มาดำเนินการ"); auditErr != nil {
+		log.Printf("admin: write audit for claim %d failed: %v", id, auditErr)
+	}
+	return s.Detail(ctx, id)
+}
+
+// Release implements "คืนงาน" — voluntarily drop a claim before it's decided
+// (staff going on leave, blocked on something, etc). Only the claimant can
+// release their own claim.
+func (s *AdminService) Release(ctx context.Context, id uint, actor Actor) (*model.ReviewRequest, error) {
+	g, err := s.findByID(id)
+	if err != nil {
+		return nil, err
+	}
+	if err := ensureClaimant(g, actor); err != nil {
+		return nil, err
+	}
+
+	if err := s.db.Model(&models.GeneralInfo{}).Where("id = ?", id).Updates(map[string]any{
+		"claimed_by":   "",
+		"claimed_at":   nil,
+		"claimed_name": "",
+	}).Error; err != nil {
+		return nil, err
+	}
+	if auditErr := s.writeAudit(id, actor, "release", "", "", "คืนงานนี้กลับเข้ากองงานที่รอรับ"); auditErr != nil {
+		log.Printf("admin: write audit for release %d failed: %v", id, auditErr)
+	}
+	return s.Detail(ctx, id)
+}
+
 func (s *AdminService) PatchField(ctx context.Context, id uint, actor Actor, req model.PatchRequest) (*model.ReviewRequest, error) {
 	if strings.TrimSpace(req.Reason) == "" {
 		return nil, ErrReasonRequired
@@ -471,6 +601,9 @@ func (s *AdminService) PatchField(ctx context.Context, id uint, actor Actor, req
 	}
 	if !isReviewable(g.Status) {
 		return nil, ErrCaseClosed
+	}
+	if err := ensureClaimant(g, actor); err != nil {
+		return nil, err
 	}
 
 	switch req.Card {
@@ -573,13 +706,16 @@ func splitName(full string) (first, last string) {
 	return full, ""
 }
 
-func (s *AdminService) PatchChecklist(ctx context.Context, id uint, checklist model.Checklist) (*model.ReviewRequest, error) {
+func (s *AdminService) PatchChecklist(ctx context.Context, id uint, actor Actor, checklist model.Checklist) (*model.ReviewRequest, error) {
 	g, err := s.findByID(id)
 	if err != nil {
 		return nil, err
 	}
 	if !isReviewable(g.Status) {
 		return nil, ErrCaseClosed
+	}
+	if err := ensureClaimant(g, actor); err != nil {
+		return nil, err
 	}
 	if err := s.db.Model(&models.GeneralInfo{}).Where("id = ?", g.ID).Updates(map[string]any{
 		"checklist_reg":     checklist.Reg,
@@ -591,13 +727,16 @@ func (s *AdminService) PatchChecklist(ctx context.Context, id uint, checklist mo
 	return s.Detail(ctx, id)
 }
 
-func (s *AdminService) PatchNotes(ctx context.Context, id uint, notes string) (*model.ReviewRequest, error) {
+func (s *AdminService) PatchNotes(ctx context.Context, id uint, actor Actor, notes string) (*model.ReviewRequest, error) {
 	g, err := s.findByID(id)
 	if err != nil {
 		return nil, err
 	}
 	if !isReviewable(g.Status) {
 		return nil, ErrCaseClosed
+	}
+	if err := ensureClaimant(g, actor); err != nil {
+		return nil, err
 	}
 	if err := s.db.Model(&models.GeneralInfo{}).Where("id = ?", g.ID).Update("notes", notes).Error; err != nil {
 		return nil, err
@@ -612,6 +751,9 @@ func (s *AdminService) Decision(ctx context.Context, id uint, actor Actor, req m
 	}
 	if g.Status != "pending" && g.Status != "needs_info" {
 		return nil, ErrInvalidTransition
+	}
+	if err := ensureClaimant(g, actor); err != nil {
+		return nil, err
 	}
 
 	all, err := s.loadAll()
@@ -635,6 +777,10 @@ func (s *AdminService) Decision(ctx context.Context, id uint, actor Actor, req m
 		preview := computePointsPreview(*g, all, flags)
 		updates["status"] = "approved"
 		updates["points_awarded"] = preview.Points
+		// terminal decision — task is done, free the claim slot back up.
+		updates["claimed_by"] = ""
+		updates["claimed_at"] = nil
+		updates["claimed_name"] = ""
 
 		pointsText := "โดยไม่มีการมอบแต้ม Watt-D (ไม่เข้าเงื่อนไขครบทุกข้อ)"
 		if preview.Points > 0 {
@@ -651,6 +797,10 @@ func (s *AdminService) Decision(ctx context.Context, id uint, actor Actor, req m
 		zero := 0
 		updates["status"] = "rejected"
 		updates["points_awarded"] = &zero
+		// terminal decision — task is done, free the claim slot back up.
+		updates["claimed_by"] = ""
+		updates["claimed_at"] = nil
+		updates["claimed_name"] = ""
 		text = "ปฏิเสธคำขอ: " + req.Reason
 		if req.Note != "" {
 			text += " — " + req.Note
@@ -659,6 +809,8 @@ func (s *AdminService) Decision(ctx context.Context, id uint, actor Actor, req m
 		if strings.TrimSpace(req.Reason) == "" {
 			return nil, ErrReasonRequired
 		}
+		// not terminal — claim is intentionally left in place: it's still this
+		// staff member's task while it waits on the customer to supply more info.
 		updates["status"] = "needs_info"
 		text = "ขอข้อมูลเพิ่มเติม: " + req.Reason
 		if req.Note != "" {
@@ -720,6 +872,46 @@ func (s *AdminService) Stats(ctx context.Context) (*model.StatsResponse, error) 
 		}
 	}
 	return &stats, nil
+}
+
+// DashboardSummary is Stats plus the caller's claim-queue standing (open pool
+// size + their own active/completed counts) for the dashboard tab's stat cards.
+func (s *AdminService) DashboardSummary(ctx context.Context, actorSub string) (*model.DashboardSummaryResponse, error) {
+	all, err := s.loadAll()
+	if err != nil {
+		return nil, err
+	}
+
+	summary := model.DashboardSummaryResponse{}
+	for _, g := range all {
+		summary.Total++
+		switch g.Status {
+		case "pending":
+			summary.Pending++
+		case "approved":
+			summary.Approved++
+			if g.PointsAwarded != nil {
+				summary.TotalPoints += *g.PointsAwarded
+			}
+		}
+		if g.Status != "rejected" {
+			flags := computeFlags(g, all)
+			if criticalCount(flags) > 0 {
+				summary.Flagged++
+			}
+		}
+
+		if g.ClaimedBy == "" && isReviewable(g.Status) {
+			summary.Unclaimed++
+		}
+		if g.ClaimedBy == actorSub {
+			summary.MyActive++
+		}
+		if g.ReviewedBy == actorSub && (g.Status == "approved" || g.Status == "rejected") {
+			summary.MyCompleted++
+		}
+	}
+	return &summary, nil
 }
 
 // thaiStamp formats a UTC time as Thai Buddhist-era, matching
