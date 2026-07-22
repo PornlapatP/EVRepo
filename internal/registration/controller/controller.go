@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"mime/multipart"
 	"net/http"
 	"time"
@@ -100,7 +101,12 @@ func (c *RegistrationController) CreateWithRelations(ctx *gin.Context) {
 			})
 			return
 		}
-		ctx.JSON(500, gin.H{"error": err.Error()})
+		log.Printf("registration controller: %v", err)
+		ctx.JSON(500, gin.H{
+			"success": false,
+			"code":    "SYSTEM_ERROR",
+			"message": "ระบบขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง",
+		})
 		return
 	}
 
@@ -137,7 +143,12 @@ func contentTypeOf(fh *multipart.FileHeader) string {
 func (c *RegistrationController) GetAll(ctx *gin.Context) {
 	data, err := c.regisService.GetAllGeneralInfo()
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": err.Error()})
+		log.Printf("registration controller: %v", err)
+		ctx.JSON(500, gin.H{
+			"success": false,
+			"code":    "SYSTEM_ERROR",
+			"message": "ระบบขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง",
+		})
 		return
 	}
 
@@ -155,7 +166,12 @@ func (c *RegistrationController) GetMine(ctx *gin.Context) {
 
 	data, err := c.regisService.GetGeneralInfoByPID(pid)
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": err.Error()})
+		log.Printf("registration controller: %v", err)
+		ctx.JSON(500, gin.H{
+			"success": false,
+			"code":    "SYSTEM_ERROR",
+			"message": "ระบบขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง",
+		})
 		return
 	}
 
@@ -197,7 +213,12 @@ func (c *RegistrationController) CheckCA(ctx *gin.Context) {
 			})
 			return
 		}
-		ctx.JSON(500, gin.H{"error": err.Error()})
+		log.Printf("registration controller: %v", err)
+		ctx.JSON(500, gin.H{
+			"success": false,
+			"code":    "SYSTEM_ERROR",
+			"message": "ระบบขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง",
+		})
 		return
 	}
 
