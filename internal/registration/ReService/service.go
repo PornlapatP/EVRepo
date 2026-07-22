@@ -194,6 +194,22 @@ func (s *GeneralService) CreateGeneralInfoWithRelations(
 				masterID = &master.ID
 			}
 
+			// serial_number is globally unique (one charger = one registration) —
+			// check before insert/update so a collision surfaces as
+			// ErrChargerSerialDuplicate (400, citizen-facing) instead of a raw
+			// Postgres 23505 error bubbling up as a 500.
+			dupQuery := tx.Where("serial_number = ?", c.SerialNumber)
+			if c.ID != nil {
+				dupQuery = dupQuery.Where("id != ?", *c.ID)
+			}
+			var dupCharger models.Charger
+			switch err := dupQuery.First(&dupCharger).Error; {
+			case err == nil:
+				return ErrChargerSerialDuplicate
+			case !errors.Is(err, gorm.ErrRecordNotFound):
+				return err
+			}
+
 			charger := models.Charger{
 				GeneralInfoID:   general.ID,
 				VendorID:        vendorID,
@@ -293,6 +309,13 @@ func (s *GeneralService) GetGeneralInfoByPID(pid string) ([]models.GeneralInfo, 
 }
 
 var ErrCANotFound = errors.New("ca not found")
+
+// ErrChargerSerialDuplicate is returned when a charger's serial number
+// already belongs to a different registration — Charger.SerialNumber has a
+// DB-level unique index (idx_chargers_serial_number, one charger = one
+// registration), so this check runs before insert/update to turn what would
+// otherwise be a raw Postgres 23505 error into a citizen-facing message.
+var ErrChargerSerialDuplicate = errors.New("charger serial number already registered to another submission")
 
 // ErrCampaignNotOpen / ErrCampaignClosed are the submit gate's rejections when
 // the registration window isn't open — mapped to 403 by the controller

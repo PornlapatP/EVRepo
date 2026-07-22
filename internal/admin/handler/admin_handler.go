@@ -272,8 +272,6 @@ func (h *AdminHandler) Decision(c *gin.Context) {
 
 	resp, err := h.svc.Decision(c.Request.Context(), id, actor, req)
 	switch {
-	case errors.Is(err, adminservice.ErrHasCriticalFlags):
-		c.JSON(http.StatusConflict, gin.H{"code": "HAS_CRITICAL_FLAGS", "message": "คำขอนี้มีข้อควรระวังระดับร้ายแรงที่ยังไม่แก้ไข ไม่สามารถอนุมัติได้"})
 	case errors.Is(err, adminservice.ErrInvalidTransition):
 		c.JSON(http.StatusConflict, gin.H{"code": "INVALID_TRANSITION", "message": "คำขอนี้ถูกตัดสินไปแล้ว"})
 	case errors.Is(err, adminservice.ErrReasonRequired):

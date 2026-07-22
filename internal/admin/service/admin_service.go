@@ -1,9 +1,7 @@
-// Package service implements the back-office review business logic: the
-// validation-flag engine, the Watt-D points engine, listing/filtering, and
-// the mutations (inline edit, checklist, decision) with their audit trail.
-// This is the single source of truth for all of it — the frontend must never
-// be trusted to compute flags/points itself; it may keep an equivalent copy
-// only for instant UI feedback (approval is always gated server-side).
+// Package service implements the back-office review business logic:
+// listing/filtering and the mutations (inline edit, checklist, decision)
+// with their audit trail. Back-office only approves/rejects — it does not
+// compute validation flags or credit Watt-D Points.
 package service
 
 import (
@@ -11,7 +9,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"regexp"
 	"sort"
 	"strings"
 	"time"
@@ -24,16 +21,9 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-// CAPoints is the flat Watt-D Points award per CA (design/00-system-overview.md §5;
-// agreed 2026-07: flat, not an accumulating cap engine).
-const CAPoints = 500
-
-var caFormatRe = regexp.MustCompile(`^\d{12}$`)
-
 var (
 	ErrNotFound          = errors.New("registration not found")
 	ErrReasonRequired    = errors.New("reason is required")
-	ErrHasCriticalFlags  = errors.New("registration has unresolved critical flags")
 	ErrInvalidTransition = errors.New("decision not allowed from current status")
 	ErrCardMismatch      = errors.New("payload does not match card count")
 	ErrCaseClosed        = errors.New("registration is closed for edits")
@@ -50,8 +40,8 @@ var (
 // isReviewable reports whether a request is still open for staff edits/checklist/
 // notes/decisions (pending|needs_info). Mirrors the frontend canReview/canEdit gate
 // so a closed case (approved|rejected) is frozen server-side too, not just in the UI —
-// its decision and awarded points are already locked, so editing it would desync the
-// record from what was decided. Decision() enforces the same rule via ErrInvalidTransition.
+// its decision is already locked, so editing it would desync the record from what
+// was decided. Decision() enforces the same rule via ErrInvalidTransition.
 func isReviewable(status string) bool {
 	return status == "pending" || status == "needs_info"
 }
@@ -119,7 +109,7 @@ func (s *AdminService) List(ctx context.Context, actorSub string, f ListFilter) 
 
 	items := make([]model.ReviewRequest, 0, len(scoped))
 	for _, g := range scoped {
-		items = append(items, s.toReviewRequest(ctx, g, all, false))
+		items = append(items, s.toReviewRequest(ctx, g, false))
 	}
 
 	q := strings.ToLower(strings.TrimSpace(f.Query))
@@ -163,8 +153,6 @@ func matchesStatusFilter(r model.ReviewRequest, status string) bool {
 	switch status {
 	case "", "all":
 		return true
-	case "flagged":
-		return r.Status != "rejected" && criticalCount(r.Flags) > 0
 	default:
 		return r.Status == status
 	}
@@ -188,7 +176,7 @@ func (s *AdminService) Detail(ctx context.Context, id uint) (*model.ReviewReques
 	}
 	for _, g := range all {
 		if g.ID == id {
-			r := s.toReviewRequest(ctx, g, all, true)
+			r := s.toReviewRequest(ctx, g, true)
 			return &r, nil
 		}
 	}
@@ -220,7 +208,7 @@ func (s *AdminService) findByID(id uint) (*models.GeneralInfo, error) {
 	return &g, nil
 }
 
-func (s *AdminService) toReviewRequest(ctx context.Context, g models.GeneralInfo, all []models.GeneralInfo, includeActivity bool) model.ReviewRequest {
+func (s *AdminService) toReviewRequest(ctx context.Context, g models.GeneralInfo, includeActivity bool) model.ReviewRequest {
 	name := g.RegistrantName
 	if name == "" {
 		name = strings.TrimSpace(g.FirstName + " " + g.LastName)
@@ -254,8 +242,6 @@ func (s *AdminService) toReviewRequest(ctx context.Context, g models.GeneralInfo
 		})
 	}
 
-	flags := computeFlags(g, all)
-
 	activity := []model.ActivityEntry{}
 	if includeActivity {
 		activity = s.loadActivity(g.ID)
@@ -288,11 +274,8 @@ func (s *AdminService) toReviewRequest(ctx context.Context, g models.GeneralInfo
 			Charger: g.ChecklistCharger,
 			Ev:      g.ChecklistEv,
 		},
-		Notes:         g.Notes,
-		PointsAwarded: g.PointsAwarded,
-		Activity:      activity,
-		Flags:         flags,
-		PointsPreview: computePointsPreview(g, all, flags),
+		Notes:    g.Notes,
+		Activity: activity,
 	}
 }
 
@@ -323,186 +306,6 @@ func (s *AdminService) loadActivity(generalInfoID uint) []model.ActivityEntry {
 		})
 	}
 	return out
-}
-
-// ---------------------------------------------------------------------------
-// Flag engine — mirrors ev-regis/utils/backoffice.ts computeFlags() so backend
-// and (any remaining client-side) frontend logic agree. Nameplate/kW-mismatch
-// flags are omitted: no nameplate OCR/manual-entry data exists in this schema.
-// ---------------------------------------------------------------------------
-
-func computeFlags(g models.GeneralInfo, all []models.GeneralInfo) []model.Flag {
-	flags := []model.Flag{}
-
-	if !caFormatRe.MatchString(g.Ca) {
-		flags = append(flags, model.Flag{
-			Level: model.FlagCritical,
-			Text:  fmt.Sprintf("รูปแบบหมายเลขผู้ใช้ไฟ (CA) ไม่ถูกต้อง ต้องมี 12 หลัก (พบ %d หลัก)", len(digitsOnly(g.Ca))),
-		})
-	}
-
-	// 1 CA ยืนยันตัวได้สูงสุด 2 วิธี: ThaID ตรง 1 รายการ + Watt-D 1 รายการ
-	var sameCa []models.GeneralInfo
-	for _, x := range all {
-		if x.Ca == g.Ca && x.Status != "rejected" {
-			sameCa = append(sameCa, x)
-		}
-	}
-	idCardRecords := filterByMethod(sameCa, false)
-	wattDRecords := filterByMethod(sameCa, true)
-
-	if len(sameCa) > 2 {
-		flags = append(flags, model.Flag{
-			Level: model.FlagCritical,
-			Text: fmt.Sprintf(
-				"หมายเลขผู้ใช้ไฟ (CA) นี้มีคำขอทั้งหมด %d รายการ เกินเงื่อนไขที่อนุญาต (1 CA ยืนยันตัวได้สูงสุด 2 วิธี คือ ThaID 1 รายการ และ Watt-D 1 รายการ)",
-				len(sameCa),
-			),
-			Related: idsExcept(sameCa, g.ID),
-		})
-	} else {
-		if len(idCardRecords) > 1 {
-			flags = append(flags, model.Flag{
-				Level:   model.FlagCritical,
-				Text:    "CA นี้มีคำขอยืนยันตัวด้วย ThaID ซ้ำมากกว่า 1 รายการ (ยืนยันวิธีนี้ได้เพียง 1 รายการต่อ CA)",
-				Related: idsExcept(idCardRecords, g.ID),
-			})
-		}
-		if len(wattDRecords) > 1 {
-			flags = append(flags, model.Flag{
-				Level:   model.FlagCritical,
-				Text:    "CA นี้มีคำขอผูกบัญชี Watt-D ซ้ำมากกว่า 1 รายการ — อาจเข้าข่ายรับแต้มซ้ำ (ยืนยันวิธีนี้ได้เพียง 1 รายการต่อ CA)",
-				Related: idsExcept(wattDRecords, g.ID),
-			})
-		}
-	}
-
-	// Serial เครื่องชาร์จซ้ำข้ามคำขอ
-	mySerials := make(map[string]bool, len(g.Chargers))
-	for _, c := range g.Chargers {
-		if c.SerialNumber != "" {
-			mySerials[c.SerialNumber] = true
-		}
-	}
-	if len(mySerials) > 0 {
-		dupIDs := map[string]bool{}
-		for _, x := range all {
-			if x.ID == g.ID || x.Status == "rejected" {
-				continue
-			}
-			for _, c := range x.Chargers {
-				if mySerials[c.SerialNumber] {
-					dupIDs[fmt.Sprint(x.ID)] = true
-					break
-				}
-			}
-		}
-		if len(dupIDs) > 0 {
-			related := make([]string, 0, len(dupIDs))
-			for id := range dupIDs {
-				related = append(related, id)
-			}
-			sort.Strings(related)
-			flags = append(flags, model.Flag{
-				Level:   model.FlagCritical,
-				Text:    "หมายเลข Serial เครื่องชาร์จซ้ำกับคำขออื่น — เครื่องชาร์จ 1 เครื่องผูกได้กับเพียง 1 คำขอ",
-				Related: related,
-			})
-		}
-	}
-
-	return flags
-}
-
-// filterByMethod splits by "verify method": wattdId present = linked via
-// Watt-D/Smart Plus, absent = direct ThaID — same signal the frontend uses
-// (ev-regis/utils/backoffice.ts verifyMethod).
-func filterByMethod(records []models.GeneralInfo, wantWattd bool) []models.GeneralInfo {
-	out := make([]models.GeneralInfo, 0, len(records))
-	for _, r := range records {
-		hasWattd := r.WattdId != nil && *r.WattdId != ""
-		if hasWattd == wantWattd {
-			out = append(out, r)
-		}
-	}
-	return out
-}
-
-func idsExcept(records []models.GeneralInfo, excludeID uint) []string {
-	out := make([]string, 0, len(records))
-	for _, r := range records {
-		if r.ID != excludeID {
-			out = append(out, fmt.Sprint(r.ID))
-		}
-	}
-	sort.Strings(out)
-	return out
-}
-
-func digitsOnly(s string) string {
-	var b strings.Builder
-	for _, r := range s {
-		if r >= '0' && r <= '9' {
-			b.WriteRune(r)
-		}
-	}
-	return b.String()
-}
-
-func criticalCount(flags []model.Flag) int {
-	n := 0
-	for _, f := range flags {
-		if f.Level == model.FlagCritical {
-			n++
-		}
-	}
-	return n
-}
-
-// ---------------------------------------------------------------------------
-// Points engine — flat CAPoints per CA; mirrors
-// ev-regis/utils/backoffice.ts computePointsEligibility.
-// ---------------------------------------------------------------------------
-
-func computePointsPreview(g models.GeneralInfo, all []models.GeneralInfo, flags []model.Flag) model.PointsPreview {
-	caAlreadyAwarded := false
-	for _, x := range all {
-		if x.ID != g.ID && x.Ca == g.Ca && x.Status == "approved" && x.PointsAwarded != nil && *x.PointsAwarded > 0 {
-			caAlreadyAwarded = true
-			break
-		}
-	}
-
-	noCritical := criticalCount(flags) == 0
-	checklistDone := g.ChecklistReg && g.ChecklistCharger && g.ChecklistEv
-	hasWattd := g.WattdId != nil && *g.WattdId != ""
-
-	conditions := []model.PointsCondition{
-		{Label: "ผูกบัญชี Watt-D (เข้าผ่าน Smart Plus) — ไม่ใช่ ThaID ตรง", Pass: hasWattd},
-		{Label: "ไม่มีธงเตือนระดับร้ายแรงที่ยังไม่แก้ไข", Pass: noCritical},
-		{Label: "เจ้าหน้าที่ตรวจข้อมูลครบทุกรายการ", Pass: checklistDone},
-		{Label: fmt.Sprintf("CA นี้ยังไม่เคยได้แต้ม (%d แต้มต่อ CA)", CAPoints), Pass: !caAlreadyAwarded},
-	}
-
-	eligible := true
-	for _, c := range conditions {
-		if !c.Pass {
-			eligible = false
-			break
-		}
-	}
-
-	points := 0
-	if eligible {
-		points = CAPoints
-	}
-
-	return model.PointsPreview{
-		Eligible:         eligible,
-		Points:           points,
-		Conditions:       conditions,
-		CaAlreadyAwarded: caAlreadyAwarded,
-	}
 }
 
 // ---------------------------------------------------------------------------
@@ -769,11 +572,6 @@ func (s *AdminService) Decision(ctx context.Context, id uint, actor Actor, req m
 		return nil, err
 	}
 
-	all, err := s.loadAll()
-	if err != nil {
-		return nil, err
-	}
-
 	now := time.Now().UTC()
 	updates := map[string]any{
 		"reviewed_by": actor.Sub,
@@ -783,23 +581,13 @@ func (s *AdminService) Decision(ctx context.Context, id uint, actor Actor, req m
 	var text string
 	switch req.Decision {
 	case "approve":
-		flags := computeFlags(*g, all)
-		if criticalCount(flags) > 0 {
-			return nil, ErrHasCriticalFlags
-		}
-		preview := computePointsPreview(*g, all, flags)
 		updates["status"] = "approved"
-		updates["points_awarded"] = preview.Points
 		// terminal decision — task is done, free the claim slot back up.
 		updates["claimed_by"] = ""
 		updates["claimed_at"] = nil
 		updates["claimed_name"] = ""
 
-		pointsText := "โดยไม่มีการมอบแต้ม Watt-D (ไม่เข้าเงื่อนไขครบทุกข้อ)"
-		if preview.Points > 0 {
-			pointsText = fmt.Sprintf("และมอบแต้ม Watt-D %d แต้ม", preview.Points)
-		}
-		text = "อนุมัติคำขอ " + pointsText
+		text = "อนุมัติคำขอ"
 		if g.Notes != "" {
 			text += " — หมายเหตุ: " + g.Notes
 		}
@@ -807,9 +595,7 @@ func (s *AdminService) Decision(ctx context.Context, id uint, actor Actor, req m
 		if strings.TrimSpace(req.Reason) == "" {
 			return nil, ErrReasonRequired
 		}
-		zero := 0
 		updates["status"] = "rejected"
-		updates["points_awarded"] = &zero
 		// terminal decision — task is done, free the claim slot back up.
 		updates["claimed_by"] = ""
 		updates["claimed_at"] = nil
@@ -873,15 +659,6 @@ func (s *AdminService) Stats(ctx context.Context) (*model.StatsResponse, error) 
 			stats.Pending++
 		case "approved":
 			stats.Approved++
-			if g.PointsAwarded != nil {
-				stats.TotalPoints += *g.PointsAwarded
-			}
-		}
-		if g.Status != "rejected" {
-			flags := computeFlags(g, all)
-			if criticalCount(flags) > 0 {
-				stats.Flagged++
-			}
 		}
 	}
 	return &stats, nil
@@ -903,15 +680,6 @@ func (s *AdminService) DashboardSummary(ctx context.Context, actorSub string) (*
 			summary.Pending++
 		case "approved":
 			summary.Approved++
-			if g.PointsAwarded != nil {
-				summary.TotalPoints += *g.PointsAwarded
-			}
-		}
-		if g.Status != "rejected" {
-			flags := computeFlags(g, all)
-			if criticalCount(flags) > 0 {
-				summary.Flagged++
-			}
 		}
 
 		if g.ClaimedBy == "" && isReviewable(g.Status) {

@@ -5,8 +5,6 @@
 package service
 
 import (
-	"fmt"
-
 	"github.com/pornlapatP/EV/internal/admin/model"
 	"github.com/xuri/excelize/v2"
 )
@@ -20,7 +18,6 @@ var exportColumns = []string{
 	"วันที่ยื่นคำขอ",
 	"ผู้รับผิดชอบ",
 	"รับงานเมื่อ",
-	"แต้ม Watt-D ที่ได้รับ",
 }
 
 var statusLabelTH = map[string]string{
@@ -62,10 +59,6 @@ func BuildXLSX(rows []model.ReviewRequest) ([]byte, error) {
 		if r.ClaimedAt != nil {
 			claimedAt = *r.ClaimedAt
 		}
-		points := ""
-		if r.PointsAwarded != nil {
-			points = fmt.Sprint(*r.PointsAwarded)
-		}
 		values := []any{
 			r.ReferenceNo,
 			statusLabel(r.Status),
@@ -75,7 +68,6 @@ func BuildXLSX(rows []model.ReviewRequest) ([]byte, error) {
 			r.SubmittedAt,
 			r.ClaimedByName,
 			claimedAt,
-			points,
 		}
 		for col, v := range values {
 			cell, err := excelize.CoordinatesToCellName(col+1, row)

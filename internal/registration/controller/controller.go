@@ -101,6 +101,14 @@ func (c *RegistrationController) CreateWithRelations(ctx *gin.Context) {
 			})
 			return
 		}
+		if errors.Is(err, regisservice.ErrChargerSerialDuplicate) {
+			ctx.JSON(409, gin.H{
+				"success": false,
+				"code":    "CHARGER_SERIAL_DUPLICATE",
+				"message": "หมายเลข Serial เครื่องชาร์จนี้ถูกใช้ลงทะเบียนไปแล้ว กรุณาตรวจสอบหมายเลข Serial",
+			})
+			return
+		}
 		log.Printf("registration controller: %v", err)
 		ctx.JSON(500, gin.H{
 			"success": false,

@@ -23,8 +23,6 @@ const demoOfficerName = "เจ้าหน้าที่สาธิต (demo)
 // All demo CAs share this prefix so the seeder can detect it already ran.
 const demoCaPrefix = "990000000"
 
-func points(n int) *int { return &n }
-
 func main() {
 	_ = godotenv.Load()
 	if err := database.Connect(); err != nil {
@@ -69,9 +67,9 @@ func main() {
 
 		// งานของฉัน (completed) — decided by the demo officer, claim slot freed
 		{PID: "1100000000007", FirstName: "กมล", LastName: "บุญมาก", Address: "34 ถ.บางนา กรุงเทพฯ", Ca: demoCaPrefix + "007", EntrySource: "smartplus", Status: "approved",
-			ReviewedBy: demoOfficerSub, ReviewedAt: &reviewedAt, PointsAwarded: points(500)},
+			ReviewedBy: demoOfficerSub, ReviewedAt: &reviewedAt},
 		{PID: "1100000000008", FirstName: "ดวงใจ", LastName: "งามพร้อม", Address: "67 ถ.รามคำแหง กรุงเทพฯ", Ca: demoCaPrefix + "008", EntrySource: "thaid", Status: "rejected",
-			ReviewedBy: demoOfficerSub, ReviewedAt: &reviewedAt, PointsAwarded: points(0)},
+			ReviewedBy: demoOfficerSub, ReviewedAt: &reviewedAt},
 	}
 
 	if err := database.DB.Create(&rows).Error; err != nil {

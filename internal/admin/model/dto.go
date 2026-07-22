@@ -57,31 +57,6 @@ type ActivityEntry struct {
 	Text string `json:"text"`
 }
 
-type FlagLevel string
-
-const (
-	FlagCritical FlagLevel = "critical"
-	FlagWarning  FlagLevel = "warning"
-)
-
-type Flag struct {
-	Level   FlagLevel `json:"level"`
-	Text    string    `json:"text"`
-	Related []string  `json:"related,omitempty"`
-}
-
-type PointsCondition struct {
-	Label string `json:"label"`
-	Pass  bool   `json:"pass"`
-}
-
-type PointsPreview struct {
-	Eligible         bool              `json:"eligible"`
-	Points           int               `json:"points"`
-	Conditions       []PointsCondition `json:"conditions"`
-	CaAlreadyAwarded bool              `json:"caAlreadyAwarded"`
-}
-
 // ReviewRequest is the shape returned for both list items and single-record
 // detail — list items simply omit Activity (always []) to keep payload small.
 type ReviewRequest struct {
@@ -99,15 +74,8 @@ type ReviewRequest struct {
 	Chargers      []ReviewCharger `json:"chargers"`
 	Cars          []ReviewEvCar   `json:"cars"`
 	Checklist     Checklist       `json:"checklist"`
-	Notes         string          `json:"notes"`
-	PointsAwarded *int            `json:"pointsAwarded"`
-	Activity      []ActivityEntry `json:"activity"`
-	// Flags/PointsPreview are backend-authoritative (business rules live here,
-	// not in the frontend) — the frontend may keep computing its own copy for
-	// instant UI feedback, but approval is only ever gated server-side
-	// (see service.Decision).
-	Flags         []Flag        `json:"flags"`
-	PointsPreview PointsPreview `json:"pointsPreview"`
+	Notes    string          `json:"notes"`
+	Activity []ActivityEntry `json:"activity"`
 }
 
 type ListResponse struct {
@@ -118,11 +86,9 @@ type ListResponse struct {
 }
 
 type StatsResponse struct {
-	Total       int `json:"total"`
-	Pending     int `json:"pending"`
-	Flagged     int `json:"flagged"`
-	Approved    int `json:"approved"`
-	TotalPoints int `json:"totalPoints"`
+	Total    int `json:"total"`
+	Pending  int `json:"pending"`
+	Approved int `json:"approved"`
 }
 
 // DashboardSummaryResponse is the back-office dashboard tab's stat-card row —
@@ -130,9 +96,7 @@ type StatsResponse struct {
 type DashboardSummaryResponse struct {
 	Total       int `json:"total"`
 	Pending     int `json:"pending"`
-	Flagged     int `json:"flagged"`
 	Approved    int `json:"approved"`
-	TotalPoints int `json:"totalPoints"`
 	Unclaimed   int `json:"unclaimed"`   // open pool available to claim
 	MyActive    int `json:"myActive"`    // 0 or 1 — the caller's currently claimed task
 	MyCompleted int `json:"myCompleted"` // approved/rejected decisions made by the caller

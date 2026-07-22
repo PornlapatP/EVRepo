@@ -27,9 +27,9 @@ type GeneralInfo struct {
 	Evs      []Ev      `gorm:"foreignKey:GeneralInfoID"`
 
 	// WattdId links this registration to a Watt-D account (entered by the
-	// citizen during the wizard, optional) — having one is a precondition for
-	// earning Watt-D Points (see internal/admin's points engine). Nil = not
-	// linked, submitted straight via ThaID without Smart Plus/Watt-D.
+	// citizen during the wizard, optional). Nil = not linked, submitted
+	// straight via ThaID without Smart Plus/Watt-D. Watt-D Points crediting
+	// itself is not part of this system — back-office only approves/rejects.
 	WattdId *string `gorm:"column:wattd_id;type:varchar(50)"`
 
 	// RegistrantName is the back-office's editable "ผู้ลงทะเบียน" display name,
@@ -65,14 +65,12 @@ type GeneralInfo struct {
 	ClaimedAt   *time.Time
 	ClaimedName string `gorm:"column:claimed_name;type:varchar(200)"` // display name snapshot, avoids joining Employee for the dashboard table
 
-	// Notes/checklist/PointsAwarded are the back-office review layer added on
-	// top of the citizen's submission (internal/admin) — nil PointsAwarded
-	// means "not decided yet"; 0 means "approved but not eligible for points".
+	// Notes/checklist are the back-office review layer added on top of the
+	// citizen's submission (internal/admin).
 	Notes            string `gorm:"type:text"`
 	ChecklistReg     bool
 	ChecklistCharger bool
 	ChecklistEv      bool
-	PointsAwarded    *int
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
