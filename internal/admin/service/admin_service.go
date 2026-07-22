@@ -18,6 +18,7 @@ import (
 
 	"github.com/pornlapatP/EV/internal/admin/model"
 	"github.com/pornlapatP/EV/internal/models"
+	"github.com/pornlapatP/EV/internal/rbac"
 	"github.com/pornlapatP/EV/internal/storage"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -62,6 +63,18 @@ type AdminService struct {
 
 func NewAdminService(db *gorm.DB, storageSvc *storage.Service) *AdminService {
 	return &AdminService{db: db, storageSvc: storageSvc}
+}
+
+// ResolveRole returns the RBAC role name for a caller's dept_change_code, or
+// "" if their department has no back-office access (rbac.ErrNoRole) — the
+// empty string is a display hint for the frontend, not an enforcement
+// decision; RBACMiddleware is what actually blocks unauthorized requests.
+func (s *AdminService) ResolveRole(deptChangeCode string) string {
+	role, err := rbac.ResolveRole(s.db, deptChangeCode)
+	if err != nil {
+		return ""
+	}
+	return role.RoleName
 }
 
 // ---------------------------------------------------------------------------

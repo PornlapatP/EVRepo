@@ -55,6 +55,7 @@ func (h *AdminHandler) Me(c *gin.Context) {
 		Name:       actor.Name,
 		EmployeeId: user.HrEmployeeId,
 		Sub:        actor.Sub,
+		Role:       h.svc.ResolveRole(user.HrDeptChangeCode),
 	})
 }
 

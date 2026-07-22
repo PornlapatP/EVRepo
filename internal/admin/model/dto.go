@@ -145,6 +145,12 @@ type MeResponse struct {
 	// apart from "claimed by another staff member" by comparing against
 	// ReviewRequest.ClaimedBy, without trusting any client-supplied identity.
 	Sub string `json:"sub"`
+	// Role = RBAC role resolved from the caller's dept_change_code
+	// ("operator" | "executive"), or "" if their department has no
+	// back-office access at all (see rbac.ResolveRole). The frontend uses
+	// this to hide controls the caller has no RulePolicy grant for —
+	// RBACMiddleware is still the actual enforcement point.
+	Role string `json:"role"`
 }
 
 // PatchRequest is the body of PATCH /admin/registrations/:id. Exactly one of

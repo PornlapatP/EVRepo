@@ -29,7 +29,7 @@ func main() {
 	cfg := config.Load()
 	database.Connect()
 
-	database.DB.AutoMigrate(&models.GeneralInfo{}, &models.Charger{}, &models.Vendor{}, &models.Ev{}, &models.Employee{}, &models.AuditLog{}, &models.MasterEV{}, &models.MasterCharger{}, &models.Campaign{})
+	database.DB.AutoMigrate(&models.GeneralInfo{}, &models.Charger{}, &models.Vendor{}, &models.Ev{}, &models.Employee{}, &models.AuditLog{}, &models.MasterEV{}, &models.MasterCharger{}, &models.Campaign{}, &models.MasterRole{}, &models.MasterUser{}, &models.RulePolicy{})
 	rawKey := os.Getenv("KEYCLOAK_PUBLIC_KEY")
 	if rawKey == "" {
 		log.Fatal("KEYCLOAK_PUBLIC_KEY missing")
@@ -119,29 +119,38 @@ func main() {
 			staff.GET("", regisController.GetAll)
 		}
 
-		// Back-office review console (staff) — Keycloak-gated only, same as
-		// /general-info's staff group above. Handlers: internal/admin.
+		// Back-office review console (staff) — Keycloak-gated, then RBAC-gated
+		// by the caller's dept_change_code (middleware.RBACMiddleware): operator
+		// gets dashboard read + registration read/write, executive gets
+		// dashboard read only. Handlers: internal/admin.
+		rbacRead := func(resource string) gin.HandlerFunc {
+			return middleware.RBACMiddleware(database.DB, authService, resource, "read")
+		}
+		rbacWrite := func(resource string) gin.HandlerFunc {
+			return middleware.RBACMiddleware(database.DB, authService, resource, "write")
+		}
 
 		admin := apiV1.Group("/admin")
 		admin.Use(middleware.AuthMiddleware(authService, publicKey))
 		{
 			admin.GET("/me", adminController.Me)
-			admin.GET("/stats", adminController.Stats)
-			admin.GET("/registrations", adminController.List)
-			admin.GET("/registrations/:id", adminController.Detail)
-			admin.PATCH("/registrations/:id", adminController.Patch)
-			admin.PATCH("/registrations/:id/checklist", adminController.Checklist)
-			admin.PATCH("/registrations/:id/notes", adminController.Notes)
-			admin.POST("/registrations/:id/decision", adminController.Decision)
-			admin.POST("/registrations/:id/claim", adminController.Claim)
-			admin.POST("/registrations/:id/release", adminController.Release)
+			admin.GET("/stats", rbacRead("dashboard"), adminController.Stats)
+			admin.GET("/registrations", rbacRead("registration"), adminController.List)
+			admin.GET("/registrations/:id", rbacRead("registration"), adminController.Detail)
+			admin.PATCH("/registrations/:id", rbacWrite("registration"), adminController.Patch)
+			admin.PATCH("/registrations/:id/checklist", rbacWrite("registration"), adminController.Checklist)
+			admin.PATCH("/registrations/:id/notes", rbacWrite("registration"), adminController.Notes)
+			admin.POST("/registrations/:id/decision", rbacWrite("registration"), adminController.Decision)
+			admin.POST("/registrations/:id/claim", rbacWrite("registration"), adminController.Claim)
+			admin.POST("/registrations/:id/release", rbacWrite("registration"), adminController.Release)
 
 			// Dashboard tab — stat-card summary + Excel export of the current scope.
-			admin.GET("/dashboard/summary", adminController.DashboardSummary)
-			admin.GET("/dashboard/export", adminController.Export)
+			admin.GET("/dashboard/summary", rbacRead("dashboard"), adminController.DashboardSummary)
+			admin.GET("/dashboard/export", rbacRead("dashboard"), adminController.Export)
 
-			// Campaign window management (staff) — get the current window to
-			// prefill, patch its name/start/end.
+			// Campaign window management (staff) — not part of the
+			// operator/executive permission model given for this feature, left
+			// Keycloak-gated only for now; revisit if it needs its own RBAC resource.
 			admin.GET("/campaign", campaignHandler.AdminGet)
 			admin.PATCH("/campaign", campaignHandler.AdminUpdate)
 		}
