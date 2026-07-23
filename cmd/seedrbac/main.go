@@ -35,6 +35,7 @@ const (
 
 	resourceDashboard    = "dashboard"
 	resourceRegistration = "registration"
+	resourceCampaign     = "campaign"
 
 	actionRead  = "read"
 	actionWrite = "write"
@@ -110,6 +111,13 @@ func main() {
 		{RoleID: roleIDByName[roleOperator], Resource: resourceDashboard, Action: actionRead},
 		{RoleID: roleIDByName[roleOperator], Resource: resourceRegistration, Action: actionRead},
 		{RoleID: roleIDByName[roleOperator], Resource: resourceRegistration, Action: actionWrite},
+		// Campaign window (open/close public registration) is the widest-blast-
+		// radius write in the back-office — one PATCH decides whether every
+		// citizen can register at all. Deliberately NOT granted to executive:
+		// that role is view-only, and this used to be reachable by it because
+		// the route was Keycloak-gated only (no RulePolicy resource existed).
+		{RoleID: roleIDByName[roleOperator], Resource: resourceCampaign, Action: actionRead},
+		{RoleID: roleIDByName[roleOperator], Resource: resourceCampaign, Action: actionWrite},
 	}
 	if res := db.Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "role_id"}, {Name: "resource"}, {Name: "action"}},

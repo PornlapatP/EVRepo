@@ -148,11 +148,13 @@ func main() {
 			admin.GET("/dashboard/summary", rbacRead("dashboard"), adminController.DashboardSummary)
 			admin.GET("/dashboard/export", rbacRead("dashboard"), adminController.Export)
 
-			// Campaign window management (staff) — not part of the
-			// operator/executive permission model given for this feature, left
-			// Keycloak-gated only for now; revisit if it needs its own RBAC resource.
-			admin.GET("/campaign", campaignHandler.AdminGet)
-			admin.PATCH("/campaign", campaignHandler.AdminUpdate)
+			// Campaign window management (staff) — RBAC resource of its own
+			// ("campaign", seeded operator-only in cmd/seedrbac). PATCH here
+			// opens/closes registration for every citizen at once, so it must
+			// never be reachable by the view-only executive role: Keycloak-gated
+			// alone was not enough.
+			admin.GET("/campaign", rbacRead("campaign"), campaignHandler.AdminGet)
+			admin.PATCH("/campaign", rbacWrite("campaign"), campaignHandler.AdminUpdate)
 		}
 	}
 
