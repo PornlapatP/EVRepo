@@ -94,10 +94,14 @@ type StatsResponse struct {
 // DashboardSummaryResponse is the back-office dashboard tab's stat-card row —
 // Stats-like system-wide counts plus the caller's own claim-queue standing.
 type DashboardSummaryResponse struct {
-	Total       int `json:"total"`
-	Pending     int `json:"pending"`
-	Approved    int `json:"approved"`
-	Unclaimed   int `json:"unclaimed"`   // open pool available to claim
+	Total     int `json:"total"`
+	Pending   int `json:"pending"`
+	Approved  int `json:"approved"`
+	Unclaimed int `json:"unclaimed"` // open pool available to claim
+	// InProgress = claimed but not yet decided. Counted here rather than on the
+	// client because the console now holds one page of requests at a time, not
+	// the whole list (see AdminService.List).
+	InProgress  int `json:"inProgress"`
 	MyActive    int `json:"myActive"`    // 0 or 1 — the caller's currently claimed task
 	MyCompleted int `json:"myCompleted"` // approved/rejected decisions made by the caller
 }
