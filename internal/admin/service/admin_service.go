@@ -9,7 +9,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"sort"
 	"strings"
 	"time"
 
@@ -72,125 +71,211 @@ func (s *AdminService) ResolveRole(deptChangeCode string) string {
 // ---------------------------------------------------------------------------
 
 type ListFilter struct {
-	Status   string // "", "all", pending|approved|rejected|needs_info|flagged
-	Query    string
-	Scope    string // "", "mine" (claimed-by-me + decided-by-me), "unclaimed" (open pool)
+	// Status is "", "all", or a comma-separated allow-list ("pending,needs_info").
+	// Unknown values are dropped rather than passed through to SQL.
+	Status string
+	Query  string
+	// Scope narrows by claim ownership: "" (everything), "mine" (claimed by me +
+	// decided by me), "unclaimed" (the open pool), "claimed" (someone is on it but
+	// hasn't decided yet).
+	Scope string
+	// Sort is a key of sortOrders — anything else falls back to the default order.
+	Sort     string
 	Page     int
 	PageSize int
 }
 
-// List scopes which GeneralInfo rows are visible before mapping to DTOs. actorSub
-// is only consulted when f.Scope == "mine" — every other caller may pass "".
-// scope="" (the main review console) intentionally shows everything, including
-// requests claimed by other staff — decision was "must still be viewable, just
-// not editable" (see PatchField/Decision's ensureClaimant guard).
+const (
+	defaultPageSize = 20
+	// MaxPageSize is the ceiling the HTTP layer clamps a caller-supplied pageSize
+	// to — every returned row costs one S3 presign per charger image (see
+	// toReviewRequest), so an unbounded pageSize from a query string is a way to
+	// make the server do arbitrary work. Deliberately enforced at the handler and
+	// not here: Export legitimately asks this service for everything at once.
+	MaxPageSize = 200
+)
+
+var (
+	reviewableStatuses = []string{"pending", "needs_info"}
+	decidedStatuses    = []string{"approved", "rejected"}
+
+	// knownStatuses gates ListFilter.Status so a typo'd query param can never
+	// widen the result set or reach SQL as-is.
+	knownStatuses = map[string]bool{
+		"pending": true, "needs_info": true, "approved": true, "rejected": true,
+	}
+
+	// sortOrders maps the API's sort keys to fixed ORDER BY clauses. The clause is
+	// never assembled from caller input — an unknown key falls back to "".
+	sortOrders = map[string]string{
+		// Default: still-to-review first, longest-waiting on top — the order the
+		// review console has always shown.
+		"":               "CASE WHEN status = 'pending' THEN 0 ELSE 1 END, created_at ASC",
+		"submitted_desc": "created_at DESC",
+		"submitted_asc":  "created_at ASC",
+		"status":         "CASE status WHEN 'pending' THEN 0 WHEN 'needs_info' THEN 1 WHEN 'approved' THEN 2 ELSE 3 END, created_at ASC",
+		// Most recently decided first — backs the my-tasks board's "เสร็จแล้ว" column.
+		"decided_desc": "reviewed_at DESC NULLS LAST, updated_at DESC",
+	}
+)
+
+// applyScope narrows by claim ownership. actorSub is read only for scope="mine";
+// every other scope ignores it, so other callers may pass "".
+//
+// claimed_by is compared through COALESCE because rows that predate the column
+// hold NULL while rows written since hold '' — the Go side sees both as "" (the
+// string zero value), and the SQL has to agree or those rows silently vanish
+// from the open pool.
+//
+// Each condition is parenthesized here rather than trusting the query builder to
+// do it: these get ANDed with the status/search predicates, and an unparenthesized
+// OR would swallow them (`mine OR decided AND status=...`).
+func applyScope(q *gorm.DB, scope, actorSub string) *gorm.DB {
+	switch scope {
+	case "mine":
+		return q.Where(
+			"(claimed_by = ? OR (reviewed_by = ? AND status IN ?))",
+			actorSub, actorSub, decidedStatuses,
+		)
+	case "unclaimed":
+		return q.Where("(COALESCE(claimed_by, '') = '' AND status IN ?)", reviewableStatuses)
+	case "claimed":
+		return q.Where("(COALESCE(claimed_by, '') <> '' AND status IN ?)", reviewableStatuses)
+	}
+	return q
+}
+
+// parseStatuses turns the comma-separated filter into an allow-list. nil = no
+// status filter at all ("", "all", or nothing recognizable in the input).
+func parseStatuses(raw string) []string {
+	if raw == "" || raw == "all" {
+		return nil
+	}
+	out := make([]string, 0, len(knownStatuses))
+	for _, part := range strings.Split(raw, ",") {
+		s := strings.TrimSpace(part)
+		if knownStatuses[s] {
+			out = append(out, s)
+		}
+	}
+	if len(out) == 0 {
+		return nil
+	}
+	return out
+}
+
+// applySearch matches the same fields the review console's search box always
+// covered (reference no / registrant / CA owner / CA / Watt-D ID / charger
+// serial), now in SQL. LOWER(...) LIKE LOWER(...) rather than ILIKE so the
+// predicate stays standard SQL; Thai has no case so this only matters for the
+// latin-script columns (serial numbers, Watt-D IDs).
+func applySearch(q *gorm.DB, raw string) *gorm.DB {
+	term := strings.ToLower(strings.TrimSpace(raw))
+	if term == "" {
+		return q
+	}
+	// "REG-12" is what staff see and quote to each other; it's derived from the
+	// id (see toReviewRequest), so strip the prefix before matching the column.
+	like := "%" + term + "%"
+	idLike := "%" + strings.TrimPrefix(term, "reg-") + "%"
+
+	return q.Where(`(
+		   LOWER(registrant_name) LIKE ?
+		OR LOWER(first_name) LIKE ?
+		OR LOWER(last_name) LIKE ?
+		OR LOWER(first_name || ' ' || last_name) LIKE ?
+		OR LOWER(ca) LIKE ?
+		OR LOWER(COALESCE(wattd_id, '')) LIKE ?
+		OR CAST(id AS TEXT) LIKE ?
+		OR EXISTS (
+			SELECT 1 FROM chargers c
+			WHERE c.general_info_id = general_infos.id
+			  AND LOWER(c.serial_number) LIKE ?
+		)
+	)`, like, like, like, like, like, like, idLike, like)
+}
+
+// List returns one page of requests. Filtering, sorting and pagination all run
+// in SQL and only the rows on the requested page are mapped to DTOs — mapping is
+// what presigns S3 URLs, so doing it before the LIMIT would sign every image in
+// the system on every keystroke of the search box.
+//
+// actorSub is only consulted when f.Scope == "mine" — every other caller may
+// pass "". scope="" intentionally shows everything, including requests claimed
+// by other staff: the decision was "must still be viewable, just not editable"
+// (see PatchField/Decision's ensureClaimant guard).
 func (s *AdminService) List(ctx context.Context, actorSub string, f ListFilter) (*model.ListResponse, error) {
-	all, err := s.loadAll()
-	if err != nil {
-		return nil, err
-	}
-
-	scoped := make([]models.GeneralInfo, 0, len(all))
-	for _, g := range all {
-		switch f.Scope {
-		case "mine":
-			isMyActiveClaim := g.ClaimedBy == actorSub
-			isMyCompletedDecision := g.ReviewedBy == actorSub && (g.Status == "approved" || g.Status == "rejected")
-			if !isMyActiveClaim && !isMyCompletedDecision {
-				continue
-			}
-		case "unclaimed":
-			if g.ClaimedBy != "" || !isReviewable(g.Status) {
-				continue
-			}
-		}
-		scoped = append(scoped, g)
-	}
-
-	items := make([]model.ReviewRequest, 0, len(scoped))
-	for _, g := range scoped {
-		items = append(items, s.toReviewRequest(ctx, g, false))
-	}
-
-	q := strings.ToLower(strings.TrimSpace(f.Query))
-	filtered := make([]model.ReviewRequest, 0, len(items))
-	for _, r := range items {
-		if !matchesStatusFilter(r, f.Status) {
-			continue
-		}
-		if q != "" && !strings.Contains(strings.ToLower(strings.Join(searchHaystack(r), " ")), q) {
-			continue
-		}
-		filtered = append(filtered, r)
-	}
-
-	// pending first, matching the frontend's existing sidebar sort.
-	sort.SliceStable(filtered, func(i, j int) bool {
-		return filtered[i].Status == "pending" && filtered[j].Status != "pending"
-	})
-
-	total := len(filtered)
 	page := f.Page
 	if page < 1 {
 		page = 1
 	}
 	pageSize := f.PageSize
 	if pageSize < 1 {
-		pageSize = 20
+		pageSize = defaultPageSize
 	}
-	start := min((page-1)*pageSize, total)
-	end := min(start+pageSize, total)
+
+	// "my tasks" with no identity resolved must return nothing, never fall through
+	// to `claimed_by = ''` (which would hand back the whole unclaimed pool).
+	if f.Scope == "mine" && actorSub == "" {
+		return &model.ListResponse{
+			Items:    []model.ReviewRequest{},
+			Total:    0,
+			Page:     page,
+			PageSize: pageSize,
+		}, nil
+	}
+
+	// Rebuilt per use: a *gorm.DB carries the statement it accumulated, so the
+	// count query and the page query must not share one instance.
+	base := func() *gorm.DB {
+		q := applyScope(s.db.Model(&models.GeneralInfo{}), f.Scope, actorSub)
+		if statuses := parseStatuses(f.Status); statuses != nil {
+			q = q.Where("status IN ?", statuses)
+		}
+		return applySearch(q, f.Query)
+	}
+
+	var total int64
+	if err := base().Count(&total).Error; err != nil {
+		return nil, err
+	}
+
+	order, ok := sortOrders[f.Sort]
+	if !ok {
+		order = sortOrders[""]
+	}
+
+	var rows []models.GeneralInfo
+	if err := base().
+		Preload("Chargers.Vendor").
+		Preload("Evs.Vendor").
+		Order(order).
+		Offset((page - 1) * pageSize).
+		Limit(pageSize).
+		Find(&rows).Error; err != nil {
+		return nil, err
+	}
+
+	items := make([]model.ReviewRequest, 0, len(rows))
+	for _, g := range rows {
+		items = append(items, s.toReviewRequest(ctx, g, false))
+	}
 
 	return &model.ListResponse{
-		Items:    filtered[start:end],
-		Total:    total,
+		Items:    items,
+		Total:    int(total),
 		Page:     page,
 		PageSize: pageSize,
 	}, nil
 }
 
-func matchesStatusFilter(r model.ReviewRequest, status string) bool {
-	switch status {
-	case "", "all":
-		return true
-	default:
-		return r.Status == status
-	}
-}
-
-func searchHaystack(r model.ReviewRequest) []string {
-	out := []string{r.ReferenceNo, r.Registrant.Name, r.Registrant.Ca}
-	if r.Registrant.WattdId != nil {
-		out = append(out, *r.Registrant.WattdId)
-	}
-	for _, c := range r.Chargers {
-		out = append(out, c.SerialNo)
-	}
-	return out
-}
-
 func (s *AdminService) Detail(ctx context.Context, id uint) (*model.ReviewRequest, error) {
-	all, err := s.loadAll()
+	g, err := s.findByID(id)
 	if err != nil {
 		return nil, err
 	}
-	for _, g := range all {
-		if g.ID == id {
-			r := s.toReviewRequest(ctx, g, true)
-			return &r, nil
-		}
-	}
-	return nil, ErrNotFound
-}
-
-func (s *AdminService) loadAll() ([]models.GeneralInfo, error) {
-	var result []models.GeneralInfo
-	err := s.db.
-		Preload("Chargers.Vendor").
-		Preload("Evs.Vendor").
-		Order("created_at asc").
-		Find(&result).Error
-	return result, err
+	r := s.toReviewRequest(ctx, *g, true)
+	return &r, nil
 }
 
 func (s *AdminService) findByID(id uint) (*models.GeneralInfo, error) {
@@ -645,53 +730,94 @@ func (s *AdminService) writeAudit(generalInfoID uint, actor Actor, action, reaso
 // Stats
 // ---------------------------------------------------------------------------
 
-func (s *AdminService) Stats(ctx context.Context) (*model.StatsResponse, error) {
-	all, err := s.loadAll()
-	if err != nil {
-		return nil, err
+// countByStatus returns one COUNT(*) per status plus the grand total, in a
+// single GROUP BY — the stat rows used to walk every row (with both Preloads)
+// just to add up four numbers.
+func (s *AdminService) countByStatus() (map[string]int, int, error) {
+	var rows []struct {
+		Status string
+		Count  int
 	}
-
-	stats := model.StatsResponse{}
-	for _, g := range all {
-		stats.Total++
-		switch g.Status {
-		case "pending":
-			stats.Pending++
-		case "approved":
-			stats.Approved++
-		}
+	if err := s.db.Model(&models.GeneralInfo{}).
+		Select("status, COUNT(*) as count").
+		Group("status").
+		Scan(&rows).Error; err != nil {
+		return nil, 0, err
 	}
-	return &stats, nil
+	byStatus := make(map[string]int, len(rows))
+	total := 0
+	for _, r := range rows {
+		byStatus[r.Status] = r.Count
+		total += r.Count
+	}
+	return byStatus, total, nil
 }
 
-// DashboardSummary is Stats plus the caller's claim-queue standing (open pool
-// size + their own active/completed counts) for the dashboard tab's stat cards.
+// countScope counts the rows a given List scope would return (ignoring paging).
+func (s *AdminService) countScope(scope, actorSub string) (int, error) {
+	var n int64
+	err := applyScope(s.db.Model(&models.GeneralInfo{}), scope, actorSub).Count(&n).Error
+	return int(n), err
+}
+
+func (s *AdminService) Stats(ctx context.Context) (*model.StatsResponse, error) {
+	byStatus, total, err := s.countByStatus()
+	if err != nil {
+		return nil, err
+	}
+	return &model.StatsResponse{
+		Total:    total,
+		Pending:  byStatus["pending"],
+		Approved: byStatus["approved"],
+	}, nil
+}
+
+// DashboardSummary is Stats plus the claim-queue standing behind the back-office
+// header chips: the open pool, how many requests are being worked on right now
+// (what an executive watches, since they hold no tasks of their own), and the
+// caller's own active/completed counts.
 func (s *AdminService) DashboardSummary(ctx context.Context, actorSub string) (*model.DashboardSummaryResponse, error) {
-	all, err := s.loadAll()
+	byStatus, total, err := s.countByStatus()
 	if err != nil {
 		return nil, err
 	}
 
-	summary := model.DashboardSummaryResponse{}
-	for _, g := range all {
-		summary.Total++
-		switch g.Status {
-		case "pending":
-			summary.Pending++
-		case "approved":
-			summary.Approved++
-		}
-
-		if g.ClaimedBy == "" && isReviewable(g.Status) {
-			summary.Unclaimed++
-		}
-		if g.ClaimedBy == actorSub {
-			summary.MyActive++
-		}
-		if g.ReviewedBy == actorSub && (g.Status == "approved" || g.Status == "rejected") {
-			summary.MyCompleted++
-		}
+	unclaimed, err := s.countScope("unclaimed", actorSub)
+	if err != nil {
+		return nil, err
 	}
+	inProgress, err := s.countScope("claimed", actorSub)
+	if err != nil {
+		return nil, err
+	}
+
+	summary := model.DashboardSummaryResponse{
+		Total:      total,
+		Pending:    byStatus["pending"],
+		Approved:   byStatus["approved"],
+		Unclaimed:  unclaimed,
+		InProgress: inProgress,
+	}
+
+	// Without a resolved identity there is no "mine" to count — leaving these at
+	// zero is right, whereas `claimed_by = ''` would report the whole open pool
+	// as the caller's own workload.
+	if actorSub == "" {
+		return &summary, nil
+	}
+
+	var myActive, myCompleted int64
+	if err := s.db.Model(&models.GeneralInfo{}).
+		Where("claimed_by = ?", actorSub).Count(&myActive).Error; err != nil {
+		return nil, err
+	}
+	if err := s.db.Model(&models.GeneralInfo{}).
+		Where("reviewed_by = ? AND status IN ?", actorSub, decidedStatuses).
+		Count(&myCompleted).Error; err != nil {
+		return nil, err
+	}
+	summary.MyActive = int(myActive)
+	summary.MyCompleted = int(myCompleted)
 	return &summary, nil
 }
 

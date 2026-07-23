@@ -71,6 +71,12 @@ func (h *AdminHandler) Stats(c *gin.Context) {
 func (h *AdminHandler) List(c *gin.Context) {
 	page, _ := strconv.Atoi(c.Query("page"))
 	pageSize, _ := strconv.Atoi(c.Query("pageSize"))
+	// Clamp here rather than in the service: pageSize is untrusted input on this
+	// route, while Export calls the same service method with a size it chose
+	// itself and does need the whole result set.
+	if pageSize > adminservice.MaxPageSize {
+		pageSize = adminservice.MaxPageSize
+	}
 	scope := c.Query("scope")
 
 	// actor identity only needed for scope=mine — skip the Keycloak round-trip
@@ -88,6 +94,7 @@ func (h *AdminHandler) List(c *gin.Context) {
 		Status:   c.Query("status"),
 		Query:    c.Query("q"),
 		Scope:    scope,
+		Sort:     c.Query("sort"),
 		Page:     page,
 		PageSize: pageSize,
 	})
@@ -123,10 +130,13 @@ func (h *AdminHandler) Export(c *gin.Context) {
 		scope = "mine"
 	}
 
+	// Same filter/sort the caller currently has on screen, so the workbook always
+	// matches what they were looking at.
 	resp, err := h.svc.List(c.Request.Context(), actor.Sub, adminservice.ListFilter{
 		Status:   c.Query("status"),
 		Query:    c.Query("q"),
 		Scope:    scope,
+		Sort:     c.Query("sort"),
 		Page:     1,
 		PageSize: 100000,
 	})
