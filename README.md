@@ -121,7 +121,7 @@ internal/
   models/         GORM models (AutoMigrate ที่ cmd/server/main.go)
   campaign/       ช่วงเวลากิจกรรม — service + handler (public + admin)
   registration/   ReService (business logic) + controller (HTTP)
-  admin/          back-office review console — handler/service/model (flag + points engine, audit)
+  admin/          back-office review console — handler/service/model (list/paging + claim-queue + inline-edit/decision + audit · ตรวจ/อนุมัติ-ปฏิเสธเท่านั้น ไม่มี flag/points engine)
   auth/           Keycloak + ThaID OAuth (config/handler/service)
   catalog/        master EV/charger catalog (read-only)
   middleware/     AuthMiddleware (Keycloak) · CitizenAuthMiddleware (ThaID)
@@ -156,5 +156,6 @@ scripts/seed.sql  ข้อมูลตัวอย่างสำหรับ�
 - **วันที่เก็บเป็น UTC เสมอ** — แปลง/แสดงเป็นเวลาไทย (พ.ศ.) ที่ frontend
 - **PID มาจาก ThaID/DOPA ทางเดียว** — ไม่เคย trust จาก request body (`CitizenAuthMiddleware` → `ctx.MustGet("citizen")`)
 - **business rule อยู่ที่ backend เสมอ** — frontend คำนวณคู่ขนานได้แค่เพื่อ UX, การอนุมัติ/การ gate ตัดสินที่นี่เท่านั้น
-  (เช่น campaign submit gate ใน `registration/ReService`, flag/points engine ใน `admin/service`)
+  (เช่น campaign submit gate ใน `registration/ReService`, decision/transition guard ใน `admin/service`) ·
+  back-office ตรวจ/อนุมัติ-ปฏิเสธเท่านั้น — **ไม่คำนวณ flag/มอบ Watt-D Points** (ตัดออกแล้ว มติ 2026-07-22)
 - **AuditLog** ผูกกับ `GeneralInfoID` (not null) — เป็น trail ของคำขอ ไม่ใช่ของ config ระดับระบบ
