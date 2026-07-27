@@ -13,7 +13,7 @@ const (
 	CampaignClosed CampaignStatus = "closed" // now > EndAt — window has ended (also used when no active campaign exists)
 )
 
-// Campaign is the single time window during which the EV Wall Box registration
+// Campaign is the single time window during which the EV-Voluntary-Registration-Form
 // form may be filled in and submitted. The system runs one active campaign at a
 // time (IsActive); staff set its start/end through the back-office. Times are
 // stored in UTC per the project's date rule — the back-office renders/edits them

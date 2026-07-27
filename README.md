@@ -1,4 +1,4 @@
-# EVRepo — PEA Watt-D · EV Wall Box Registration (Backend)
+# EVRepo — EV-Voluntary-Registration-Form (Backend · PEA Watt-D)
 
 Backend ของระบบลงทะเบียน **เครื่องชาร์จ (Wall Box) + รถ EV** ผูกกับเลข **CA** (บัญชีผู้ใช้ไฟ)
 ของการไฟฟ้าส่วนภูมิภาค (กฟภ.) — รองรับทั้งฝั่งประชาชน (ThaID) และฝั่งเจ้าหน้าที่ (Keycloak / back-office)
