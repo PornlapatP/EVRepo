@@ -180,9 +180,14 @@ ingress:
 | `/api/auth/thaid/login` · `/callback` · `/logout` | ThaID/DOPA (ประชาชน) — `authRoutes` group |
 | `/api/profile` · `/api/thaid/profile` | `main.go:183-191` |
 
-> ✅ **ไม่มี route ของ backend อยู่นอก `/api` อีกแล้ว** — เดิม `/login` `/dashboard` `/logout`
+> ✅ **route ที่อยู่ในสัญญาไม่มีตัวไหนอยู่นอก `/api` แล้ว** — เดิม `/login` `/dashboard` `/logout`
 > `/thaid/*` วางไว้ที่ราก ทำให้ backend "จอง" URL ที่ฝั่ง frontend อาจอยากใช้เป็นหน้าเว็บจริง
 > (โดยเฉพาะ `/dashboard`) และบังคับให้ ingress ต้องประกาศ path แยก 5 กลุ่ม
+>
+> ⏳ **ข้อยกเว้นชั่วคราว: `GET /dashboard`** ยังถูก register ไว้เป็น alias ของ Keycloak callback
+> เพราะ client ฝั่ง Keycloak ยังมีแต่ URI เดิม — **ห้ามใส่ path นี้ลง ingress values** เพราะยังไม่มี
+> environment ไหนถูก deploy ทุก env จะเริ่มที่ `/api/auth/callback` ตั้งแต่วันแรก · ลบ alias ทิ้ง
+> พร้อมกับตอนเปลี่ยน `KEYCLOAK_REDIRECT_URI` (ดู §6)
 >
 > ⚠️ กติกาที่ต้องรักษา: **`/api/auth` ห้ามแขวน `AuthMiddleware`** — มันคือ route ที่ใช้ login เอง
 > ถ้าเผลอเอาไปไว้ใน group `api` ที่ Keycloak-gated อยู่ จะกลายเป็น "ต้อง login ก่อนถึงจะ login ได้"
@@ -320,8 +325,11 @@ vaultStaticSecret:
 ### ทีม Keycloak
 
 - [ ] 🔴 เพิ่ม redirect URI `https://<hostname>/api/auth/callback` และ post-logout URI
-      ⚠️ **local dev ก็ต้องเพิ่ม `http://localhost:8080/api/auth/callback` ด้วย** — `.env` ชี้ไป
-      path ใหม่แล้ว ถ้า client ฝั่ง Keycloak ยังมีแต่ `/dashboard` เดิม staff login จะพังทั้ง local
+- [ ] เพิ่ม `http://localhost:8080/api/auth/callback` ให้ client ของ local dev ด้วย
+      ⏳ **ระหว่างรอ** `.env` ยังชี้ `/dashboard` เดิม และ backend คง route `/dashboard` ไว้เป็น
+      alias ชั่วคราว (`main.go` ท้าย `authRoutes`) → staff login ใน local ยังทำงานปกติ
+      ✅ **พอเพิ่มเสร็จ** ให้ทำ 2 อย่างพร้อมกัน: เปลี่ยน `KEYCLOAK_REDIRECT_URI` เป็น path ใหม่
+      + **ลบ alias `/dashboard`** ทิ้ง ไม่งั้น backend จองรากนั้นไว้จาก frontend ต่อไปเรื่อย ๆ
 
 ### DBA
 
