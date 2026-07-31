@@ -158,20 +158,29 @@ func main() {
 		}
 	}
 
-	// Keycloak auth routes — full-page browser redirects, intentionally outside /api
-	auth := r.Group("/")
+	// Auth routes — every one of them lives under /api so the whole backend is
+	// reachable through a single ingress path (/api) and the frontend never has
+	// to know an absolute backend URL. They used to sit at /login, /dashboard,
+	// /logout and /thaid/* at the root, which meant five separate ingress path
+	// rules: forget one and that route silently falls through to the Next.js
+	// catch-all and answers 404 with nothing in any log to point at it.
+	//
+	// ⚠️ This group must NOT carry AuthMiddleware — these ARE the login routes.
+	// The `api` group further down is Keycloak-gated; do not merge them.
+	authRoutes := r.Group("/api/auth")
 	{
-		auth.GET("login", authHandler.Login)
-		auth.GET("dashboard", authHandler.Callback)
-		auth.GET("logout", authHandler.Logout)
-	}
+		// Keycloak (staff) — /callback replaces the old /dashboard, which was a
+		// confusing name for an OAuth callback and squatted on a URL the
+		// frontend may well want for a real page.
+		authRoutes.GET("/login", authHandler.Login)
+		authRoutes.GET("/callback", authHandler.Callback)
+		authRoutes.GET("/logout", authHandler.Logout)
 
-	// ThaID auth routes — full-page browser redirects, intentionally outside /api
-	thaid := r.Group("/thaid")
-	{
-		thaid.GET("/login", thaidHandler.Login)
-		thaid.GET("/callback", thaidHandler.Callback)
-		thaid.GET("/logout", thaidHandler.Logout)
+		// ThaID (citizen). login/callback are full-page browser redirects;
+		// logout is a plain XHR from services/auth.service.ts and answers JSON.
+		authRoutes.GET("/thaid/login", thaidHandler.Login)
+		authRoutes.GET("/thaid/callback", thaidHandler.Callback)
+		authRoutes.GET("/thaid/logout", thaidHandler.Logout)
 	}
 
 	api := r.Group("/api")

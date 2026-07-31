@@ -64,7 +64,7 @@ func (h *AuthHandler) Callback(c *gin.Context) {
 
 	// redirect กลับ frontend's back-office console — this is the only page
 	// Keycloak login exists for (staff review, see internal/admin); citizens
-	// never hit this route (they use /thaid/login instead).
+	// never hit this route (they use /api/auth/thaid/login instead).
 	c.Redirect(http.StatusFound, fmt.Sprintf("%s/backoffice", h.cfg.FrontendURL))
 }
 
