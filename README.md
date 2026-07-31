@@ -122,12 +122,22 @@ curl -X POST http://localhost:8080/api/v1/general-info \
 | POST | `/api/v1/admin/registrations/:id/decision` |
 | GET / PATCH | `/api/v1/admin/campaign` — ตั้งค่าช่วงเวลากิจกรรม |
 
-### OAuth (full-page redirect — **อยู่นอก `/api` โดยตั้งใจ**)
+### OAuth — **อยู่ใต้ `/api/auth` ทั้งหมด**
 
-`GET /login` · `/dashboard` (callback) · `/logout` — Keycloak
-`GET /thaid/login` · `/thaid/callback` · `/thaid/logout` — ThaID/DOPA
+| Endpoint | ชนิด | หมายเหตุ |
+| --- | --- | --- |
+| `GET /api/auth/login` | full-page redirect | Keycloak (พนักงาน) |
+| `GET /api/auth/callback` | full-page redirect | Keycloak callback — เดิมชื่อ `/dashboard` |
+| `GET /api/auth/logout` | **XHR** ตอบ JSON | เรียกจาก `services/auth.service.ts` |
+| `GET /api/auth/thaid/login` | full-page redirect | ThaID/DOPA (ประชาชน) |
+| `GET /api/auth/thaid/callback` | full-page redirect | ThaID callback |
+| `GET /api/auth/thaid/logout` | **XHR** ตอบ JSON | เรียกจาก `services/auth.service.ts` |
 
-> route เหล่านี้ต้องเป็น browser redirect ไม่ใช่ fetch/XHR จึงไม่ผ่าน rewrite proxy `/api/*` ของ frontend
+> เดิมอยู่ที่ราก (`/login`, `/dashboard`, `/logout`, `/thaid/*`) ซึ่งบังคับให้ ingress ต้องประกาศ
+> path แยก **5 กลุ่ม** — ลืมกลุ่มไหน route นั้นจะตกไปที่ catch-all ของ Next แล้วตอบ 404 เงียบ ๆ
+> โดยไม่มี log ฝั่งไหนชี้เลย · ย้ายมาใต้ `/api` แล้ว ingress เหลือ **path เดียว**
+>
+> ⚠️ group `/api/auth` **ห้ามแขวน `AuthMiddleware`** — มันคือ route ที่ใช้ login เอง
 
 ---
 

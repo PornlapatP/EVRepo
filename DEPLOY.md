@@ -39,28 +39,29 @@ ingress:
   enabled: true                                       # ✅ คงไว้
   hosts:
     - host: <hostname จริง>                           # ← ต้องเป็น string เดียวกันเป๊ะกับฝั่ง FE
-      paths:                                          # 🔴 เปลี่ยนจาก `/` เป็น 5 กลุ่มนี้ (ดู §3)
-        - { path: /api,       pathType: Prefix, serviceName: evregist-be, servicePort: http }
-        - { path: /thaid,     pathType: Prefix, serviceName: evregist-be, servicePort: http }
-        - { path: /login,     pathType: Exact,  serviceName: evregist-be, servicePort: http }
-        - { path: /logout,    pathType: Exact,  serviceName: evregist-be, servicePort: http }
-        - { path: /dashboard, pathType: Exact,  serviceName: evregist-be, servicePort: http }
+      paths:                                          # 🔴 เปลี่ยนจาก `/` เป็น path เดียวนี้
+        - { path: /api, pathType: Prefix, serviceName: evregist-be, servicePort: http }
 ```
 
-> 🔴 **`/api` อย่างเดียวไม่พอ** — backend มี route ที่อยู่ **นอก `/api`** โดยตั้งใจ เพราะเป็น
-> full-page OAuth redirect ไม่ใช่ fetch ([`main.go:161-175`](cmd/server/main.go#L161-L175))
-> ถ้าไม่ประกาศครบ 5 กลุ่ม path ที่ขาดจะตกไปที่ catch-all `/` ของ FE แล้ว **Next.js ตอบ 404**
-> → ประชาชน login ThaID ไม่ได้ · พนักงาน login Keycloak ไม่ได้ · อาการเหมือน
-> "หน้าเว็บขึ้นปกติแต่กดปุ่มแล้ว 404" ซึ่ง debug ยากมาก
+> ✅ **`/api` path เดียวพอ (ตั้งแต่ 2026-07-31)** — route auth ทุกตัวถูกย้ายมาอยู่ใต้
+> **`/api/auth/*`** แล้ว ([`main.go:161-181`](cmd/server/main.go#L161-L181))
+>
+> เดิม backend วาง `/login` `/dashboard` `/logout` `/thaid/*` ไว้ที่ราก ทำให้ต้องประกาศ path
+> แยก **5 กลุ่ม** และเกิดกับดัก: เพิ่ม route ใหม่นอก `/api` แล้วลืมแก้ values → route นั้น
+> ตกไปที่ catch-all `/` ของ FE แล้ว **Next.js ตอบ 404** โดยไม่มี log ฝั่งไหนชี้เลย
+> อาการคือ "หน้าเว็บขึ้นปกติแต่กดปุ่มแล้ว 404" ซึ่ง debug ยากมาก — **กับดักนี้ถูกปิดถาวรแล้ว**
 
 **กติกาที่ต้องรักษาเมื่อใช้ 2 Ingress:**
 
 | # | กติกา | ถ้าลืม |
 | --- | --- | --- |
-| 1 | **เพิ่ม route นอก `/api` เมื่อไหร่ ต้องเพิ่ม path ใน values ของ BE ด้วยเสมอ** | route ใหม่ตกไป FE → **404 เงียบ ๆ** ไม่มี error ให้เห็น |
+| 1 | **ทุก route ของ backend ต้องอยู่ใต้ `/api`** — ห้ามเพิ่ม route ที่ราก | route นั้นตกไป FE → **404 เงียบ ๆ** ไม่มี error ให้เห็น |
 | 2 | `host` ต้องเป็น string เดียวกันเป๊ะทั้ง 2 ไฟล์ | กลายเป็นคนละ server block → path ของอีกฝั่งหาย |
 | 3 | **`tls:` ประกาศฝั่งเดียว** (แนะนำที่ FE เพราะเป็นเจ้าของ `/`) | nginx เลือก cert ให้ host นั้นได้ใบเดียว — ประกาศ 2 ที่ด้วยคนละ secret จะได้ใบที่ไม่ได้ตั้งใจ |
 | 4 | ทั้ง 2 Ingress อยู่ namespace เดียวกัน | nginx เตือน host conflict ข้าม namespace |
+
+> กติกาข้อ 1 เป็นกฎที่ **บังคับตัวเองได้จากโค้ด** — ตราบใดที่ทุก route ถูก register ใต้
+> `r.Group("/api...")` values ก็ไม่ต้องแก้ตามอีกเลย
 
 > `pathType: Prefix` ของ k8s match เป็น **segment** — `/api` จับ `/api/v1/campaign` แต่ **ไม่จับ** `/apifoo` ✅
 > ส่วน `/*` (redirect_uri ที่ DOPA ล็อกไว้) ตกที่ FE ตามตั้งใจ เพราะ `proxy.ts` ดักไว้เอง
@@ -164,25 +165,28 @@ ingress:
                     host เดียว (server block เดียวใน nginx)
    ┌──────────────────────────────┴──────────────────────────────┐
    │ Ingress: evregist-be          │  Ingress: evregist-fe       │
-   │  /api  /thaid                 │   /  (catch-all)            │
-   │  /login  /logout  /dashboard  │                             │
+   │  /api        (path เดียว)     │   /  (catch-all)            │
    └───────────────┬───────────────┴──────────────┬──────────────┘
                    ▼                              ▼
             svc/evregist-be :80            svc/evregist-fe :80
 ```
 
-ที่มาของแต่ละ path — [`cmd/server/main.go:90-185`](cmd/server/main.go#L90-L185):
+ที่มาของแต่ละ path — [`cmd/server/main.go:90-191`](cmd/server/main.go#L90-L191):
 
 | Path | Route ในโค้ด |
 | --- | --- |
 | `/api/v1/*` | `apiV1 := r.Group("/api/v1")` — catalog, campaign, general-info, admin |
-| `/api/profile` · `/api/thaid/profile` | `main.go:177-185` |
-| `/thaid/login` · `/thaid/callback` · `/thaid/logout` | `main.go:170-175` |
-| `/login` · `/logout` | Keycloak — `main.go:162-167` |
-| `/dashboard` | 🔴 **Keycloak callback** — `main.go:165` |
+| `/api/auth/login` · `/callback` · `/logout` | Keycloak (พนักงาน) — `authRoutes` group |
+| `/api/auth/thaid/login` · `/callback` · `/logout` | ThaID/DOPA (ประชาชน) — `authRoutes` group |
+| `/api/profile` · `/api/thaid/profile` | `main.go:183-191` |
 
-> 🔴 **`/dashboard` เป็นของ backend** — ถ้าฝั่ง frontend เผลอสร้าง `app/dashboard/page.tsx`
-> เมื่อไหร่ login พนักงานจะพังแบบ debug ยากมาก (คอมเมนต์เตือนไว้แล้วทั้ง 2 ฝั่ง)
+> ✅ **ไม่มี route ของ backend อยู่นอก `/api` อีกแล้ว** — เดิม `/login` `/dashboard` `/logout`
+> `/thaid/*` วางไว้ที่ราก ทำให้ backend "จอง" URL ที่ฝั่ง frontend อาจอยากใช้เป็นหน้าเว็บจริง
+> (โดยเฉพาะ `/dashboard`) และบังคับให้ ingress ต้องประกาศ path แยก 5 กลุ่ม
+>
+> ⚠️ กติกาที่ต้องรักษา: **`/api/auth` ห้ามแขวน `AuthMiddleware`** — มันคือ route ที่ใช้ login เอง
+> ถ้าเผลอเอาไปไว้ใน group `api` ที่ Keycloak-gated อยู่ จะกลายเป็น "ต้อง login ก่อนถึงจะ login ได้"
+> → 401 วนลูป
 
 **ผลพลอยได้ — CORS หายไปเอง:** พอ FE/BE อยู่ host เดียวกัน request เป็น **same-origin**
 browser ไม่ยิง preflight เลย → CORS ที่ hardcode `localhost:3000/3001` ไว้ที่
@@ -276,12 +280,8 @@ ingress:
   # 🔴 ไม่ประกาศ tls: ที่นี่ — ให้ FE ประกาศฝั่งเดียว (D1 กติกาข้อ 3)
   hosts:
     - host: <hostname จริง>          # 🔴 ต้องเป็น string เดียวกันเป๊ะกับ values ของ FE
-      paths:                         # 🔴 ครบ 5 กลุ่ม — ขาดข้อไหน path นั้นตกไป FE แล้ว 404 เงียบ
-        - { path: /api,       pathType: Prefix, serviceName: evregist-be, servicePort: http }
-        - { path: /thaid,     pathType: Prefix, serviceName: evregist-be, servicePort: http }
-        - { path: /login,     pathType: Exact,  serviceName: evregist-be, servicePort: http }
-        - { path: /logout,    pathType: Exact,  serviceName: evregist-be, servicePort: http }
-        - { path: /dashboard, pathType: Exact,  serviceName: evregist-be, servicePort: http }
+      paths:                         # path เดียวพอ — route ทุกตัวรวม auth อยู่ใต้ /api แล้ว
+        - { path: /api, pathType: Prefix, serviceName: evregist-be, servicePort: http }
 
 ### VAULT ###
 vaultStaticSecret:
@@ -313,12 +313,15 @@ vaultStaticSecret:
 
 ### DOPA (ThaID)
 
-- [ ] 🔴 ลงทะเบียน `THAID_REDIRECT_URI` ใหม่เป็น `https://<hostname>/thaid/callback`
-      (ปัจจุบัน sandbox ล็อกไว้ที่ `http://localhost:3000/*`)
+- [ ] 🔴 ลงทะเบียน `THAID_REDIRECT_URI` ใหม่เป็น `https://<hostname>/api/auth/thaid/callback`
+      (ปัจจุบัน sandbox ล็อกไว้ที่ `http://localhost:3000/*` ซึ่ง `proxy.ts` ดักแล้ว redirect ต่อ
+      ไป `/api/auth/thaid/callback` เอง — hop นี้จะเลิกจำเป็นเมื่อ DOPA ลงทะเบียน path ตรงให้)
 
 ### ทีม Keycloak
 
-- [ ] 🔴 เพิ่ม redirect URI `https://<hostname>/dashboard` และ post-logout URI
+- [ ] 🔴 เพิ่ม redirect URI `https://<hostname>/api/auth/callback` และ post-logout URI
+      ⚠️ **local dev ก็ต้องเพิ่ม `http://localhost:8080/api/auth/callback` ด้วย** — `.env` ชี้ไป
+      path ใหม่แล้ว ถ้า client ฝั่ง Keycloak ยังมีแต่ `/dashboard` เดิม staff login จะพังทั้ง local
 
 ### DBA
 
@@ -358,13 +361,13 @@ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
 | --- | --- | --- |
 | 1 | pod ขึ้น `Running` ไม่ CrashLoop | env ครบทั้ง 33 ตัว (D3) |
 | 2 | `https://<host>/api/v1/campaign` ตอบ JSON | Ingress `/api` → `evregist-be` |
-| 2b | 🔴 **`curl -I` ทั้ง 5 path** — `/api/v1/campaign` · `/thaid/login` · `/login` · `/logout` · `/dashboard` **ต้องไม่มีตัวไหนได้ 404 หน้า Next.js** | **D1 — path ครบไหม** · ตัวไหนได้ HTML 404 = ตกไป catch-all ของ FE |
+| 2b | 🔴 `curl -I https://<host>/api/auth/thaid/login` และ `/api/auth/login` **ต้องได้ 302 ไป IdP ไม่ใช่ 404 หน้า Next.js** | **D1 — Ingress `/api` ครอบ auth ด้วยจริงไหม** · ได้ HTML 404 = ตกไป catch-all ของ FE |
 | 2c | `https://<host>/` ได้หน้าเว็บ (ไม่ใช่ JSON ของ Gin) | FE catch-all ยังทำงาน ไม่โดน BE กลืน |
 | 3 | ThaID login เต็มรอบจนได้ `citizen_session` | `THAID_REDIRECT_URI` + egress DOPA |
 | 4 | CA lookup ตอบผลจริง | DB + `PEA_CS_SERVICE_URL` |
 | 5 | ส่งฟอร์มพร้อมรูป (multipart) สำเร็จ | egress geodrive:9021 + S3 credential + `proxy-body-size` |
 | 6 | เปิดรูปผ่าน presigned URL ได้ | `storage.PresignGet` |
-| 7 | พนักงาน login Keycloak เข้า `/backoffice` | Ingress `/login` + `/dashboard` |
+| 7 | พนักงาน login Keycloak เข้า `/backoffice` | `KEYCLOAK_REDIRECT_URI` = `/api/auth/callback` ที่ลงทะเบียนไว้ |
 | 8 | Backoffice อนุมัติ/ปฏิเสธได้ | RBAC + cookie rotation |
 | 9 | Cookie มี `Secure` + `HttpOnly` จริง | `ENV=production` + `COOKIE_SECURE=true` + TLS |
 | 10 | ตาราง DB ถูกสร้างครบหลัง pod แรกขึ้น | `AutoMigrate` (replicas=1) |
