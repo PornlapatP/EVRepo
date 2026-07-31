@@ -1,3 +1,10 @@
+# EV-Voluntary-Registration-Form — backend (Go)
+#
+# ⚠️ LOCAL DEV ONLY — ไฟล์นี้ **ไม่ใช่ deployment path** อีกต่อไป
+# ของจริง deploy ด้วย GitLab CI (build image) → Argo CD → Helm chart บน k8s
+# ดู README.md / MIGRATION-PLAN.md · ห้ามเอา credential หรือ config ในไฟล์นี้
+# ไปอ้างเป็นค่าที่รันบน dev/uat/prod (บน k8s ค่ามาจาก ConfigMap/Secret + Vault
+# และ Postgres เป็น service แยก ไม่ใช่ container ในไฟล์นี้)
 version: "3.9"
 
 services:
