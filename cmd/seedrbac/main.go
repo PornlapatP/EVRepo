@@ -12,12 +12,20 @@
 //
 // Idempotent: MasterRole/RulePolicy upsert on their unique keys; MasterUser
 // upserts on employee_id. Run: go run ./cmd/seedrbac
+//
+// deptRoleMap/extraUsers below are the built-in defaults. A deploy that needs
+// to grant a department not listed there (a tester on another dev box, a
+// department created after this file was last edited) does NOT have to edit and
+// rebuild — see RBAC_DEPT_ROLES and the -dept/-role/-emp/-name flags.
 package main
 
 import (
 	"embed"
 	"encoding/csv"
+	"flag"
+	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/joho/godotenv"
@@ -69,8 +77,29 @@ var extraUsers = []models.MasterUser{
 	},
 }
 
+// Flags for granting one ad-hoc employee access without editing extraUsers.
+// All four must be given together; the department is added to deptRoleMap with
+// the given role, so the CSV rows of that department get picked up too.
+var (
+	flagDept = flag.String("dept", "", "dept_change_code to grant (requires -role, -emp, -name)")
+	flagRole = flag.String("role", "", "role for -dept: operator | executive")
+	flagEmp  = flag.String("emp", "", "employee_id of the ad-hoc user")
+	flagName = flag.String("name", "", "full name of the ad-hoc user")
+)
+
 func main() {
 	_ = godotenv.Load()
+	flag.Parse()
+
+	// Env override first, flags second — flags are the more specific intent.
+	if err := applyDeptRoles(os.Getenv("RBAC_DEPT_ROLES")); err != nil {
+		log.Fatal(err)
+	}
+	adhoc, err := adhocUser()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	if err := database.Connect(); err != nil {
 		log.Fatal(err)
 	}
@@ -130,7 +159,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, u := range extraUsers {
+	for _, u := range append(append([]models.MasterUser{}, extraUsers...), adhoc...) {
 		u.RoleID = roleIDByName[deptRoleMap[u.DeptChangeCode]]
 		users = append(users, u)
 	}
@@ -146,6 +175,73 @@ func main() {
 	}
 	log.Printf("seeded %d roles, %d policies, %d master users (%d inserted/updated)",
 		len(roles), len(policies), len(users), res.RowsAffected)
+}
+
+// applyDeptRoles merges "code:role,code:role" (env RBAC_DEPT_ROLES) into
+// deptRoleMap, so a deploy can grant a department the built-in map doesn't
+// know about. An entry for an existing code overrides its role.
+func applyDeptRoles(spec string) error {
+	for _, pair := range strings.Split(spec, ",") {
+		pair = strings.TrimSpace(pair)
+		if pair == "" {
+			continue
+		}
+		code, role, ok := strings.Cut(pair, ":")
+		code, role = strings.TrimSpace(code), strings.TrimSpace(role)
+		if !ok || code == "" || role == "" {
+			return fmt.Errorf("RBAC_DEPT_ROLES: bad entry %q — want dept_change_code:role", pair)
+		}
+		if err := validRole(role); err != nil {
+			return fmt.Errorf("RBAC_DEPT_ROLES entry %q: %w", pair, err)
+		}
+		deptRoleMap[code] = role
+	}
+	return nil
+}
+
+// adhocUser turns -dept/-role/-emp/-name into a MasterUser (and registers the
+// department in deptRoleMap). Returns nil when no flag was given. Partial flag
+// sets are an error rather than a silent no-op: a half-specified grant that
+// quietly does nothing is exactly the "seeded but still 403" trap this whole
+// override path exists to avoid.
+func adhocUser() ([]models.MasterUser, error) {
+	given := 0
+	for _, f := range []*string{flagDept, flagRole, flagEmp, flagName} {
+		if strings.TrimSpace(*f) != "" {
+			given++
+		}
+	}
+	switch given {
+	case 0:
+		return nil, nil
+	case 4:
+	default:
+		return nil, fmt.Errorf("-dept/-role/-emp/-name must be given together (got %d of 4)", given)
+	}
+
+	role := strings.TrimSpace(*flagRole)
+	if err := validRole(role); err != nil {
+		return nil, err
+	}
+	dept := strings.TrimSpace(*flagDept)
+	deptRoleMap[dept] = role
+
+	return []models.MasterUser{{
+		DeptChangeCode: dept,
+		FullName:       strings.TrimSpace(*flagName),
+		EmployeeId:     strings.TrimSpace(*flagEmp),
+		Status:         "active",
+		Description:    "เพิ่มโดยผู้ดูแลระบบ (seedrbac flags)",
+	}}, nil
+}
+
+// validRole guards against a typo'd role name silently resolving to RoleID 0,
+// which would fail on the foreign key (or worse, insert an unusable row).
+func validRole(role string) error {
+	if role != roleOperator && role != roleExecutive {
+		return fmt.Errorf("unknown role %q — want %q or %q", role, roleOperator, roleExecutive)
+	}
+	return nil
 }
 
 // loadCSVUsers reads employees.csv and returns one MasterUser per row whose

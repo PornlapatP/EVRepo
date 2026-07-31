@@ -43,6 +43,29 @@ docker compose up -d
 | `go run ./cmd/seedcampaign` | ช่วงเวลากิจกรรม (campaign window) 1 แถว active สำหรับ dev/test | ข้ามถ้ามี campaign active อยู่แล้ว |
 | `go run ./cmd/seedmaster` | บัญชีรุ่น **เครื่องชาร์จ** ที่ผ่านการรับรอง (`MasterCharger`) จาก `chargers.json` | `ON CONFLICT (brand, model) DO NOTHING` |
 | `go run ./cmd/seedevmaster` | บัญชีรุ่น **รถ EV** (`MasterEV`) จาก `ev_master_seed.json` | `ON CONFLICT (brand, model, battery_label) DO NOTHING` |
+| `go run ./cmd/seedrbac` | RBAC ฝั่ง back-office — `MasterRole` / `RulePolicy` / `MasterUser` (allow-list ตาม `dept_change_code`) | upsert ตาม unique key · `MasterUser` upsert บน `employee_id` |
+
+รันครบทั้ง 4 ตัวรวดเดียวด้วย `./scripts/seed-dev.sh` (หรือ `.\scripts\seed-dev.ps1` บน Windows) ·
+เติม `--demo` / `-Demo` เพื่อ seed คำขอตัวอย่างสำหรับหน้า dashboard (`cmd/seeddashboarddemo`)
+
+> ⚠️ **ไม่ seed = ระบบใช้ไม่ได้** — ไม่มี `seedrbac` เจ้าหน้าที่ login ผ่านแต่ทุก `/api/v1/admin/*`
+> ตอบ 403 `NO_ROLE` · ไม่มี `seedcampaign` ระบบ **fail closed** (ไม่มี campaign active = `closed`)
+> ประชาชน submit ไม่ได้ · ไม่มี master catalog dropdown ใน wizard ว่าง
+
+#### เพิ่มสิทธิ์หน่วยงานโดยไม่ต้องแก้โค้ด
+
+`deptRoleMap` ใน `cmd/seedrbac/main.go` เป็นแค่ **ค่า default** — ถ้าคนที่จะเทสต์อยู่หน่วยงานอื่น
+เพิ่มได้ 2 ทางโดยไม่ต้อง rebuild:
+
+```bash
+# ก) ทั้งหน่วยงาน (รับพนักงานจาก employees.csv ที่ dept ตรงกันมาด้วย)
+RBAC_DEPT_ROLES="530203003000000:operator,210102006000000:executive" go run ./cmd/seedrbac
+
+# ข) รายคน — สำหรับ dept ที่ไม่มีใน employees.csv (ต้องครบทั้ง 4 flag)
+go run ./cmd/seedrbac -dept 530203003000000 -role operator -emp 515731 -name "ชื่อ นามสกุล"
+```
+
+`role` รับแค่ `operator` / `executive` — พิมพ์ผิดจะ error ทันทีก่อนแตะ DB
 
 **ข้อมูลตัวอย่าง (vendor / general_info / charger / ev)** สำหรับเทสต์ อยู่ใน `scripts/seed.sql`:
 
@@ -139,7 +162,7 @@ scripts/seed.sql  ข้อมูลตัวอย่างสำหรับ�
 
 | กลุ่ม | ตัวแปร |
 | --- | --- |
-| App | `ENV` · `PORT` · `FRONTEND_URL` |
+| App | `ENV` · `PORT` · `FRONTEND_URL` · `COOKIE_SECURE` (optional) |
 | Database | `DB_HOST` · `DB_PORT` · `DB_USER` · `DB_PASSWORD` · `DB_NAME` |
 | Keycloak | `KEYCLOAK_CLIENT_ID` · `KEYCLOAK_CLIENT_SECRET` · `KEYCLOAK_ISSUER` · `KEYCLOAK_PUBLIC_KEY` · `KEYCLOAK_LOGIN_URL` · `KEYCLOAK_TOKEN_URL` · `KEYCLOAK_USERINFO_URL` · `KEYCLOAK_LOGOUT_URL` · `KEYCLOAK_REDIRECT_URI` |
 | ThaID | `THAID_CLIENT_ID` · `THAID_CLIENT_SECRET` · `THAID_AUTH_URL` · `THAID_TOKEN_URL` · `THAID_USERINFO_URL` · `THAID_REVOKE_URL` · `THAID_REDIRECT_URI` |
@@ -148,6 +171,22 @@ scripts/seed.sql  ข้อมูลตัวอย่างสำหรับ�
 | PEA cs-service | `PEA_CS_SERVICE_URL` |
 
 `KEYCLOAK_PUBLIC_KEY` **บังคับ** — ไม่มีแล้ว server `log.Fatal` ตอน start
+
+`COOKIE_SECURE` (`true`/`false`) override flag `Secure` ของ auth cookie ทุกใบ — ปกติ flag นี้ตามชื่อ
+stage (`ENV=production`) แต่ตัวที่ควรตัดสินจริงคือ **scheme ที่ deploy ให้บริการ** ไม่ใช่ชื่อ stage:
+dev/staging ที่อยู่หลัง HTTPS ต้อง `COOKIE_SECURE=true` (ไม่งั้น cookie รั่วถ้ามี request http
+ไปโฮสต์เดียวกัน และถูก MITM เขียนทับได้) · ส่วน production build ที่รันโลคอลผ่าน http ต้อง
+`COOKIE_SECURE=false` ไม่งั้น browser ทิ้ง cookie แล้ว login ไม่ติด · ไม่ตั้ง = ตาม `ENV` เหมือนเดิม
+
+| `ENV` | `COOKIE_SECURE` | ผลลัพธ์ |
+| --- | --- | --- |
+| `development` | ไม่ตั้ง | `Secure=false` — dev โลคอล http |
+| `development` | `true` | `Secure=true` — **dev/staging หลัง HTTPS ใช้อันนี้** |
+| `production` | ไม่ตั้ง | `Secure=true` |
+| `production` | `false` | `Secure=false` — production build ที่รันโลคอล http |
+
+> ยังเหลือ hardening อีกชุด (SameSite ยังไม่ตั้งชัด, ชื่อ cookie ThaID ชนกับ Keycloak,
+> path scope ของ staff cookie) — ดู `internal/auth/service/cookie.go` และ handler ที่เรียก `SecureCookie()`
 
 ---
 
