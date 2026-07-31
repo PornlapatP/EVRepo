@@ -65,23 +65,22 @@ ingress:
 > `pathType: Prefix` ของ k8s match เป็น **segment** — `/api` จับ `/api/v1/campaign` แต่ **ไม่จับ** `/apifoo` ✅
 > ส่วน `/*` (redirect_uri ที่ DOPA ล็อกไว้) ตกที่ FE ตามตั้งใจ เพราะ `proxy.ts` ดักไว้เอง
 
-### D2 — `containerPort: 3000` บังเอิญตรง แต่ผูกกับ B6
+### D2 — `containerPort` ต้องเป็น `8080` (ตัวอย่างเขียน `3000`)
 
-| ที่ | ค่าตอนนี้ |
+**ตัดสินใจแล้ว (2026-07-31): backend = `8080` · frontend = `3000`** — เดินทาง B (B6) เรียบร้อย
+
+| ที่ | ค่าที่ถูก |
 | --- | --- |
-| [`main.go:187-190`](cmd/server/main.go#L187-L190) | `PORT` ถ้าไม่ตั้ง → default **`3000`** |
-| [`Dockerfile:19`](Dockerfile#L19) | `EXPOSE 8080` |
-| `values.dev.yml` | `containerPort: 3000` · `targetPort: 3000` |
+| [`main.go:187-193`](cmd/server/main.go#L187-L193) | `PORT` ถ้าไม่ตั้ง → default **`8080`** ✅ แก้แล้ว |
+| [`Dockerfile:19`](Dockerfile#L19) | `EXPOSE 8080` ✅ ตรงอยู่แล้ว |
+| `values.dev.yml` | 🔴 ตัวอย่างเป็น `containerPort: 3000` · `targetPort: 3000` — **ต้องแก้เป็น `8080` ทั้งคู่** |
 
-ตอนนี้ **ใช้ได้** เพราะ default ของ Go = 3000 ตรงกับ values (ส่วน `EXPOSE` เป็นแค่ metadata ไม่บังคับ)
+เดิม default ของ Go เป็น `3000` ซึ่ง **ชนกับ `next dev` ของ frontend** ตอนรัน local โดยไม่ตั้ง `PORT`
+และไม่ตรงกับ `EXPOSE 8080` · ตอนนี้ทั้งโค้ด/Dockerfile/เอกสารพูดตรงกันหมดที่ `8080` แล้ว
 
-> 🔴 **แต่ B6 ในแผนสั่งให้เปลี่ยน default เป็น `8080` ให้ตรง `EXPOSE`** — ถ้าทำ B6
-> **ต้องแก้ `values.dev.yml` เป็น `8080` ทั้ง `containerPort` และ `targetPort` ในคอมมิตเดียวกัน**
-> ไม่งั้น Service จะชี้ไปพอร์ตที่ไม่มีใครฟัง → 502 ทุก request
->
-> เลือกทางใดทางหนึ่ง แล้วบันทึกไว้:
-> - **ทาง A (ง่ายสุด, ไม่ต้องแตะโค้ด):** ปล่อย values เป็น 3000 + ตั้ง `PORT=3000` ให้ชัดเจน แล้วแก้ `EXPOSE` เป็น 3000
-> - **ทาง B (ตาม B6):** แก้ default เป็น 8080 + `PORT=8080` + values เป็น 8080 ทั้งคู่
+> 🔴 **`values.dev.yml` เป็นที่เดียวที่ยังค้าง** — ถ้าปล่อย `containerPort`/`targetPort` เป็น `3000`
+> ไว้ Service จะชี้ไปพอร์ตที่ไม่มีใครฟัง → **502 ทุก request** · แก้ทั้ง 2 ค่าในคอมมิตเดียวกัน
+> (ถ้าอยากคุมแบบ explicit ตั้ง `PORT: '8080'` ใน `env:` ไปด้วย — ค่าเดียวกับ default อยู่แล้ว)
 
 ### D3 — `envFrom` ชี้ secret เดียว แต่ backend ต้องการ env 33 ตัว
 
@@ -101,7 +100,7 @@ ingress:
     APP_VERSION:      { value: '' }
     ENV:              { value: 'production' }   # 🔴 ต้องเป็น production
     COOKIE_SECURE:    { value: 'true' }         # 🔴 ต้องเป็น true (HTTPS)
-    PORT:             { value: '3000' }         # ให้ตรง D2
+    PORT:             { value: '8080' }         # ให้ตรง D2 (= default ของโค้ด)
     FRONTEND_URL:     { value: 'https://<hostname จริง>' }
     DB_HOST:          { value: '<db host>' }
     # … ที่เหลือดู §2
@@ -203,7 +202,7 @@ browser ไม่ยิง preflight เลย → CORS ที่ hardcode `loca
 | **B3** | 🟠 | ไม่มี health endpoint | เพิ่ม `GET /healthz` + `GET /readyz` (ping DB) **นอก** auth middleware<br>🟢 **ลดความเร่งด่วนแล้ว** — values ตั้ง `livenessProbe.enabled: false` และ startup/readiness ยัง comment ไว้ → ถ้าไม่เปิด probe เลย B3 ไม่ใช่ blocker |
 | **B4** | 🟠 | CORS hardcode `localhost:3000/3001` + `AllowCredentials: true` | อ่าน origin จาก env (`FRONTEND_URL` มีอยู่แล้วแต่ยังไม่ได้ใช้ตรงนี้) รับ comma-separated<br>🟢 ไม่ blocker บน k8s เพราะ same-origin (§3) |
 | **B5** | 🟠 | `AutoMigrate` ตอน boot ([`main.go:32`](cmd/server/main.go#L32)) → หลาย replica migrate ชนกัน | 🟢 **values ตั้ง `replicas: 1` แล้ว ปลอดภัย** — 🔴 **ห้ามขึ้น replicas จนกว่าจะย้าย migrate ไป Argo PreSync hook Job** |
-| **B6** | 🟠 | `PORT` default = `3000` ไม่ตรง `EXPOSE 8080` | ดู **D2** — ต้องแก้พร้อม `values.dev.yml` |
+| **B6** | ✅ | `PORT` default = `3000` ไม่ตรง `EXPOSE 8080` (และชนกับ `next dev`) | แก้ default เป็น `8080` แล้ว — เหลือ `values.dev.yml` ที่ยังต้องเปลี่ยน `containerPort`/`targetPort` เป็น `8080` (ดู **D2**) |
 | **B7** | 🟡 | `ENV`/`COOKIE_SECURE` | ตั้งใน `deployment.env` (§2) |
 | **B8** | 🟡 | `godotenv.Load()` ตอน boot ([`main.go:28`](cmd/server/main.go#L28)) | ไม่ต้องแก้ (error ถูก ignore) แต่ต้องมั่นใจว่า env มาจาก Vault/env ครบ |
 
@@ -232,7 +231,7 @@ deployment:
   #   enabled: true
   #   httpGet:
   #     path: /readyz
-  #     port: 3000                   # 🔴 containerPort ไม่ใช่ 80 (ตัวอย่างเขียน 80 = service port ผิด)
+  #     port: 8080                   # 🔴 containerPort ไม่ใช่ 80 (ตัวอย่างเขียน 80 = service port ผิด)
 
   resources:
     limits:
@@ -241,7 +240,7 @@ deployment:
       memory: 256Mi
 
   ports:
-    - containerPort: 3000            # ต้องตรงกับ PORT (ดู D2)
+    - containerPort: 8080            # ต้องตรงกับ PORT (ดู D2) — ตัวอย่างเขียน 3000 = ผิด
       name: http
       protocol: TCP
 
@@ -253,7 +252,7 @@ deployment:
     APP_VERSION:       { value: '' }
     ENV:               { value: 'production' }
     COOKIE_SECURE:     { value: 'true' }
-    PORT:              { value: '3000' }
+    PORT:              { value: '8080' }
     FRONTEND_URL:      { value: 'https://<hostname จริง>' }
     # … Keycloak 8 · ThaID 6 · DB 4 · S3 3 · PEA_CS_SERVICE_URL · RBAC_DEPT_ROLES (ดู §2)
 
@@ -265,7 +264,7 @@ service:
     - port: 80                       # in-cluster เรียกที่ 80 → FE ตั้ง API_PROXY_TARGET=http://evregist-be
       name: http
       protocol: TCP
-      targetPort: 3000
+      targetPort: 8080
 
 ### INGRESS ###
 # host เดียวกับ FE แต่คนละ path — nginx merge เข้า server block เดียวให้เอง (D1)

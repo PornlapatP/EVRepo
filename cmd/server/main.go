@@ -184,9 +184,12 @@ func main() {
 	// verify DOPA-issued tokens.
 	r.GET("/api/thaid/profile", handler.ThaIDProfileHandler())
 
+	// Backend listens on 8080, frontend on 3000 — the old 3000 fallback collided
+	// with `next dev` whenever PORT was unset. Keep in sync with Dockerfile EXPOSE
+	// and with containerPort/targetPort in the deployment values (DEPLOY.md D2).
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3000"
+		port = "8080"
 	}
 
 	log.Println("Server running on :" + port)
