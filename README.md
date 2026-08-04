@@ -132,8 +132,10 @@ curl -X POST http://localhost:8080/api/v1/general-info \
 | `GET /api/auth/thaid/login` | full-page redirect | ThaID/DOPA (ประชาชน) |
 | `GET /api/auth/thaid/callback` | full-page redirect | ThaID callback |
 | `GET /api/auth/thaid/logout` | **XHR** ตอบ JSON | เรียกจาก `services/auth.service.ts` |
-| `GET /dashboard` | ⏳ **alias ชั่วคราว** | ชี้ handler เดียวกับ `/api/auth/callback` — มีไว้เพราะ client ฝั่ง Keycloak ยังลงทะเบียน URI เดิม · ลบพร้อมตอนแก้ `KEYCLOAK_REDIRECT_URI` |
 
+> ✅ **ไม่มี route ไหนอยู่นอก `/api` แล้ว** — alias `/dashboard` ถูกลบทิ้งเมื่อ 2026-08-04 หลังยืนยันว่า
+> client ฝั่ง Keycloak รับ `/api/auth/callback` ได้จริง → ราก `/dashboard` ว่างให้ frontend ใช้แล้ว
+>
 > เดิมอยู่ที่ราก (`/login`, `/dashboard`, `/logout`, `/thaid/*`) ซึ่งบังคับให้ ingress ต้องประกาศ
 > path แยก **5 กลุ่ม** — ลืมกลุ่มไหน route นั้นจะตกไปที่ catch-all ของ Next แล้วตอบ 404 เงียบ ๆ
 > โดยไม่มี log ฝั่งไหนชี้เลย · ย้ายมาใต้ `/api` แล้ว ingress เหลือ **path เดียว**

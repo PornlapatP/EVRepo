@@ -183,18 +183,6 @@ func main() {
 		authRoutes.GET("/thaid/logout", thaidHandler.Logout)
 	}
 
-	// ⏳ TEMPORARY — the old Keycloak callback path, kept alive only because the
-	// Keycloak client still has just http://localhost:8080/dashboard registered.
-	// KEYCLOAK_REDIRECT_URI must point at a path we actually serve, so until the
-	// Keycloak team adds /api/auth/callback this alias is what keeps staff login
-	// working locally. It is not part of the routing contract: nothing on the
-	// frontend links here, and it must NOT be added to the ingress values —
-	// nothing is deployed yet, so every environment starts on the new URI.
-	//
-	// Remove together with the KEYCLOAK_REDIRECT_URI change once the client is
-	// updated; leaving it behind re-reserves /dashboard from the frontend.
-	r.GET("/dashboard", authHandler.Callback)
-
 	api := r.Group("/api")
 	api.Use(middleware.AuthMiddleware(authService, publicKey))
 	{
