@@ -184,10 +184,10 @@ ingress:
 > `/thaid/*` วางไว้ที่ราก ทำให้ backend "จอง" URL ที่ฝั่ง frontend อาจอยากใช้เป็นหน้าเว็บจริง
 > (โดยเฉพาะ `/dashboard`) และบังคับให้ ingress ต้องประกาศ path แยก 5 กลุ่ม
 >
-> ⏳ **ข้อยกเว้นชั่วคราว: `GET /dashboard`** ยังถูก register ไว้เป็น alias ของ Keycloak callback
-> เพราะ client ฝั่ง Keycloak ยังมีแต่ URI เดิม — **ห้ามใส่ path นี้ลง ingress values** เพราะยังไม่มี
-> environment ไหนถูก deploy ทุก env จะเริ่มที่ `/api/auth/callback` ตั้งแต่วันแรก · ลบ alias ทิ้ง
-> พร้อมกับตอนเปลี่ยน `KEYCLOAK_REDIRECT_URI` (ดู §6)
+> ✅ **alias `/dashboard` ถูกลบแล้ว (2026-08-04)** — ยืนยันด้วยการทดสอบจริงว่า client ฝั่ง Keycloak
+> รับ `http://localhost:8080/api/auth/callback` ได้ (น่าจะลงทะเบียนเป็น wildcard `localhost:8080/*`)
+> `.env` จึงชี้ path ใหม่และ route เก่าถูกถอดออกจาก `main.go` → **ราก `/dashboard` ว่างให้ frontend แล้ว**
+> · 🔴 **ยังต้องขอทีม SSO ลงทะเบียน hostname จริงของแต่ละ env** — wildcard ของ localhost ไม่ครอบ (ดู §6)
 >
 > ⚠️ กติกาที่ต้องรักษา: **`/api/auth` ห้ามแขวน `AuthMiddleware`** — มันคือ route ที่ใช้ login เอง
 > ถ้าเผลอเอาไปไว้ใน group `api` ที่ Keycloak-gated อยู่ จะกลายเป็น "ต้อง login ก่อนถึงจะ login ได้"
@@ -324,12 +324,14 @@ vaultStaticSecret:
 
 ### ทีม Keycloak
 
-- [ ] 🔴 เพิ่ม redirect URI `https://<hostname>/api/auth/callback` และ post-logout URI
-- [ ] เพิ่ม `http://localhost:8080/api/auth/callback` ให้ client ของ local dev ด้วย
-      ⏳ **ระหว่างรอ** `.env` ยังชี้ `/dashboard` เดิม และ backend คง route `/dashboard` ไว้เป็น
-      alias ชั่วคราว (`main.go` ท้าย `authRoutes`) → staff login ใน local ยังทำงานปกติ
-      ✅ **พอเพิ่มเสร็จ** ให้ทำ 2 อย่างพร้อมกัน: เปลี่ยน `KEYCLOAK_REDIRECT_URI` เป็น path ใหม่
-      + **ลบ alias `/dashboard`** ทิ้ง ไม่งั้น backend จองรากนั้นไว้จาก frontend ต่อไปเรื่อย ๆ
+- [x] ~~เพิ่ม `http://localhost:8080/api/auth/callback` ให้ client ของ local dev~~
+      ✅ **ใช้ได้อยู่แล้ว** (ทดสอบจริง 2026-08-04) — client รับ path ใหม่โดยไม่ต้องขอเพิ่ม
+      แปลว่าน่าจะลงทะเบียนเป็น wildcard `http://localhost:8080/*` ไว้ → alias `/dashboard` ถูกลบแล้ว
+- [ ] 🔴 **เพิ่ม redirect URI `https://<hostname>/api/auth/callback` ของแต่ละ env** (dev/uat/prod)
+      ⚠️ **wildcard ของ localhost ไม่ครอบ hostname จริง** — ที่ local ใช้ได้ไม่ได้แปลว่าบน k8s ใช้ได้
+      ถ้าไม่ลงทะเบียน Keycloak จะตีกลับตั้งแต่หน้า login ("Invalid parameter: redirect_uri")
+- [ ] post-logout URI (ถ้าจะเปลี่ยน logout เป็น front-channel ในอนาคต — ตอนนี้ `Logout()` เป็น
+      **backchannel POST** ส่ง `refresh_token` ตรงไป Keycloak จึงยังไม่ต้องใช้)
 
 ### DBA
 
